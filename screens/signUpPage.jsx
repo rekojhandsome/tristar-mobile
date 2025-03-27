@@ -23,8 +23,8 @@ export default function SignUp({ navigation }) {
       return;
     }
 
-    const employeeURL = "http://192.168.29.207:5269/api/Employee";
-    const signinURL = "http://192.168.29.207:5269/api/SignIn/register";
+    const employeeURL = "http://192.168.100.3:5269/api/Employee";
+    const signinURL = "http://192.168.100.3:5269/api/SignIn/register";
 
     try {
       const employeeData = {

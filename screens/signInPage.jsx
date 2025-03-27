@@ -3,6 +3,7 @@ import { View, Text, TextInput, StyleSheet, Image, TouchableOpacity, Pressable, 
 import { Alert } from "react-native";
 import { useState } from "react";
 import axios from "axios";
+import { Login } from "../service/AuthService";
 
 
 export default function SignIn({ navigation }) {
@@ -10,14 +11,11 @@ export default function SignIn({ navigation }) {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
 
-    const handleSignIn = async () => {
-      try {
-        const response = await axios.post("http://192.168.100.3:5269/api/Authentication/login", {
-          username,
-          password
-        });
+    const handleLogin= async () => {
+      const result = await Login(username,password)
     
-        if (response.status === 200) {
+
+        if (result.success) {
           Alert.alert("Success", "Login successful!", [
             {
               text: "OK",
@@ -26,14 +24,12 @@ export default function SignIn({ navigation }) {
           ]);
           console.log("Signed In!");
         }
-      } catch (error) {
-        Alert.alert("Error", "Invalid username or password.");
-        console.log("Error Signing In!");
-      }
+        else{
+          Alert.alert("Error", result.message);
+          console.log("Error Signing In");
+        }
+      
     };
-
-
-
     return (
       <SafeAreaView style={styles.background}>
         <View style={styles.background} >
@@ -59,7 +55,7 @@ export default function SignIn({ navigation }) {
               onChangeText={setPassword}
             />
             {/* Sign-In Button */}
-            <Pressable style={styles.signInButton} onPress={handleSignIn}>
+            <Pressable style={styles.signInButton} onPress={handleLogin}>
               <Text style={styles.signInButtonText}>Sign In</Text>
             </Pressable>
     
