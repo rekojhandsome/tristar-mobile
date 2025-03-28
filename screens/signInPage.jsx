@@ -2,9 +2,13 @@ import React from "react";
 import { View, Text, TextInput, StyleSheet, Image, TouchableOpacity, Pressable, SafeAreaView } from "react-native";
 import { Alert } from "react-native";
 import { useState } from "react";
-import axios from "axios";
+
+
 import { Login } from "../service/AuthService";
 
+//API ENDPOINTS
+import { API_BASE_URL } from "../service/AuthService";
+import { API_BASE_URL1 } from "../service/AuthService";
 
 export default function SignIn({ navigation }) {
 

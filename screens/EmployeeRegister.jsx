@@ -5,6 +5,11 @@ import axios from "axios";
 import { CompaniesDropdown, DepartmentsDropdown } from "../components/Dropdown";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
+//API ENDPOINTS
+import { API_BASE_URL } from "../service/AuthService";
+import { API_BASE_URL1 } from "../service/AuthService";
+
+
 export default function EmployeeRegister({ navigation }) {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -17,7 +22,7 @@ export default function EmployeeRegister({ navigation }) {
 
   const handleSaveEmployeeDetail = async () => {
 
-    const employeeURL = "http://192.168.29.207:5269/api/Employee";
+    const employeeURL = `${API_BASE_URL}/api/Employee`;
 
     if (isSubmitting) return;
     setIsSubmitting(true);
@@ -122,13 +127,12 @@ export default function EmployeeRegister({ navigation }) {
             <Text style={styles.signInButtonText}>Create Account</Text>
           </Pressable>
         </View>
-        <View style={styles.footerText}>
+        <View>
         <Pressable onPress={() => navigation.navigate("SignUp")}>
         <Text style={styles.signUpText}> Already Registered? <Text style={styles.signUpLink}>Sign Up</Text>
         </Text>
         </Pressable>
         </View>
-        
     </SafeAreaView>
   );
 }
@@ -153,6 +157,7 @@ const styles = StyleSheet.create({
   formText: {
     fontSize: 30,
     paddingHorizontal: 10,
+    marginTop: 10,
     marginBottom: 10,
   },
   bodyText: {
@@ -201,7 +206,5 @@ const styles = StyleSheet.create({
     color: "#3FD68F", 
     fontWeight: "500"
   },
-  footerText:{
-    marginTop: 5,
-  }
+  
 });

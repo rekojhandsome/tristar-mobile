@@ -2,7 +2,8 @@ import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 
-const API_BASE_URL = "http://192.168.29.207:5269";
+export const API_BASE_URL = "http://192.168.100.3:5269";
+export const API_BASE_URL1 = "http://192.168.29.207:5269";
 
 export const Login = async (username, password) => {
     try{
@@ -34,18 +35,4 @@ export const getToken = async () => {
     return await AsyncStorage.getItem("userToken");
 }
 
-export const FetchProtectedData = async () => {
-    try {
-        const token = await getToken();
-        const response = await axios.get(`${API_BASE_URL}/protected-route`,{
-            headers: { Authorization: `Bearer ${token}`}
-        });
 
-        return response.data;
-    } catch (error){
-        if (error.response?.status === 401){
-            await Logout();
-        }
-        return { success: false, message: "Failed to fetch data"};
-    }
-};

@@ -2,8 +2,8 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 //Authentication Screens
-import SignIn from '../screens/SignInPage';
-import SignUp from '../screens/SignUpPage';
+import SignIn from "../screens/SignInPage";
+import SignUp from "../screens/SignUpPage";
 import EmployeeRegister from "../screens/EmployeeRegister";
 
 //BottomNavigation
@@ -11,6 +11,7 @@ import BottomNavbarNavigation from "./BottomTabNavigation";
 
 import RequestLeavePage from "../screens/RequestLeavePage";
 import ViewModal from "../components/LeavePopUp";
+import AccountPage from "../screens/AccountPage";
 
 
 const Stack = createNativeStackNavigator();
@@ -20,6 +21,7 @@ export default function Navigation(){
         <NavigationContainer>
             <Stack.Navigator screenOptions={{headerShown: false} }>
                 {/* Authentication Screens */}
+                <Stack.Screen name ="Account" component={AccountPage}/>
                 <Stack.Screen name="SignIn" component={SignIn}/>
                 <Stack.Screen name="SignUp" component={SignUp}/>
 

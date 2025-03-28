@@ -1,22 +1,49 @@
 import {View, Text, TextInput, TouchableOpacity, StyleSheet, SafeAreaView, Image, Pressable} from 'react-native';
 import { Alert } from "react-native";
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+//URL ENDPOINTS
+import { API_BASE_URL } from "../service/AuthService";
+import { API_BASE_URL1 } from "../service/AuthService";
 
 export default function SignUp({navigation}){
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
+  const [employeeID, setEmployeeID] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSaveSignUp = async () => {
+  useEffect(() => {
+      const fetchEmployeeID = async () => {
+        try {
+          const storedEmployeeID = await AsyncStorage.getItem("employeeID");
+          
+          if (storedEmployeeID){
+            setEmployeeID(storedEmployeeID);
+          }
+        }catch(error){
+          console.log("Error retrieving Employee ID", error);
+          Alert.alert("Error", "Error retrieving Employee ID", error);
+        }
+      };
 
-    const registerAPI = "http://192.168.29.207:5269/api/SignIn/register";
+      fetchEmployeeID();
+    }, []);
+
+  const handleSaveSignUp = async () => {
+    const registerAPI = `${API_BASE_URL}/api/SignIn/register`;
 
     try{
+
     if (isSubmitting) return;
     setIsSubmitting(true);
+
+    if (!employeeID){
+      Alert.alert("Error", "Employee ID is missing. Please register first")
+    }
 
      if (password !== confirmPassword) {
           Alert.alert("Error", "Passwords do not match!");
@@ -51,6 +78,8 @@ export default function SignUp({navigation}){
           Alert.alert("Error", "Error creating account");
           console.log("Error creating account", error);
         }
+    }finally{
+      setIsSubmitting(false);
     }
 }
  return (
