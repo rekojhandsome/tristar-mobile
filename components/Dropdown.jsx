@@ -124,13 +124,15 @@ import axios from "axios";
 
 const styles = StyleSheet.create({
   dropdownContainer: {
-    marginVertical: 10,
   },
   dropdownButton: {
+    height: 50,
     borderWidth: 1,
     borderColor: "#ccc",
     padding: 12,
     borderRadius: 5,
+    alignItems: "flex-start",
+    justifyContent: "center"
   },
   dropdownIcon: {
     marginTop: 10,
@@ -154,7 +156,7 @@ const styles = StyleSheet.create({
     borderBottomColor: "#ddd",
   },
   itemText: {
-    fontSize: 16,
+    fontSize: 15,
   },
 });
 

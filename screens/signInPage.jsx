@@ -13,7 +13,6 @@ export default function SignIn({ navigation }) {
 
     const handleLogin= async () => {
       const result = await Login(username,password)
-    
 
         if (result.success) {
           Alert.alert("Success", "Login successful!", [
@@ -32,8 +31,8 @@ export default function SignIn({ navigation }) {
     return (
       <SafeAreaView style={styles.background}>
         <View style={styles.background} >
-          <Text style={styles.title}>Banana Highland Corp. E-Leave App</Text>
-            <Image style={styles.image} source={require("../assets/images/banana.png")} />
+            <Image style={styles.image} source={require("../assets/images/tristar-logo.png")} />
+            <Text style={styles.title}>E-Leave App</Text>
           <View style={styles.formContainer}>
             <Text style={styles.formTitle}>Sign In</Text>
             <TextInput
@@ -59,7 +58,7 @@ export default function SignIn({ navigation }) {
             </Pressable>
     
             {/* Navigation to Sign Up */}
-            <TouchableOpacity onPress={() => navigation.navigate("SignUp")}>
+            <TouchableOpacity onPress={() => navigation.navigate("Register")}>
             <Text style={styles.signUpText}> Don't have an account? <Text style={styles.signUpLink}>Register here</Text>
             </Text>
             </TouchableOpacity>
@@ -72,32 +71,31 @@ export default function SignIn({ navigation }) {
   const styles = StyleSheet.create({
     background: {
       flex: 1,
-      backgroundColor: "#70907C",
       justifyContent: "center",
       alignItems: "center",
     },
-    title: {
-      fontSize: 30,
-      textAlign: "center",
-      color: "white",
-      fontWeight: "bold",
-      marginHorizontal: 40
-    },
     image: {
+      marginTop: 80,
       height: 120,
-      width: 120,
+      width: 230,
+    },
+    title: {
       marginBottom: 20,
+      fontSize: 35,
+      textAlign: "center",
+      fontWeight: "800",
+      color: '#70907C'
     },
     formContainer: {
       alignItems: 'center',
-      height:240,
+      height:270,
       width: 282,
       backgroundColor: "#FFFFFF",
       padding: 10,
       borderRadius: 20,
     },
     formTitle:{
-      fontSize: 40,
+      fontSize: 30,
       color: '#91CB89',
       textAlign: 'center',
       fontWeight: 'bold',
@@ -109,7 +107,7 @@ export default function SignIn({ navigation }) {
       height: 48,
       backgroundColor: "#70907C",
       borderRadius: 10,
-      paddingHorizontal: 15,
+      paddingHorizontal: 10,
       color: "white",
       marginBottom: 5,
       fontSize: 15,
@@ -119,22 +117,21 @@ export default function SignIn({ navigation }) {
     signInButton: {
       backgroundColor: "#3FD68F",
       borderRadius: 15,
+      justifyContent: 'center',
       alignItems: "center",
-      width: 122,
-      height: 35,
-      paddingTop: 5,
-      marginTop:5
+      width: 242,
+      height: 45,
+      marginTop:10,
     },
     signInButtonText: {
+      textAlign: 'center',
       color: "white",
-      fontSize: 12,
       fontWeight: "bold",
-      paddingTop:6
     },
     signUpText: {
       color: "black",
       textAlign: "center",
-     paddingTop: 8
+     paddingTop: 15
     },
     signUpLink:{
       color: "#3FD68F", 

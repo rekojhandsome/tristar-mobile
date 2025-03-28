@@ -2,8 +2,9 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 //Authentication Screens
-import SignIn from '../screens/signInPage';
-import SignUp from '../screens/signUpPage';
+import SignIn from '../screens/SignInPage';
+import SignUp from '../screens/SignUpPage';
+import EmployeeRegister from "../screens/EmployeeRegister";
 
 //BottomNavigation
 import BottomNavbarNavigation from "./BottomTabNavigation";
@@ -21,6 +22,9 @@ export default function Navigation(){
                 {/* Authentication Screens */}
                 <Stack.Screen name="SignIn" component={SignIn}/>
                 <Stack.Screen name="SignUp" component={SignUp}/>
+
+                {/* Register Screens */}
+                <Stack.Screen name="Register" component={EmployeeRegister}/>
 
                 {/* Main Screens */}
                 <Stack.Screen name="RequestLeavePage" component={RequestLeavePage} />
