@@ -4,8 +4,8 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import axios from "axios";
 
     //API Endpoints
-    const COMPANY_URL = "http://192.168.100.3:5269/api/Company";
-    const DEPARTMENT_URL = "http://192.168.100.3:5269/api/Department";
+    const COMPANY_URL = "http://192.168.29.207:5269/api/Company";
+    const DEPARTMENT_URL = "http://192.168.29.207:5269/api/Department";
 
     export const  CompaniesDropdown = ({ value, setValue, placeholder }) => {
     const [isOpen, setIsOpen] = useState(false);

@@ -17,14 +17,21 @@ export default function SignUp({ navigation }) {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const handleSaveEmployeeDetail = async () => {
+
+    if (isSubmitting) return;
+    setIsSubmitting(true);
+
     if (password !== confirmPassword) {
       Alert.alert("Error", "Passwords do not match!");
+      setIsSubmitting(false);
       return;
     }
 
-    const employeeURL = "http://192.168.100.3:5269/api/Employee";
-    const signinURL = "http://192.168.100.3:5269/api/SignIn/register";
+    const employeeURL = "http://192.168.29.207:5269/api/Employee";
+    const signinURL = "http://192.168.29.207:5269/api/SignIn/register";
 
     try {
       const employeeData = {
@@ -35,6 +42,7 @@ export default function SignUp({ navigation }) {
         departmentID, // Include the selected department ID
       };
 
+      console.log("Employee Data: ", employeeData);
       const employeeResponse = await axios.post(employeeURL, employeeData);
       const employeeID = employeeResponse.data.employeeID;
 
@@ -56,8 +64,16 @@ export default function SignUp({ navigation }) {
         },
       ]);
     } catch (error) {
+      if (axios.isAxiosError(error) && error.response?.status === 409) {
+        console.error("An employee with same credentials already exists", error.response.data.message);
+        Alert.alert("Error", "An employee with same credentials already exists");
+        setIsSubmitting(false);
+      }
+      else {
       console.error(error);
       Alert.alert("Error", "Failed to create the account");
+      setIsSubmitting(false);
+    }
     }
   };
 

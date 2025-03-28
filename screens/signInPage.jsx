@@ -25,10 +25,9 @@ export default function SignIn({ navigation }) {
           console.log("Signed In!");
         }
         else{
-          Alert.alert("Error", result.message);
+          Alert.alert("Error", "Username or Password is incorrect!");
           console.log("Error Signing In");
         }
-      
     };
     return (
       <SafeAreaView style={styles.background}>
