@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { View, Text, TextInput, StyleSheet, Alert, SafeAreaView, Pressable } from "react-native";
 import axios from "axios";
 
@@ -14,9 +14,36 @@ export default function AccountPage({ navigation }) {
   const [lastName, setLastName] = useState("");
   const [phoneNo, setPhoneNo] = useState("");
   const [salary, setSalary] = useState("");
-
-
   const [isEditing, setIsEditing] = useState(false);
+
+  // Fetch employee profile
+  useEffect(() => {
+    const fetchEmployeeProfile = async () => {
+      try {
+        const token = await AsyncStorage.getItem("userToken");
+
+        if (!token) {
+          Alert.alert("Error", "No token found. Please sign in again.");
+          return;
+        }
+
+        const response = await axios.get(`${API_BASE_URL}/api/employee/profile`, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+
+        const employee = response.data;
+        setFirstName(employee.firstName);
+        setLastName(employee.lastName);
+        setPhoneNo(employee.phoneNo || "");
+        setSalary(employee.salary.toString());
+      } catch (error) {
+        console.error("Error fetching employee profile:", error);
+        Alert.alert("Error", "Failed to load employee data. Please try again.");
+      }
+    };
+
+    fetchEmployeeProfile();
+  }, []);
 
   return (
     <SafeAreaView>
@@ -58,22 +85,7 @@ export default function AccountPage({ navigation }) {
               value={salary}
               onChangeText={setSalary}
             />
-            <Text style={styles.bodyText}>Salary:</Text>
-            <TextInput
-              style={styles.input}
-              editable={isEditing}
-              keyboardType="number-pad"
-              value={salary}
-              onChangeText={setSalary}
-            />
-            <Text style={styles.bodyText}>Salary:</Text>
-            <TextInput
-              style={styles.input}
-              editable = {isEditing}
-              keyboardType="number-pad"
-              value={salary}
-              onChangeText={setSalary}
-            />
+        
         </View>
         <View style={styles.buttonContainer}>
           <Pressable style={styles.registerButton} disabled={!isEditing} onPress={() => console.log("Button Pressed")}>

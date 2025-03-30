@@ -21,7 +21,6 @@ export default function Navigation(){
         <NavigationContainer>
             <Stack.Navigator screenOptions={{headerShown: false} }>
                 {/* Authentication Screens */}
-                <Stack.Screen name ="Account" component={AccountPage}/>
                 <Stack.Screen name="SignIn" component={SignIn}/>
                 <Stack.Screen name="SignUp" component={SignUp}/>
 

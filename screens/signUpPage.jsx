@@ -54,6 +54,7 @@ export default function SignUp({navigation}){
     const signUpData = {
         username,
         password,
+        employeeID
     };  
 
     console.log("SignUp Data: ", signUpData);
