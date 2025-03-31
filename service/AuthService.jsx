@@ -7,7 +7,7 @@ export const API_BASE_URL1 = "http://192.168.29.207:5269";
 
 export const Login = async (username, password) => {
     try{
-        const response = await axios.post(`${API_BASE_URL}/api/Authentication/login`,{
+        const response = await axios.post(`${API_BASE_URL}/api/Account/login`,{
             username,
             password
         });

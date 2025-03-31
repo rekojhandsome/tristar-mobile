@@ -14,7 +14,7 @@ export default function EmployeeRegister({ navigation }) {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [phoneNo, setPhoneNo] = useState("");
-  const [salary, setSalary] = useState("");
+  const [email, setEmail] = useState("");
   const [companyID, setCompanyID] = useState(null); 
   const [departmentID, setDepartmentID] = useState(null); // State for department ID
 
@@ -32,7 +32,7 @@ export default function EmployeeRegister({ navigation }) {
         firstName,
         lastName,
         phoneNo,
-        salary,
+        email,
         departmentID, // Include the selected department ID
       };
 
@@ -100,13 +100,13 @@ export default function EmployeeRegister({ navigation }) {
               value={phoneNo}
               onChangeText={setPhoneNo}
             />
-            <Text style={styles.bodyText}>Salary:</Text>
+            <Text style={styles.bodyText}>Email Address:</Text>
             <TextInput
               style={styles.input}
-              placeholder="Enter your salary"
-              keyboardType="number-pad"
-              value={salary}
-              onChangeText={setSalary}
+              placeholder="Enter your email address"
+              keyboardType="email-address"
+              value={email}
+              onChangeText={setEmail}
             />
           <Text style={styles.bodyText}>Company:</Text>
           <CompaniesDropdown 

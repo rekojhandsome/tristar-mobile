@@ -13,7 +13,7 @@ export default function AccountPage({ navigation }) {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [phoneNo, setPhoneNo] = useState("");
-  const [salary, setSalary] = useState("");
+  const [email, setEmail] = useState("");
   const [isEditing, setIsEditing] = useState(false);
 
   // Fetch employee profile
@@ -35,7 +35,7 @@ export default function AccountPage({ navigation }) {
         setFirstName(employee.firstName);
         setLastName(employee.lastName);
         setPhoneNo(employee.phoneNo || "");
-        setSalary(employee.salary.toString());
+        setEmail(employee.email);
       } catch (error) {
         console.error("Error fetching employee profile:", error);
         Alert.alert("Error", "Failed to load employee data. Please try again.");
@@ -77,13 +77,13 @@ export default function AccountPage({ navigation }) {
               value={phoneNo}
               onChangeText={setPhoneNo}
             />
-            <Text style={styles.bodyText}>Salary:</Text>
+            <Text style={styles.bodyText}>Email Address</Text>
             <TextInput
               style={styles.input}
               editable={isEditing}
-              keyboardType="number-pad"
-              value={salary}
-              onChangeText={setSalary}
+              keyboardType="email-address"
+              value={email}
+              onChangeText={setEmail}
             />
         
         </View>
