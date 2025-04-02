@@ -14,8 +14,12 @@ export default function AccountPage({ navigation }) {
   const [lastName, setLastName] = useState("");
   const [phoneNo, setPhoneNo] = useState("");
   const [email, setEmail] = useState("");
+  
+  //Leave
+  const [vacationLeave, setVacationLeave] = useState("");
+  const [sickLeave, setSickLeave] = useState("");
+  
   const [isEditing, setIsEditing] = useState(false);
-
   // Fetch employee profile
   useEffect(() => {
     const fetchEmployeeProfile = async () => {
@@ -27,15 +31,23 @@ export default function AccountPage({ navigation }) {
           return;
         }
 
-        const response = await axios.get(`${API_BASE_URL}/api/employee/profile`, {
+        const response = await axios.get(`${API_BASE_URL1}/api/employee/profile`, {
           headers: { Authorization: `Bearer ${token}` }
         });
 
         const employee = response.data;
+
+        const vacationLeaveCredits = employee.leaveCredits.find((leave) => leave.leaveTypeID === 1)?.remainingCredits || "0";;
+        const sickLeaveCredits = employee.leaveCredits.find((leave) => leave.leaveTypeID === 2)?.remainingCredits || "0";;
+        
         setFirstName(employee.firstName);
         setLastName(employee.lastName);
         setPhoneNo(employee.phoneNo || "");
         setEmail(employee.email);
+        setVacationLeave(vacationLeaveCredits.toString());
+        setSickLeave(sickLeaveCredits.toString());
+
+        console.log(employee);
       } catch (error) {
         console.error("Error fetching employee profile:", error);
         Alert.alert("Error", "Failed to load employee data. Please try again.");
@@ -77,7 +89,7 @@ export default function AccountPage({ navigation }) {
               value={phoneNo}
               onChangeText={setPhoneNo}
             />
-            <Text style={styles.bodyText}>Email Address</Text>
+            <Text style={styles.bodyText}>Email Address:</Text>
             <TextInput
               style={styles.input}
               editable={isEditing}
@@ -85,11 +97,25 @@ export default function AccountPage({ navigation }) {
               value={email}
               onChangeText={setEmail}
             />
+            <Text style={styles.bodyText}>Vacation Leave Credits:</Text>
+            <TextInput
+              style={styles.input}
+              editable={false}
+              keyboardType="default"
+              value={vacationLeave}
+            />
+            <Text style={styles.bodyText}>Sick Leave Credits:</Text>
+            <TextInput
+              style={styles.input}
+              editable={false}
+              keyboardType="default"
+              value={sickLeave}
+            />
         
         </View>
         <View style={styles.buttonContainer}>
           <Pressable style={styles.registerButton} disabled={!isEditing} onPress={() => console.log("Button Pressed")}>
-            <Text style={styles.signInButtonText}>Save Changes</Text>
+            <Text style={styles.saveChangesButtonText}>Save Changes</Text>
           </Pressable>
         </View>
         <View>
@@ -150,7 +176,7 @@ const styles = StyleSheet.create({
  
   buttonContainer: {
     paddingHorizontal: 10,
-    marginTop: 20,
+    marginTop: 25,
   },
   registerButton: {
     width: '100%',
@@ -158,19 +184,11 @@ const styles = StyleSheet.create({
     padding: 15,
     borderRadius: 5,
   },
-  signInButtonText: {
+  saveChangesButtonText: {
     textAlign: 'center',
     color: "white",
     fontSize: 16,
   },
-  signUpText: {
-    color: "black",
-    textAlign: "center",
-   paddingTop: 15
-  },
-  signUpLink:{
-    color: "#3FD68F", 
-    fontWeight: "500"
-  },
+  
   
 });

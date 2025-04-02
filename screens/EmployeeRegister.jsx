@@ -22,7 +22,7 @@ export default function EmployeeRegister({ navigation }) {
 
   const handleSaveEmployeeDetail = async () => {
 
-    const employeeURL = `${API_BASE_URL}/api/Employee`;
+    const employeeURL = `${API_BASE_URL1}/api/Employee`;
 
     if (isSubmitting) return;
     setIsSubmitting(true);
@@ -71,6 +71,9 @@ export default function EmployeeRegister({ navigation }) {
   return (
     <SafeAreaView>
       <View style={styles.header}>
+        <Pressable style={styles.signInButton} onPress={() => navigation.navigate("SignIn")}>
+            <Text style={styles.headerText }>Sign In</Text>
+          </Pressable>
         <Text style={styles.headerText}>Employee Registration</Text>
       </View>
 
@@ -105,6 +108,7 @@ export default function EmployeeRegister({ navigation }) {
               style={styles.input}
               placeholder="Enter your email address"
               keyboardType="email-address"
+              autoCapitalize="none"
               value={email}
               onChangeText={setEmail}
             />
@@ -117,6 +121,7 @@ export default function EmployeeRegister({ navigation }) {
        
        <Text style={styles.bodyText}>Department:</Text>
           <DepartmentsDropdown 
+          styles ={styles.dropdownText}
           placeholder={"Select Department"}
           value={departmentID} 
           setValue={setDepartmentID}
@@ -124,14 +129,10 @@ export default function EmployeeRegister({ navigation }) {
       </View>
         <View style={styles.buttonContainer}>
           <Pressable style={styles.registerButton} onPress={handleSaveEmployeeDetail}>
-            <Text style={styles.signInButtonText}>Create Account</Text>
+            <Text style={styles.registerButtonText}>Create Account</Text>
           </Pressable>
         </View>
         <View>
-        <Pressable onPress={() => navigation.navigate("SignUp")}>
-        <Text style={styles.signUpText}> Already Registered? <Text style={styles.signUpLink}>Sign Up</Text>
-        </Text>
-        </Pressable>
         </View>
     </SafeAreaView>
   );
@@ -145,6 +146,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
+  signInButton:{
+    position: 'absolute',
+    left: 15
+   },
   headerText: {
     fontSize: 20,
     fontWeight: "600",
@@ -181,10 +186,9 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 5,
   },
- 
   buttonContainer: {
     paddingHorizontal: 10,
-    marginTop: 20,
+    marginTop: 30,
   },
   registerButton: {
     width: '100%',
@@ -192,19 +196,12 @@ const styles = StyleSheet.create({
     padding: 15,
     borderRadius: 5,
   },
-  signInButtonText: {
+  registerButtonText: {
     textAlign: 'center',
     color: "white",
     fontSize: 16,
   },
-  signUpText: {
-    color: "black",
-    textAlign: "center",
-   paddingTop: 15
-  },
-  signUpLink:{
-    color: "#3FD68F", 
-    fontWeight: "500"
-  },
+ 
+ 
   
 });

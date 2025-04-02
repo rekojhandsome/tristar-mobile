@@ -29,7 +29,7 @@ export default function Navigation(){
 
                 {/* Main Screens */}
                 <Stack.Screen name="RequestLeavePage" component={RequestLeavePage} />
-
+                
 
                 {/* Sub Screens */}
                 <Stack.Screen name="ViewModal" component={ViewModal} />

@@ -1,14 +1,26 @@
-import { useState,  } from 'react';
-import  React from "react";
-import { View, Text, StyleSheet, TextInput, Pressable, SafeAreaView, Modal  } from 'react-native';
-import DatePicker from 'react-native-date-picker';
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import { useState, React } from 'react';
+import { View, Text, StyleSheet, TextInput, Pressable, SafeAreaView, Modal, Button  } from 'react-native';
+
+//Components
 import ConfirmLeaveModal from '../components/ConfirmLeavePopup';
+import DatePickerComponent from '../components/DatePicker'; 
+import { LeaveTypeDropdown } from '../components/Dropdown';
+
 
 export default function RequestLeavePage({navigation}){
 
     const [modalVisible, setModalVisible] = useState(false);
 
+    const [selectedDate, setSelectedDate] = useState(new Date()); // State for the selected date
+    const [isDatePickerOpen, setIsDatePickerOpen] = useState(false); // State to control the modal
+
+    const [leaveTypeID, setLeaveTypeID] = useState(null); // State for department ID
+
+    const handleConfirm = (date) => {
+        setSelectedDate(date); // Update the selected date
+        setIsDatePickerOpen(false); // Close the date picker
+      };
+    
     return(
         <SafeAreaView>
             <View style ={styles.header}>
@@ -22,23 +34,34 @@ export default function RequestLeavePage({navigation}){
                 <View style= {styles.form}>
                    <Text style= {styles.formText}>Leave Application form</Text>
                     {/*Leave type */}
-                   <Text style={styles.leaveType}>Leave Type:</Text>
-                    <TextInput style= {styles.input} placeholder="Select leave Type" keyboardType="default"
-                    autoCapitalize="none">
-                    </TextInput>
-
+                    <Text style={styles.leaveType}>Leave Type:</Text>
+                     <LeaveTypeDropdown 
+                              placeholder={"Select Leave Type"}
+                              value={leaveTypeID} 
+                              setValue={setLeaveTypeID}
+                              />
+        
                     {/*Date */}
-                    <Text style={styles.leaveType}>Select Date:</Text>
-                    <View style={styles.date}>
-                        <View style={styles.leaveDate}>
-                            <TextInput placeholder="DD/MM/YYYY" autoCapitalize="none" />
-                            <Ionicons name="calendar-outline" size={25} color="black" style={styles.calendarIcon} />
-                        </View>
-                        <View style={styles.leaveDate}>
-                            <TextInput placeholder="DD/MM/YYYY" autoCapitalize="none" />
-                            <Ionicons name="calendar-outline" size={25} color="black" style={styles.calendarIcon} />
-                        </View>
-                    </View>
+                    <Text style={styles.leaveType}>Start of Leave:</Text>
+                    {/* DatePicker Modal */}
+                    <DatePickerComponent
+                        show={true}
+                        date={selectedDate}
+                        onChange={() => {}}
+                        onConfirm={(date) => setSelectedDate(date)}
+                        placeholder="Select Leave Date"
+                    />
+
+                    <Text style={styles.leaveType}>End of Leave:</Text>
+                    {/* DatePicker Modal */}
+                    <DatePickerComponent
+                        show={true}
+                        date={selectedDate}
+                        onChange={() => {}}
+                        onConfirm={(date) => setSelectedDate(date)}
+                        placeholder="Select Leave Date"
+                    />
+
                     {/*Supervisor*/}
 
                     <Text style={styles.leaveType}>Supervisor:</Text>
@@ -50,12 +73,6 @@ export default function RequestLeavePage({navigation}){
                     <Text style={styles.leaveType}>Reason:</Text>
                     <TextInput style= {styles.input} placeholder="Enter Reason" keyboardType="default"
                     autoCapitalize="none" >
-                    </TextInput>
-
-                    {/*File Attachment */}
-                    <Text style={styles.leaveType}>File Attachment:</Text>
-                    <TextInput style= {styles.input} placeholder="Upload Files" keyboardType="default"
-                    autoCapitalize="none">
                     </TextInput>
                 </View>
                     <View style= {styles.button}>
@@ -73,41 +90,36 @@ const styles = StyleSheet.create({
         height: 65,
         alignItems: 'center',
         backgroundColor: '#70907C',
-        justifyContent: 'space-between',
-       
+        justifyContent: 'center',
     },
+    headerText: {
+        fontSize: 20,
+        fontWeight: "600",
+        color: "white",
+      },
     leaveButton:{
         position: 'absolute',
         left: 15,
     },
-    titleContainer:{
-        flex: 1,
-        alignItems: 'center',
-        
-    },
-    headerText:{
-        fontSize: 20,
-        color: 'white',
-        marginTop: 20
-    },
-    
+   
     form:{
-        paddingTop: 15,
-        paddingLeft: 15,
+        paddingHorizontal: 10
     },
     formText:{
         fontSize: 30,
-        fontStyle: 'bold',
-        marginBottom: 20,
+        marginBottom: 10,
+        marginTop: 10,
     },
     leaveType:{
         fontSize: 20,
         Color: 'black'
     },
     input:{
-        width: 380,
-        height: 60,
+        width: "100%",
+        height: 50,
         borderWidth: 1,
+        backgroundColor: "#fff",
+        borderColor: '#ccc',
         borderRadius: 5,
         paddingHorizontal: 10,
         marginBottom: 10,
@@ -123,15 +135,7 @@ const styles = StyleSheet.create({
         height: 50,
         marginBottom: 10,
       },
-    date:{
-        flexDirection: 'row',
-        gap: 40
-    },
-   
-    calendarIcon:{
-        right: 10,
-        position: 'absolute'
-    },
+    
     button:{
         alignItems: 'center',
         paddingTop: 40

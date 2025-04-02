@@ -7,8 +7,9 @@ import { API_BASE_URL } from "../service/AuthService";
 import { API_BASE_URL1 } from "../service/AuthService";
 
     //API Endpoints
-    const COMPANY_URL = `${API_BASE_URL}/api/Company`;
-    const DEPARTMENT_URL = `${API_BASE_URL}/api/Department`;
+    const COMPANY_URL = `${API_BASE_URL1}/api/Company`;
+    const DEPARTMENT_URL = `${API_BASE_URL1}/api/Department`;
+    const LEAVE_TYPE_URL = `${API_BASE_URL1}/api/LeaveType`;
 
     export const  CompaniesDropdown = ({ value, setValue, placeholder }) => {
     const [isOpen, setIsOpen] = useState(false);
@@ -124,9 +125,68 @@ import { API_BASE_URL1 } from "../service/AuthService";
         );
       };
 
+      export const  LeaveTypeDropdown = ({ value, setValue, placeholder }) => {
+        const [isOpen, setIsOpen] = useState(false);
+        const [data, setData] = useState([]);
+        const [loading, setLoading] = useState(true);
+      
+        useEffect(() => {
+          axios.get(LEAVE_TYPE_URL)
+            .then(response => {
+              console.log("Fetched Data:", response.data); // Debugging
+              setData(response.data);
+              setLoading(false);
+            })
+            .catch(error => {
+              console.error("Error fetching data:", error);
+              setLoading(false);
+            });
+        }, []);
+      
+        return (
+          <View style={styles.dropdownContainer}>
+            {/* Dropdown Button */}
+            <TouchableOpacity style={styles.dropdownButton} onPress={() => setIsOpen(!isOpen)}>
+              <Text style={styles.dropdownText}>
+                {/* Display selected Company Name */}
+                {value ? data.find((item) => item.leaveTypeID === value)?.leaveTypeName : placeholder}
+              </Text>
+              <Ionicons name="chevron-down-outline" size={25} style={styles.dropdownIcon} />
+            </TouchableOpacity>
+      
+            {/* Dropdown List */}
+            {isOpen && (
+              <View style={styles.dropdownList}>
+                {loading ? (
+                  <ActivityIndicator size="small" color="#0000ff" />
+                ) : (
+                  <FlatList
+                    data={data}
+                    keyExtractor={(item) => (item?.leaveTypeID ? item.leaveTypeID.toString() : "unknown")}
+                    renderItem={({ item }) => (
+                      <TouchableOpacity
+                        style={styles.dropdownItem}
+                        onPress={() => {
+                          setValue(item.leaveTypeID); // Save the Department ID, not the name
+                          setIsOpen(false);
+                        }}
+                      >
+                        <Text style={styles.itemText}>{item.leaveTypeName}</Text>
+                      </TouchableOpacity>
+                    )}
+                  />
+                )}
+              </View>
+            )}
+          </View>
+        );
+      };
+
+
 
 const styles = StyleSheet.create({
   dropdownContainer: {
+    backgroundColor: "#fff",
   },
   dropdownButton: {
     height: 50,
