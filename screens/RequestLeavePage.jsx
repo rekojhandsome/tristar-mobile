@@ -1,5 +1,12 @@
-import { useState, React } from 'react';
+import { useState, React, useEffect } from 'react';
 import { View, Text, StyleSheet, TextInput, Pressable, SafeAreaView, Modal, Button  } from 'react-native';
+
+import axios from 'axios';
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
+//API ENDPOINTS
+import { API_BASE_URL } from "../service/AuthService";
+import { API_BASE_URL1 } from "../service/AuthService";
 
 //Components
 import ConfirmLeaveModal from '../components/ConfirmLeavePopup';
@@ -14,13 +21,46 @@ export default function RequestLeavePage({navigation}){
     const [selectedDate, setSelectedDate] = useState(new Date()); // State for the selected date
     const [isDatePickerOpen, setIsDatePickerOpen] = useState(false); // State to control the modal
 
-    const [leaveTypeID, setLeaveTypeID] = useState(null); // State for department ID
+    const [vacationLeave, setVacationLeave] = useState("");
+    const [sickLeave, setSickLeave] = useState("");
+
+    const [leaveTypeID, setLeaveTypeID] = useState(null); // State for LeaveType ID
 
     const handleConfirm = (date) => {
         setSelectedDate(date); // Update the selected date
         setIsDatePickerOpen(false); // Close the date picker
       };
     
+      // Fetch employee profile
+  useEffect(() => {
+    const fetchEmployeeProfile = async () => {
+      try {
+        const token = await AsyncStorage.getItem("userToken");
+
+        if (!token) {
+          Alert.alert("Error", "No token found. Please sign in again.");
+          return;
+        }
+
+        const response = await axios.get(`${API_BASE_URL1}/api/employee/profile`, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+
+        const employee = response.data;
+        const vacationLeaveCredits = employee.leaveCredits.find((leave) => leave.leaveTypeID ===1)?.remainingCredits || "0";
+        const sickLeaveCredits = employee.leaveCredits.find((leave)=> leave.leaveTypeID === 2)?.remainingCredits || "0";
+
+        setVacationLeave(vacationLeaveCredits.toString());
+        setSickLeave(sickLeaveCredits.toString());
+        
+
+    console.log(employee);
+          } catch (error) {
+            console.error("Error fetching employee profile:", error);
+            Alert.alert("Error", "Failed to load employee data. Please try again.");
+          }
+        }; fetchEmployeeProfile();
+    }, []);
     return(
         <SafeAreaView>
             <View style ={styles.header}>
@@ -32,9 +72,26 @@ export default function RequestLeavePage({navigation}){
                 </View>
             </View>
                 <View style= {styles.form}>
-                   <Text style= {styles.formText}>Leave Application form</Text>
+                   <Text style= {styles.formText}>Leave Application Form</Text>
                     {/*Leave type */}
-                    <Text style={styles.leaveType}>Leave Type:</Text>
+
+                    <Text style={styles.bodyText}>Vacation Leave Credits:</Text>
+                                <TextInput
+                                  style={styles.input}
+                                  editable={false}
+                                  keyboardType="default"
+                                  value={vacationLeave}
+                                />
+                                <Text style={styles.bodyText}>Sick Leave Credits:</Text>
+                                <TextInput
+                                  style={styles.input}
+                                  editable={false}
+                                  keyboardType="default"
+                                  value={sickLeave}
+                                />
+
+
+                    <Text style={styles.bodyText}>Leave Type:</Text>
                      <LeaveTypeDropdown 
                               placeholder={"Select Leave Type"}
                               value={leaveTypeID} 
@@ -42,7 +99,7 @@ export default function RequestLeavePage({navigation}){
                               />
         
                     {/*Date */}
-                    <Text style={styles.leaveType}>Start of Leave:</Text>
+                    <Text style={styles.bodyText}>Start of Leave:</Text>
                     {/* DatePicker Modal */}
                     <DatePickerComponent
                         show={true}
@@ -52,7 +109,7 @@ export default function RequestLeavePage({navigation}){
                         placeholder="Select Leave Date"
                     />
 
-                    <Text style={styles.leaveType}>End of Leave:</Text>
+                    <Text style={styles.bodyText}>End of Leave:</Text>
                     {/* DatePicker Modal */}
                     <DatePickerComponent
                         show={true}
@@ -61,17 +118,12 @@ export default function RequestLeavePage({navigation}){
                         onConfirm={(date) => setSelectedDate(date)}
                         placeholder="Select Leave Date"
                     />
-
-                    {/*Supervisor*/}
-
-                    <Text style={styles.leaveType}>Supervisor:</Text>
-                    <TextInput style= {styles.input} placeholder="Select Supervisor" keyboardType="email-address"
-                    autoCapitalize="none">
-                    </TextInput>
-
                     {/*Reason*/}
-                    <Text style={styles.leaveType}>Reason:</Text>
-                    <TextInput style= {styles.input} placeholder="Enter Reason" keyboardType="default"
+                    <Text style={styles.bodyText}>Reason:</Text>
+                    <TextInput 
+                    style= {styles.input} 
+                    placeholder="Enter Reason" 
+                    keyboardType="default"
                     autoCapitalize="none" >
                     </TextInput>
                 </View>
@@ -101,18 +153,19 @@ const styles = StyleSheet.create({
         position: 'absolute',
         left: 15,
     },
-   
     form:{
-        paddingHorizontal: 10
+        paddingHorizontal: 10,
+        marginBottom: 5
     },
     formText:{
         fontSize: 30,
         marginBottom: 10,
         marginTop: 10,
     },
-    leaveType:{
+    bodyText:{
         fontSize: 20,
-        Color: 'black'
+        marginBottom: 5,
+        marginTop: 5,
     },
     input:{
         width: "100%",
@@ -122,29 +175,17 @@ const styles = StyleSheet.create({
         borderColor: '#ccc',
         borderRadius: 5,
         paddingHorizontal: 10,
-        marginBottom: 10,
         fontSize:20,
     },
-    leaveDate: {
-        flexDirection: "row",
-        alignItems: "center",
-        borderWidth: 1,
-        borderRadius: 5,
-        paddingHorizontal: 10,
-        width: 170,
-        height: 50,
-        marginBottom: 10,
-      },
-    
     button:{
-        alignItems: 'center',
-        paddingTop: 40
+        paddingHorizontal: 10,
+        marginTop: 30,
     },
     requestButton:{
         height: 50,
-        width: 200,
+        width: '100%',
         backgroundColor: '#3FD68F',
-        borderRadius: 10,
+        borderRadius: 5,
         alignItems: 'center',
         justifyContent: 'center',
         marginBottom: 10
@@ -152,7 +193,6 @@ const styles = StyleSheet.create({
     requestButtonText:{
         fontSize: 20,
         color: 'white',
-        fontWeight: 'semi-bold'
     }, 
     
 })

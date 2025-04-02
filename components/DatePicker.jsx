@@ -78,6 +78,7 @@ const styles = StyleSheet.create({
     },
     
     dropdownList: {
+      position: "static",
       marginTop: 5,
       borderWidth: 1,
       borderColor: "#ccc",
