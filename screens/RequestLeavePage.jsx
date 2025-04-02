@@ -1,6 +1,7 @@
 import { useState, React, useEffect } from 'react';
 import { View, Text, StyleSheet, TextInput, Pressable, SafeAreaView, Modal, Button  } from 'react-native';
 
+
 import axios from 'axios';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
@@ -10,7 +11,7 @@ import { API_BASE_URL1 } from "../service/AuthService";
 
 //Components
 import ConfirmLeaveModal from '../components/ConfirmLeavePopup';
-import DatePickerComponent from '../components/DatePicker'; 
+import { DatePickerComponent } from '../components/DatePicker'; 
 import { LeaveTypeDropdown } from '../components/Dropdown';
 
 
@@ -42,7 +43,7 @@ export default function RequestLeavePage({navigation}){
           return;
         }
 
-        const response = await axios.get(`${API_BASE_URL1}/api/employee/profile`, {
+        const response = await axios.get(`${API_BASE_URL}/api/employee/profile`, {
           headers: { Authorization: `Bearer ${token}` }
         });
 
