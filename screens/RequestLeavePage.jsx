@@ -1,5 +1,5 @@
 import { useState, React, useEffect } from 'react';
-import { View, Text, StyleSheet, TextInput, Pressable, SafeAreaView, Modal, Button  } from 'react-native';
+import { View, Text, StyleSheet, TextInput, Pressable, SafeAreaView, ScrollView  } from 'react-native';
 
 
 import axios from 'axios';
@@ -15,6 +15,7 @@ import { DatePickerComponent } from '../components/DatePicker';
 import { LeaveTypeDropdown } from '../components/Dropdown';
 
 
+
 export default function RequestLeavePage({navigation}){
 
     const [modalVisible, setModalVisible] = useState(false);
@@ -27,10 +28,7 @@ export default function RequestLeavePage({navigation}){
 
     const [leaveTypeID, setLeaveTypeID] = useState(null); // State for LeaveType ID
 
-    const handleConfirm = (date) => {
-        setSelectedDate(date); // Update the selected date
-        setIsDatePickerOpen(false); // Close the date picker
-      };
+    
     
       // Fetch employee profile
   useEffect(() => {
@@ -43,7 +41,7 @@ export default function RequestLeavePage({navigation}){
           return;
         }
 
-        const response = await axios.get(`${API_BASE_URL}/api/employee/profile`, {
+        const response = await axios.get(`${API_BASE_URL1}/api/employee/profile`, {
           headers: { Authorization: `Bearer ${token}` }
         });
 
@@ -71,7 +69,8 @@ export default function RequestLeavePage({navigation}){
                 <View styles={styles.titleContainer}>
                     <Text style={styles.headerText}>Request leave</Text>
                 </View>
-            </View>
+            </View> 
+            <ScrollView >
                 <View style= {styles.form}>
                    <Text style= {styles.formText}>Leave Application Form</Text>
                     {/*Leave type */}
@@ -90,8 +89,6 @@ export default function RequestLeavePage({navigation}){
                                   keyboardType="default"
                                   value={sickLeave}
                                 />
-
-
                     <Text style={styles.bodyText}>Leave Type:</Text>
                      <LeaveTypeDropdown 
                               placeholder={"Select Leave Type"}
@@ -107,7 +104,6 @@ export default function RequestLeavePage({navigation}){
                         date={selectedDate}
                         onChange={() => {}}
                         onConfirm={(date) => setSelectedDate(date)}
-                        placeholder="Select Leave Date"
                     />
 
                     <Text style={styles.bodyText}>End of Leave:</Text>
@@ -117,13 +113,22 @@ export default function RequestLeavePage({navigation}){
                         date={selectedDate}
                         onChange={() => {}}
                         onConfirm={(date) => setSelectedDate(date)}
-                        placeholder="Select Leave Date"
                     />
+
                     {/*Reason*/}
                     <Text style={styles.bodyText}>Reason:</Text>
                     <TextInput 
                     style= {styles.input} 
                     placeholder="Enter Reason" 
+                    keyboardType="default"
+                    autoCapitalize="none" >
+                    </TextInput>
+                    
+                    {/*Number of Days*/}
+                    <Text style={styles.bodyText}>Number of Days:</Text>
+                    <TextInput 
+                    style= {styles.input}
+                    editable={false}
                     keyboardType="default"
                     autoCapitalize="none" >
                     </TextInput>
@@ -134,6 +139,7 @@ export default function RequestLeavePage({navigation}){
                         </Pressable>
                     </View>
             <ConfirmLeaveModal visible={modalVisible} onClose={() => setModalVisible(false)}/>
+            </ScrollView>
         </SafeAreaView>
     )
 }

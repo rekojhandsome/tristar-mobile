@@ -1,54 +1,36 @@
 import React, { useState } from "react";
-import {
-  View,
-  Text,
-  Modal,
-  TouchableOpacity,
-  StyleSheet,
-  Platform,
-} from "react-native";
+import { View, Text,Modal, TouchableOpacity, StyleSheet, Platform } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { Ionicons } from "@expo/vector-icons";
 
-export const DatePickerComponent = ({ placeholder, onConfirm }) => {
+export const DatePickerComponent = ({ placeholder = "Select Leave Date", onConfirm }) => {
   const [isModalVisible, setModalVisible] = useState(false);
-  const [selectedDate, setSelectedDate] = useState(null);
-  const [showPicker, setShowPicker] = useState(false); // For Android
+  const [selectedDate, setSelectedDate] = useState(null); // Keep null for placeholder
+  const [tempDate, setTempDate] = useState(new Date()); // Temporary state for iOS
 
   const handleDateChange = (event, date) => {
     if (date) {
-      setSelectedDate(date);
+      setTempDate(date);
       if (Platform.OS === "android") {
-        setShowPicker(false); // Close picker automatically
-        onConfirm(date); // Confirm immediately on Android
+        setSelectedDate(date); // Set date immediately on Android
+        onConfirm(date);
+        setModalVisible(false);
       }
     }
   };
 
   return (
     <View style={styles.container}>
-      {/* Button to Open Modal (iOS) / Show Picker (Android) */}
+      {/* Button to Open Modal */}
       <TouchableOpacity
         style={styles.dropdownButton}
-        onPress={() =>
-          Platform.OS === "ios" ? setModalVisible(true) : setShowPicker(true)
-        }
+        onPress={() => setModalVisible(true)}
       >
         <Text style={styles.dropdownText}>
-          {selectedDate ? selectedDate.toDateString() : placeholder}
+          {selectedDate ? selectedDate.toDateString() : (placeholder || "Select Leave Date")}
         </Text>
         <Ionicons name="calendar-outline" size={25} />
       </TouchableOpacity>
-
-      {/* Android Date Picker (Appears Inline) */}
-      {showPicker && Platform.OS === "android" && (
-        <DateTimePicker
-          value={selectedDate || new Date()}
-          mode="date"
-          display="calendar"
-          onChange={handleDateChange}
-        />
-      )}
 
       {/* iOS Modal for Date Picker */}
       {Platform.OS === "ios" && (
@@ -60,7 +42,7 @@ export const DatePickerComponent = ({ placeholder, onConfirm }) => {
           <View style={styles.modalContainer}>
             <View style={styles.modalContent}>
               <DateTimePicker
-                value={selectedDate || new Date()}
+                value={tempDate}
                 mode="date"
                 display="inline"
                 onChange={handleDateChange}
@@ -70,7 +52,8 @@ export const DatePickerComponent = ({ placeholder, onConfirm }) => {
               <TouchableOpacity
                 style={styles.confirmButton}
                 onPress={() => {
-                  onConfirm(selectedDate);
+                  setSelectedDate(tempDate); // Update selected date on confirm
+                  onConfirm(tempDate);
                   setModalVisible(false);
                 }}
               >
@@ -79,6 +62,16 @@ export const DatePickerComponent = ({ placeholder, onConfirm }) => {
             </View>
           </View>
         </Modal>
+      )}
+
+      {/* Android Date Picker */}
+      {Platform.OS === "android" && isModalVisible && (
+        <DateTimePicker
+          value={selectedDate || new Date()}
+          mode="date"
+          display="calendar"
+          onChange={handleDateChange}
+        />
       )}
     </View>
   );
@@ -89,6 +82,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   dropdownButton: {
+    height: 50,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
@@ -97,10 +91,11 @@ const styles = StyleSheet.create({
     borderColor: "#ccc",
     backgroundColor: "#fff",
     borderRadius: 5,
-    width: '100%',
+    width: "100%",
   },
   dropdownText: {
     fontSize: 16,
+    color: "#000",
   },
   modalContainer: {
     flex: 1,
@@ -127,4 +122,3 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
 });
-

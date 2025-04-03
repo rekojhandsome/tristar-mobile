@@ -68,62 +68,71 @@ import { API_BASE_URL1 } from "../service/AuthService";
     );
     };
 
-    export const  DepartmentsDropdown = ({ value, setValue, placeholder }) => {
-        const [isOpen, setIsOpen] = useState(false);
-        const [data, setData] = useState([]);
-        const [loading, setLoading] = useState(true);
-      
-        useEffect(() => {
-          axios.get(DEPARTMENT_URL)
-            .then(response => {
-              console.log("Fetched Data:", response.data); // Debugging
-              setData(response.data);
-              setLoading(false);
-            })
-            .catch(error => {
-              console.error("Error fetching data:", error);
-              setLoading(false);
-            });
-        }, []);
-      
-        return (
-          <View style={styles.dropdownContainer}>
-            {/* Dropdown Button */}
-            <TouchableOpacity style={styles.dropdownButton} onPress={() => setIsOpen(!isOpen)}>
-              <Text style={styles.dropdownText}>
-                {/* Display selected Company Name */}
-                {value ? data.find((item) => item.departmentID === value)?.departmentName : placeholder}
-              </Text>
-              <Ionicons name="chevron-down-outline" size={25} style={styles.dropdownIcon} />
-            </TouchableOpacity>
-      
-            {/* Dropdown List */}
-            {isOpen && (
-              <View style={styles.dropdownList}>
-                {loading ? (
-                  <ActivityIndicator size="small" color="#0000ff" />
-                ) : (
-                  <FlatList
-                    data={data}
-                    keyExtractor={(item) => (item?.departmentID ? item.departmentID.toString() : "unknown")}
-                    renderItem={({ item }) => (
-                      <TouchableOpacity
-                        style={styles.dropdownItem}
-                        onPress={() => {
-                          setValue(item.departmentID); // Save the Department ID, not the name
-                          setIsOpen(false);
-                        }}
-                      >
-                        <Text style={styles.itemText}>{item.departmentName}</Text>
-                      </TouchableOpacity>
-                    )}
-                  />
-                )}
-              </View>
-            )}
-          </View>
-        );
-      };
+    export const DepartmentsDropdown = ({ value, setValue, placeholder }) => {
+      const [isOpen, setIsOpen] = useState(false);
+      const [data, setData] = useState([]);
+      const [loading, setLoading] = useState(true);
+    
+      useEffect(() => {
+        axios
+          .get(DEPARTMENT_URL)
+          .then((response) => {
+            console.log("Fetched Data:", response.data); // Debugging
+            setData(response.data);
+            setLoading(false);
+          })
+          .catch((error) => {
+            console.error("Error fetching data:", error);
+            setLoading(false);
+          });
+      }, []);
+    
+      return (
+        <View style={styles.dropdownContainer}>
+          {/* Dropdown Button */}
+          <TouchableOpacity
+            style={styles.dropdownButton}
+            onPress={() => setIsOpen(!isOpen)}
+          >
+            <Text style={styles.dropdownText}>
+              {/* Display selected Department Name */}
+              {value
+                ? data.find((item) => item.departmentID === value)?.departmentName
+                : placeholder}
+            </Text>
+            <Ionicons name="chevron-down-outline" size={25} style={styles.dropdownIcon} />
+          </TouchableOpacity>
+    
+          {/* Dropdown List */}
+          {isOpen && (
+            <View style={styles.dropdownList}>
+              {loading ? (
+                <ActivityIndicator size="small" color="#0000ff" />
+              ) : (
+                <FlatList
+                  data={data}
+                  keyExtractor={(item) =>
+                    item?.departmentID ? item.departmentID.toString() : "unknown"
+                  }
+                  renderItem={({ item }) => (
+                    <TouchableOpacity
+                      style={styles.dropdownItem}
+                      onPress={() => {
+                        setValue(item.departmentID); // Save the Department ID, not the name
+                        setIsOpen(false);
+                      }}
+                    >
+                      <Text style={styles.itemText}>{item.departmentName}</Text>
+                    </TouchableOpacity>
+                  )}
+                  nestedScrollEnabled={true} // Enable nested scrolling for FlatList
+                />
+              )}
+            </View>
+          )}
+        </View>
+      );
+    };
 
       export const  LeaveTypeDropdown = ({ value, setValue, placeholder }) => {
         const [isOpen, setIsOpen] = useState(false);
