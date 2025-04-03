@@ -4,11 +4,11 @@ import { Alert } from "react-native";
 import { useState } from "react";
 
 
-import { Login } from "../service/AuthService";
+import { Login } from "../service/Authentication/AuthService";
 
 //API ENDPOINTS
-import { API_BASE_URL } from "../service/AuthService";
-import { API_BASE_URL1 } from "../service/AuthService";
+import { API_BASE_URL } from "../service/Authentication/AuthService";
+import { API_BASE_URL1 } from "../service/Authentication/AuthService";
 
 export default function SignIn({ navigation }) {
 

@@ -5,8 +5,8 @@ import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 //API ENDPOINTS
-import { API_BASE_URL } from "../service/AuthService";
-import { API_BASE_URL1 } from "../service/AuthService";
+import { API_BASE_URL } from "../service/Authentication/AuthService";
+import { API_BASE_URL1 } from "../service/Authentication/AuthService";
 
 
 export default function AccountPage({ navigation }) {
