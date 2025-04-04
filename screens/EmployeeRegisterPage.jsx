@@ -21,7 +21,9 @@ export default function EmployeeRegister({ navigation }) {
   const [email, setEmail] = useState("");
   const [companyID, setCompanyID] = useState(null);
   const [departmentID, setDepartmentID] = useState(null);
-  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [selectedDate, setSelectedDate] = useState(null);
+
+
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSaveEmployeeDetail = async () => {
@@ -78,7 +80,7 @@ export default function EmployeeRegister({ navigation }) {
     { key: "lastName", label: "Last Name:", component: <TextInput style={styles.input} placeholder="Enter your last name" value={lastName} onChangeText={setLastName} /> },
     { key: "phoneNo", label: "Contact Number:", component: <TextInput style={styles.input} placeholder="Enter your contact number" keyboardType="number-pad" value={phoneNo} onChangeText={setPhoneNo} /> },
     { key: "email", label: "Email Address:", component: <TextInput style={styles.input} placeholder="Enter your email address" keyboardType="email-address" autoCapitalize="none" value={email} onChangeText={setEmail} /> },
-    { key: "dateHired", label: "Date Hired:", component: <DatePickerComponent show={true} date={selectedDate} onChange={() => {}} onConfirm={(date) => setSelectedDate(date)} placeholder="Select Date"/> },
+    { key: "dateHired", label: "Date Hired:", component: <DatePickerComponent value={selectedDate} onConfirm={(date) => setSelectedDate(date)} placeholder="Select Date"/> },
   ];
 
   return (
@@ -114,6 +116,7 @@ export default function EmployeeRegister({ navigation }) {
         }
         nestedScrollEnabled={true}
         contentContainerStyle={{ paddingBottom: 20 }} // Enable nested scrolling
+        showsVerticalScrollIndicator={false} // Hide vertical scroll indicator
       />
     </KeyboardAvoidingView>
   </SafeAreaView>
@@ -159,6 +162,7 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 5,
     backgroundColor: "#fff",
+    fontSize: 20
   },
   buttonContainer: {
     paddingHorizontal: 10,

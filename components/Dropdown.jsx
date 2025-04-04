@@ -212,7 +212,7 @@ const styles = StyleSheet.create({
     right: 10,
   },
   dropdownText: {
-    fontSize: 14,
+    fontSize: 16,
   },
   dropdownList: {
     marginTop: 5,
@@ -228,7 +228,7 @@ const styles = StyleSheet.create({
     borderBottomColor: "#ddd",
   },
   itemText: {
-    fontSize: 15,
+    fontSize: 16,
   },
 });
 

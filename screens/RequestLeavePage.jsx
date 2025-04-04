@@ -1,5 +1,5 @@
 import { useState, React, useEffect } from 'react';
-import { View, Text, StyleSheet, TextInput, Pressable, SafeAreaView, ScrollView  } from 'react-native';
+import { View, Text, StyleSheet, TextInput, Pressable, SafeAreaView,  Platform, FlatList, KeyboardAvoidingView } from 'react-native';
 
 
 import axios from 'axios';
@@ -16,133 +16,163 @@ import { LeaveTypeDropdown } from '../components/Dropdown';
 
 
 
-export default function RequestLeavePage({navigation}){
-
-    const [modalVisible, setModalVisible] = useState(false);
-
-    const [selectedDate, setSelectedDate] = useState(new Date()); // State for the selected date
-    const [isDatePickerOpen, setIsDatePickerOpen] = useState(false); // State to control the modal
-
+export default function RequestLeavePage({ navigation }) {
+    const [leaveStart, setLeaveStart] = useState(null);
+    const [leaveEnd, setLeavEnd] = useState(null);
     const [vacationLeave, setVacationLeave] = useState("");
     const [sickLeave, setSickLeave] = useState("");
+    const [leaveTypeID, setLeaveTypeID] = useState(null);
 
-    const [leaveTypeID, setLeaveTypeID] = useState(null); // State for LeaveType ID
-
-    
-    
-      // Fetch employee profile
-  useEffect(() => {
-    const fetchEmployeeProfile = async () => {
-      try {
-        const token = await AsyncStorage.getItem("userToken");
-
-        if (!token) {
-          Alert.alert("Error", "No token found. Please sign in again.");
-          return;
-        }
-
-        const response = await axios.get(`${API_BASE_URL1}/api/employee/profile`, {
-          headers: { Authorization: `Bearer ${token}` }
-        });
-
-        const employee = response.data;
-        const vacationLeaveCredits = employee.leaveCredits.find((leave) => leave.leaveTypeID ===1)?.remainingCredits || "0";
-        const sickLeaveCredits = employee.leaveCredits.find((leave)=> leave.leaveTypeID === 2)?.remainingCredits || "0";
-
-        setVacationLeave(vacationLeaveCredits.toString());
-        setSickLeave(sickLeaveCredits.toString());
-        
-
-    console.log(employee);
-          } catch (error) {
-            console.error("Error fetching employee profile:", error);
-            Alert.alert("Error", "Failed to load employee data. Please try again.");
+    const [reason, setReason] = useState("");
+    const [numberOfDays, setNumberOfDays] = useState(0);
+  
+    useEffect(() => {
+      const fetchEmployeeProfile = async () => {
+        try {
+          const token = await AsyncStorage.getItem("userToken");
+  
+          if (!token) {
+            Alert.alert("Error", "No token found. Please sign in again.");
+            return;
           }
-        }; fetchEmployeeProfile();
+  
+          const response = await axios.get(`${API_BASE_URL1}/api/employee/profile`, {
+            headers: { Authorization: `Bearer ${token}` }
+          });
+  
+          const employee = response.data;
+          const vacationLeaveCredits = employee.leaveCredits.find((leave) => leave.leaveTypeID === 1)?.remainingCredits || "0";
+          const sickLeaveCredits = employee.leaveCredits.find((leave) => leave.leaveTypeID === 2)?.remainingCredits || "0";
+  
+          setVacationLeave(vacationLeaveCredits.toString());
+          setSickLeave(sickLeaveCredits.toString());
+        } catch (error) {
+          console.error("Error fetching employee profile:", error);
+          Alert.alert("Error", "Failed to load employee data. Please try again.");
+        }
+      };
+  
+      fetchEmployeeProfile();
     }, []);
-    return(
-        <SafeAreaView>
-            <View style ={styles.header}>
-                 <Pressable style={styles.leaveButton} onPress={() => navigation.navigate("LeavePage")}>
-                    <Text style={styles.headerText }>Leave</Text>
-                </Pressable>
-                <View styles={styles.titleContainer}>
-                    <Text style={styles.headerText}>Request leave</Text>
+  
+    const formFields = [
+      {
+        key: "vacationLeave",
+        label: "Vacation Leave Credits:",
+        component: (
+          <TextInput
+            style={[styles.input, styles.disabledInput]}// Add a new style for disabled input
+            editable={false}
+            value={vacationLeave}
+          />
+        ),
+      },
+      {
+        key: "sickLeave",
+        label: "Sick Leave Credits:",
+        component: (
+          <TextInput
+            style={[styles.input, styles.disabledInput]}
+            editable={false}
+            value={sickLeave}
+          />
+        ),
+      },
+      {
+        key: "leaveType",
+        label: "Leave Type:",
+        component: (
+          <LeaveTypeDropdown
+            placeholder={"Select Leave Type"}
+            value={leaveTypeID}
+            setValue={setLeaveTypeID}
+          />
+        ),
+      },
+      {
+        key: "startDate",
+        label: "Start of Leave:",
+        component: (
+          <DatePickerComponent
+            value={leaveStart}
+            onConfirm={(date) => setLeaveStart(date)}
+          />
+        ),
+      },
+      {
+        key: "endDate",
+        label: "End of Leave:",
+        component: (
+          <DatePickerComponent
+            value={leaveEnd}
+            onConfirm={(date) => setLeavEnd(date)}
+          />
+        ),
+      },
+      {
+        key: "reason",
+        label: "Reason:",
+        component: (
+          <TextInput
+            style={styles.input}
+            placeholder="Enter Reason"
+            keyboardType="default"
+            autoCapitalize="none"
+            value={reason}
+            onchange={setReason}
+          />
+        ),
+      },
+      {
+        key: "numberOfDays",
+        label: "Number of Days",
+        component:(
+            <TextInput 
+            style={[styles.input, styles.disabledInput]}
+            editable={false}
+            />
+        )
+      }
+    ];
+  
+    return (
+      <SafeAreaView style={{ flex: 1 }}>
+        <View style={styles.header}>
+          <Pressable style={styles.leaveButton} onPress={() => navigation.navigate("LeavePage")}>
+            <Text style={styles.headerText}>Leave</Text>
+          </Pressable>
+          <Text style={styles.headerText}>Request Leave</Text>
+        </View>
+  
+        <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={{ flex: 1 }}>
+          <FlatList
+            data={formFields}
+            keyExtractor={(item) => item.key}
+            renderItem={({ item }) => (
+              <View style={styles.form}>
+                <Text style={styles.bodyText}>{item.label}</Text>
+                {item.component}
+              </View>
+            )}
+            ListHeaderComponent={
+                <Text style={styles.formText}>Leave Application Form</Text> // Only the "Employee Details" text remains in the header of the list
+            }
+            ListFooterComponent={
+                <View style={styles.buttonContainer}>
+                    <Pressable style={styles.registerButton}>
+                        <Text style={styles.registerButtonText}>Request Leave</Text>
+                    </Pressable>
                 </View>
-            </View> 
-            <ScrollView >
-                <View style= {styles.form}>
-                   <Text style= {styles.formText}>Leave Application Form</Text>
-                    {/*Leave type */}
+            }
+            nestedScrollEnabled={true}  // Enable nested scrolling
+            showsVerticalScrollIndicator={false} // Hide vertical scroll indicator  
+            contentContainerStyle={{ paddingBottom: 20 }} // Enable nested scrolling
+          />
+        </KeyboardAvoidingView>
+      </SafeAreaView>
+    );
+  }
 
-                    <Text style={styles.bodyText}>Vacation Leave Credits:</Text>
-                                <TextInput
-                                  style={styles.input}
-                                  editable={false}
-                                  keyboardType="default"
-                                  value={vacationLeave}
-                                />
-                                <Text style={styles.bodyText}>Sick Leave Credits:</Text>
-                                <TextInput
-                                  style={styles.input}
-                                  editable={false}
-                                  keyboardType="default"
-                                  value={sickLeave}
-                                />
-                    <Text style={styles.bodyText}>Leave Type:</Text>
-                     <LeaveTypeDropdown 
-                              placeholder={"Select Leave Type"}
-                              value={leaveTypeID} 
-                              setValue={setLeaveTypeID}
-                              />
-        
-                    {/*Date */}
-                    <Text style={styles.bodyText}>Start of Leave:</Text>
-                    {/* DatePicker Modal */}
-                    <DatePickerComponent
-                        show={true}
-                        date={selectedDate}
-                        onChange={() => {}}
-                        onConfirm={(date) => setSelectedDate(date)}
-                    />
-
-                    <Text style={styles.bodyText}>End of Leave:</Text>
-                    {/* DatePicker Modal */}
-                    <DatePickerComponent
-                        show={true}
-                        date={selectedDate}
-                        onChange={() => {}}
-                        onConfirm={(date) => setSelectedDate(date)}
-                    />
-
-                    {/*Reason*/}
-                    <Text style={styles.bodyText}>Reason:</Text>
-                    <TextInput 
-                    style= {styles.input} 
-                    placeholder="Enter Reason" 
-                    keyboardType="default"
-                    autoCapitalize="none" >
-                    </TextInput>
-                    
-                    {/*Number of Days*/}
-                    <Text style={styles.bodyText}>Number of Days:</Text>
-                    <TextInput 
-                    style= {styles.input}
-                    editable={false}
-                    keyboardType="default"
-                    autoCapitalize="none" >
-                    </TextInput>
-                </View>
-                    <View style= {styles.button}>
-                        <Pressable style={styles.requestButton}>
-                            <Text style={styles.requestButtonText} onPress={() => setModalVisible(true)}>Request Leave</Text>
-                        </Pressable>
-                    </View>
-            <ConfirmLeaveModal visible={modalVisible} onClose={() => setModalVisible(false)}/>
-            </ScrollView>
-        </SafeAreaView>
-    )
-}
 const styles = StyleSheet.create({
     header:{
         width: '100%',
@@ -168,6 +198,7 @@ const styles = StyleSheet.create({
         fontSize: 30,
         marginBottom: 10,
         marginTop: 10,
+        paddingHorizontal: 10,
     },
     bodyText:{
         fontSize: 20,
@@ -184,22 +215,22 @@ const styles = StyleSheet.create({
         paddingHorizontal: 10,
         fontSize:20,
     },
-    button:{
+    disabledInput: {
+        color: "#a9a9a9", // Grey text color
+      },
+    buttonContainer: {
         paddingHorizontal: 10,
-        marginTop: 30,
-    },
-    requestButton:{
-        height: 50,
-        width: '100%',
-        backgroundColor: '#3FD68F',
+        marginTop: 10,
+      },
+    registerButton: {
+        width: "100%",
+        backgroundColor: "#3FD68F",
+        padding: 15,
         borderRadius: 5,
-        alignItems: 'center',
-        justifyContent: 'center',
-        marginBottom: 10
-    },
-    requestButtonText:{
+      },
+    registerButtonText: {
+        textAlign: "center",
+        color: "white",
         fontSize: 20,
-        color: 'white',
-    }, 
-    
+    },
 })

@@ -120,7 +120,7 @@ export default function SignIn({ navigation }) {
     },
     signInButton: {
       backgroundColor: "#3FD68F",
-      borderRadius: 15,
+      borderRadius: 10,
       justifyContent: 'center',
       alignItems: "center",
       width: 242,

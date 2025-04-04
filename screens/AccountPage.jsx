@@ -27,7 +27,7 @@ export default function AccountPage({ navigation }) {
         const token = await AsyncStorage.getItem("userToken");
 
         if (!token) {
-          Alert.alert("Error", "No token found. Please sign in again.");
+          Alert.alert("Error", "No token found. Please login again.");
           return;
         }
 

@@ -3,20 +3,24 @@ import { View, Text,Modal, TouchableOpacity, StyleSheet, Platform } from "react-
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { Ionicons } from "@expo/vector-icons";
 
-export const DatePickerComponent = ({ placeholder = "Select Leave Date", onConfirm }) => {
+export const DatePickerComponent = ({ placeholder = "Select Date", value, onConfirm }) => {
   const [isModalVisible, setModalVisible] = useState(false);
-  const [selectedDate, setSelectedDate] = useState(null); // Keep null for placeholder
-  const [tempDate, setTempDate] = useState(new Date()); // Temporary state for iOS
+  const [tempDate, setTempDate] = useState(value || new Date()); // Use value as the initial date
 
   const handleDateChange = (event, date) => {
     if (date) {
       setTempDate(date);
       if (Platform.OS === "android") {
-        setSelectedDate(date); // Set date immediately on Android
-        onConfirm(date);
+        onConfirm(date); // Update the parent state
         setModalVisible(false);
       }
     }
+  };
+
+  const handleConfirm = () => {
+    // Always call onConfirm with the selected date, even if it's the same as the current date
+    onConfirm(tempDate);
+    setModalVisible(false);
   };
 
   return (
@@ -27,7 +31,7 @@ export const DatePickerComponent = ({ placeholder = "Select Leave Date", onConfi
         onPress={() => setModalVisible(true)}
       >
         <Text style={styles.dropdownText}>
-          {selectedDate ? selectedDate.toDateString() : (placeholder || "Select Leave Date")}
+          {value ? value.toDateString() : placeholder}
         </Text>
         <Ionicons name="calendar-outline" size={25} />
       </TouchableOpacity>
@@ -51,11 +55,7 @@ export const DatePickerComponent = ({ placeholder = "Select Leave Date", onConfi
               {/* Confirm Button (Only for iOS) */}
               <TouchableOpacity
                 style={styles.confirmButton}
-                onPress={() => {
-                  setSelectedDate(tempDate); // Update selected date on confirm
-                  onConfirm(tempDate);
-                  setModalVisible(false);
-                }}
+                onPress={handleConfirm} // Call handleConfirm
               >
                 <Text style={styles.confirmButtonText}>Confirm</Text>
               </TouchableOpacity>
@@ -67,10 +67,18 @@ export const DatePickerComponent = ({ placeholder = "Select Leave Date", onConfi
       {/* Android Date Picker */}
       {Platform.OS === "android" && isModalVisible && (
         <DateTimePicker
-          value={selectedDate || new Date()}
+          value={tempDate}
           mode="date"
           display="calendar"
-          onChange={handleDateChange}
+          onChange={(event, date) => {
+            if (date) {
+              setTempDate(date);
+              onConfirm(date); // Update the parent state
+              setModalVisible(false);
+            } else {
+              setModalVisible(false); // Close the picker if canceled
+            }
+          }}
         />
       )}
     </View>
