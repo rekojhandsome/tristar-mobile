@@ -21,7 +21,7 @@ export default function EmployeeRegister({ navigation }) {
   const [email, setEmail] = useState("");
   const [companyID, setCompanyID] = useState(null);
   const [departmentID, setDepartmentID] = useState(null);
-  const [selectedDate, setSelectedDate] = useState(null);
+  const [dateHired, setDateHired] = useState(null);
 
 
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -39,6 +39,7 @@ export default function EmployeeRegister({ navigation }) {
         phoneNo,
         email,
         departmentID,
+        dateHired
       };
 
       console.log("Employee Data: ", employeeData);
@@ -67,6 +68,7 @@ export default function EmployeeRegister({ navigation }) {
         console.error(error);
         Alert.alert("Error", "Error registering employee");
         console.log("Error registering employee", error);
+        console.log("Sending employee data:", employeeData);
         setIsSubmitting(false);
       }
     }
@@ -80,7 +82,7 @@ export default function EmployeeRegister({ navigation }) {
     { key: "lastName", label: "Last Name:", component: <TextInput style={styles.input} placeholder="Enter your last name" value={lastName} onChangeText={setLastName} /> },
     { key: "phoneNo", label: "Contact Number:", component: <TextInput style={styles.input} placeholder="Enter your contact number" keyboardType="number-pad" value={phoneNo} onChangeText={setPhoneNo} /> },
     { key: "email", label: "Email Address:", component: <TextInput style={styles.input} placeholder="Enter your email address" keyboardType="email-address" autoCapitalize="none" value={email} onChangeText={setEmail} /> },
-    { key: "dateHired", label: "Date Hired:", component: <DatePickerComponent value={selectedDate} onConfirm={(date) => setSelectedDate(date)} placeholder="Select Date"/> },
+    { key: "dateHired", label: "Date Hired:", component: <DatePickerComponent value={dateHired} onConfirm={(date) => setDateHired(date)} placeholder="Select Date"/> },
   ];
 
   return (

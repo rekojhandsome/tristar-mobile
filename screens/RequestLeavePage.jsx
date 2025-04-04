@@ -15,7 +15,6 @@ import { DatePickerComponent } from '../components/DatePicker';
 import { LeaveTypeDropdown } from '../components/Dropdown';
 
 
-
 export default function RequestLeavePage({ navigation }) {
     const [leaveStart, setLeaveStart] = useState(null);
     const [leaveEnd, setLeavEnd] = useState(null);
@@ -25,16 +24,22 @@ export default function RequestLeavePage({ navigation }) {
 
     const [reason, setReason] = useState("");
     const [numberOfDays, setNumberOfDays] = useState(0);
+
+    const [isSubmitting, setIsSubmitting] = useState(false);
   
     useEffect(() => {
-      const fetchEmployeeProfile = async () => {
+
+    if (isSubmitting) return;
+    setIsSubmitting(true);
+
+    const fetchEmployeeProfile = async () => {
         try {
-          const token = await AsyncStorage.getItem("userToken");
+            const token = await AsyncStorage.getItem("userToken");
   
-          if (!token) {
-            Alert.alert("Error", "No token found. Please sign in again.");
-            return;
-          }
+            if (!token) {
+                Alert.alert("Error", "No token found. Please sign in again.");
+                return;
+            }
   
           const response = await axios.get(`${API_BASE_URL1}/api/employee/profile`, {
             headers: { Authorization: `Bearer ${token}` }
@@ -46,6 +51,7 @@ export default function RequestLeavePage({ navigation }) {
   
           setVacationLeave(vacationLeaveCredits.toString());
           setSickLeave(sickLeaveCredits.toString());
+
         } catch (error) {
           console.error("Error fetching employee profile:", error);
           Alert.alert("Error", "Failed to load employee data. Please try again.");
@@ -119,7 +125,7 @@ export default function RequestLeavePage({ navigation }) {
             keyboardType="default"
             autoCapitalize="none"
             value={reason}
-            onchange={setReason}
+            onChangeText={setReason}
           />
         ),
       },
