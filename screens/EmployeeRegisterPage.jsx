@@ -12,6 +12,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 // API ENDPOINTS
 import { API_BASE_URL } from "../service/Authentication/AuthenticationService";
 import { API_BASE_URL1 } from "../service/Authentication/AuthenticationService";
+import { RegisterEmployee } from "../service/Employee/EmployeeService";
 
 
 export default function EmployeeRegister({ navigation }) {
@@ -26,39 +27,31 @@ export default function EmployeeRegister({ navigation }) {
 
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSaveEmployeeDetail = async () => {
-    const employeeURL = `${API_BASE_URL}/api/Employee`;
+  const handleRegisterEmployee = async () => {
 
     if (isSubmitting) return;
     setIsSubmitting(true);
 
-    try {
-      const employeeData = {
-        firstName,
-        lastName,
-        phoneNo,
-        email,
-        departmentID,
-        dateHired
-      };
+    try{
+      const result = await RegisterEmployee(firstName, lastName, phoneNo, email, departmentID, dateHired);
 
-      console.log("Employee Data: ", employeeData);
-      const response = await axios.post(employeeURL, employeeData);
-
-      const employeeID = await response.data.employeeID;
-      console.log("Employee ID: ", employeeID);
-
-      AsyncStorage.setItem("employeeID", employeeID.toString());
-
-      Alert.alert("Success", "Employee Registered Successfully!", [
-        {
-          text: "Okay",
-          onPress: () => {
-            console.log("Employee Registered Successfully!");
-            navigation.navigate("SignUp");
-          },
-        },
-      ]);
+      if (result.success){
+        Alert.alert("Success", "Employee registered successfully",
+        [
+          {
+            text: "Okay",
+            onPress: () => {
+              navigation.navigate("SignUp");
+            }
+          }
+        ]),
+        console.log("Employee registered successfuly", result);
+        setIsSubmitting(false);
+      } else {
+        Alert.alert("Error", "Failed to register employee. Please try again.");
+        console.log("Failed to register employee", result);
+        setIsSubmitting(false);
+      }
     } catch (error) {
       if (axios.isAxiosError(error) && error.response?.status === 409) {
         console.error("An employee with the same credentials already exists", error.response.data.message);
@@ -111,7 +104,7 @@ export default function EmployeeRegister({ navigation }) {
         }
         ListFooterComponent={
           <View style={styles.buttonContainer}>
-            <Pressable style={styles.registerButton} onPress={handleSaveEmployeeDetail}>
+            <Pressable style={styles.registerButton} onPress={handleRegisterEmployee}>
               <Text style={styles.registerButtonText}>Create Account</Text>
             </Pressable>
           </View>

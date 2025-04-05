@@ -6,8 +6,41 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { API_BASE_URL } from '../Authentication/AuthenticationService';
 import { API_BASE_URL1 } from '../Authentication/AuthenticationService';
 
+
+// Register Employee
+export const RegisterEmployee = async (firstName,lastName,phoneNo, email, departmentID, dateHired) => {
+    try {
+      const employeeData ={
+        firstName,
+        lastName,
+        phoneNo,
+        email,
+        departmentID,
+        dateHired
+      }
+
+    const response  = await axios.post(`${API_BASE_URL}/api/Employee`, employeeData);
+
+    const employeeID = response.data.employeeID;
+    console.log("Employee ID: ", employeeID);
+    AsyncStorage.setItem("employeeID", employeeID.toString());
+      
+    if (response.status === 201){
+      console.log("Employee registered succefully");
+      return { success: true };
+    } else {
+      console.log("Employee registration failed", response.status);
+      return { success: false };
+    }
+
+  }catch (error) {
+    console.error("Error registering employee:", error);
+    Alert.alert("Error", "Failed to register employee. Please try again.");
+    return { success: false };
+  }
+}
 // Fetch Employee Profile
-export const GetEmployeeProfile = async (firstName, lastName, phoneNo, email) => {
+export const GetEmployeeProfile = async () => {
   try {
     const token = await AsyncStorage.getItem("userToken");
 
@@ -68,7 +101,7 @@ export const AddLeaveRequest = async (leaveStart, leaveEnd, leaveTypeID, reason)
 
     const employeeData = await GetEmployeeProfile();
     const employeeID = employeeData.employeeID;
-    
+
     const employeeRequestLeaveData = {
       employeeID,
       leaveTypeID,
