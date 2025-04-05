@@ -62,11 +62,13 @@ export const AddLeaveRequest = async (leaveStart, leaveEnd, leaveTypeID, reason)
     if (!token){
       console.log("Token not found, Please login"),
       Alert.alert("Token not found", "Token not found, please login");
+      return { success: false };
+
     }
 
     const employeeData = await GetEmployeeProfile();
     const employeeID = employeeData.employeeID;
-
+    
     const employeeRequestLeaveData = {
       employeeID,
       leaveTypeID,
@@ -79,14 +81,17 @@ export const AddLeaveRequest = async (leaveStart, leaveEnd, leaveTypeID, reason)
       headers: {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
-      }
+      },
     });
     if (response.status === 200) {
-      Alert.alert("Success", "Leave request submitted successfully.");
+      return { success: true };
+    }else {
+      return { success: false };
     }
   }catch(error){
     console.error("Error submitting leave request:", error);
     Alert.alert("Error", "Failed to submit leave request. Please try again.");
+    return { success: false };
     
   }
 

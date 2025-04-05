@@ -16,7 +16,7 @@ export default function SignIn({ navigation }) {
         if (result.success) {
           Alert.alert("Success", "Login successful!", [
             {
-              text: "OK",
+              text: "Okay",
               onPress: () => navigation.navigate("LeavePage") // Navigate only after pressing OK
             }
           ]);

@@ -1,5 +1,5 @@
 import { useState, React, useEffect } from 'react';
-import { View, Text, StyleSheet, TextInput, Pressable, SafeAreaView,  Platform, FlatList, KeyboardAvoidingView } from 'react-native';
+import { View, Text, StyleSheet, TextInput, Pressable, SafeAreaView,  Platform, FlatList, KeyboardAvoidingView, Alert } from 'react-native';
 
 
 import axios from 'axios';
@@ -18,24 +18,27 @@ import { DatePickerComponent } from '../components/DatePicker';
 import { LeaveTypeDropdown } from '../components/Dropdown';
 
 
-export default function RequestLeavePage({ navigation }) {
+export default function RequestLeavePage({ navigation }) { 
+    // Leave Credits
+    const [vacationLeaveCredits, setVacationLeaveCredits] = useState("");
+    const [sickLeaveCredits, setSickLeaveCredits] = useState("");
+
+    // Leave Request
+    const [leaveTypeID, setLeaveTypeID] = useState(null);
     const [leaveStart, setLeaveStart] = useState(null);
     const [leaveEnd, setLeavEnd] = useState(null);
-    const [vacationLeave, setVacationLeaveCredits] = useState("");
-    const [sickLeave, setSickLeaveCredits] = useState("");
-    const [leaveTypeID, setLeaveTypeID] = useState(null);
-
     const [reason, setReason] = useState("");
 
     const [isSubmitting, setIsSubmitting] = useState(false);
   
+    // Fetch Leave Credits
     useEffect(() => {
     const loadLeaveCredits = async () => {
       try {
         const { vacationLeaveCredits, sickLeaveCredits } = await GetLeaveCredits();
           setVacationLeaveCredits(vacationLeaveCredits);
           setSickLeaveCredits(sickLeaveCredits);
-          console.log("Leave Credits:", "Vacation Leave: ",vacationLeaveCredits, "Sick Leave: ",sickLeaveCredits);
+          console.log("Current leave credits:", "Vacation Leave: ",vacationLeaveCredits, "Sick Leave: ",sickLeaveCredits);
           }
       catch (error) {
         console.error("Error loading leave credits: ", error)
@@ -44,23 +47,56 @@ export default function RequestLeavePage({ navigation }) {
       loadLeaveCredits();
     },[]);
 
+    // Apply Leave Request
     const handleAddLeaveRequest = async () => {
+      if (isSubmitting) return; // Prevent multiple submissions
+      setIsSubmitting(true);
+
+      const currentDate = new Date();
+      currentDate.setHours(0, 0, 0, 0); // Set time to midnight for comparison
+
+      //Validtate inputs
+      if (!leaveStart || !leaveEnd || !leaveTypeID || !reason) {
+        Alert.alert("Incomplete Fields", "Please fill in all fields.");
+        setIsSubmitting(false);
+        return;
+      }
+      if (leaveStart < currentDate) {
+        Alert.alert("Error", "Start date must be the current date or later.");
+        setIsSubmitting(false);
+        return;
+      }
+
+      if (leaveStart > leaveEnd) {
+        Alert.alert("Error", "Start date must be before the end date.");
+        setIsSubmitting(false);
+        return;
+      }
+      //Execute API Call
+      try{
         const result = await AddLeaveRequest(leaveStart, leaveEnd, leaveTypeID, reason);
 
         if (result.success){
-          Alert.alert("Success", "Leave request submitted successfully!"[
+          Alert.alert("Success", "Leave request submitted successfully!",
+          [
             {
               text: "Okay",
               onPress: () => navigation.navigate("LeavePage")
-            }
-          ]);
+            },
+          ]
+        );
           console.log("Leave request submitted successfully!");
         } else {
           Alert.alert("Error", "Failed to submit leave request. Please try again.");
           console.log("Failed to submit leave request.");
         }
-    }
-    
+      }catch (error) {
+        console.error("Error submitting leave request:", error);
+        Alert.alert("Error", "Failed to submit leave request. Please try again.");
+      } finally {
+          setIsSubmitting(false);
+      }
+    };
   
     const formFields = [
       {
@@ -70,7 +106,7 @@ export default function RequestLeavePage({ navigation }) {
           <TextInput
             style={[styles.input, styles.disabledInput]}// Add a new style for disabled input
             editable={false}
-            value={vacationLeave}
+            value={vacationLeaveCredits}
           />
         ),
       },
@@ -81,7 +117,7 @@ export default function RequestLeavePage({ navigation }) {
           <TextInput
             style={[styles.input, styles.disabledInput]}
             editable={false}
-            value={sickLeave}
+            value={sickLeaveCredits}
           />
         ),
       },
