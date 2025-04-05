@@ -6,8 +6,11 @@ import axios from 'axios';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 //API ENDPOINTS
-import { API_BASE_URL } from "../service/Authentication/AuthService";
-import { API_BASE_URL1 } from "../service/Authentication/AuthService";
+import { API_BASE_URL } from "../service/Authentication/AuthenticationService";
+import { API_BASE_URL1 } from "../service/Authentication/AuthenticationService";
+
+import { GetLeaveCredits } from "../service/Employee/EmployeeService";
+import { AddLeaveRequest } from '../service/Employee/EmployeeService';
 
 //Components
 import ConfirmLeaveModal from '../components/ConfirmLeavePopup';
@@ -18,48 +21,46 @@ import { LeaveTypeDropdown } from '../components/Dropdown';
 export default function RequestLeavePage({ navigation }) {
     const [leaveStart, setLeaveStart] = useState(null);
     const [leaveEnd, setLeavEnd] = useState(null);
-    const [vacationLeave, setVacationLeave] = useState("");
-    const [sickLeave, setSickLeave] = useState("");
+    const [vacationLeave, setVacationLeaveCredits] = useState("");
+    const [sickLeave, setSickLeaveCredits] = useState("");
     const [leaveTypeID, setLeaveTypeID] = useState(null);
 
     const [reason, setReason] = useState("");
-    const [numberOfDays, setNumberOfDays] = useState(0);
 
     const [isSubmitting, setIsSubmitting] = useState(false);
   
     useEffect(() => {
-
-    if (isSubmitting) return;
-    setIsSubmitting(true);
-
-    const fetchEmployeeProfile = async () => {
-        try {
-            const token = await AsyncStorage.getItem("userToken");
-  
-            if (!token) {
-                Alert.alert("Error", "No token found. Please sign in again.");
-                return;
-            }
-  
-          const response = await axios.get(`${API_BASE_URL}/api/employee/profile`, {
-            headers: { Authorization: `Bearer ${token}` }
-          });
-  
-          const employee = response.data;
-          const vacationLeaveCredits = employee.leaveCredits.find((leave) => leave.leaveTypeID === 1)?.remainingCredits || "0";
-          const sickLeaveCredits = employee.leaveCredits.find((leave) => leave.leaveTypeID === 2)?.remainingCredits || "0";
-  
-          setVacationLeave(vacationLeaveCredits.toString());
-          setSickLeave(sickLeaveCredits.toString());
-
-        } catch (error) {
-          console.error("Error fetching employee profile:", error);
-          Alert.alert("Error", "Failed to load employee data. Please try again.");
+    const loadLeaveCredits = async () => {
+      try {
+        const { vacationLeaveCredits, sickLeaveCredits } = await GetLeaveCredits();
+          setVacationLeaveCredits(vacationLeaveCredits);
+          setSickLeaveCredits(sickLeaveCredits);
+          console.log("Leave Credits:", "Vacation Leave: ",vacationLeaveCredits, "Sick Leave: ",sickLeaveCredits);
+          }
+      catch (error) {
+        console.error("Error loading leave credits: ", error)
         }
-      };
-  
-      fetchEmployeeProfile();
-    }, []);
+        };
+      loadLeaveCredits();
+    },[]);
+
+    const handleAddLeaveRequest = async () => {
+        const result = await AddLeaveRequest(leaveStart, leaveEnd, leaveTypeID, reason);
+
+        if (result.success){
+          Alert.alert("Success", "Leave request submitted successfully!"[
+            {
+              text: "Okay",
+              onPress: () => navigation.navigate("LeavePage")
+            }
+          ]);
+          console.log("Leave request submitted successfully!");
+        } else {
+          Alert.alert("Error", "Failed to submit leave request. Please try again.");
+          console.log("Failed to submit leave request.");
+        }
+    }
+    
   
     const formFields = [
       {
@@ -155,7 +156,7 @@ export default function RequestLeavePage({ navigation }) {
             }
             ListFooterComponent={
                 <View style={styles.buttonContainer}>
-                    <Pressable style={styles.registerButton}>
+                    <Pressable style={styles.registerButton} onPress={handleAddLeaveRequest}>
                         <Text style={styles.registerButtonText}>Request Leave</Text>
                     </Pressable>
                 </View>

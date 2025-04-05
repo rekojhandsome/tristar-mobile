@@ -3,12 +3,7 @@ import { View, Text, TextInput, StyleSheet, Image, TouchableOpacity, Pressable, 
 import { Alert } from "react-native";
 import { useState } from "react";
 
-
-import { Login } from "../service/Authentication/AuthService";
-
-//API ENDPOINTS
-import { API_BASE_URL } from "../service/Authentication/AuthService";
-import { API_BASE_URL1 } from "../service/Authentication/AuthService";
+import { Login } from "../service/Authentication/AuthenticationService";
 
 export default function SignIn({ navigation }) {
 
@@ -32,6 +27,7 @@ export default function SignIn({ navigation }) {
           console.log("Error Signing In");
         }
     };
+   
     return (
       <SafeAreaView style={styles.background}>
         <View style={styles.background} >

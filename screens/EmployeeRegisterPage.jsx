@@ -10,8 +10,8 @@ import { DatePickerComponent } from "../components/DatePicker";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 // API ENDPOINTS
-import { API_BASE_URL } from "../service/Authentication/AuthService";
-import { API_BASE_URL1 } from "../service/Authentication/AuthService";
+import { API_BASE_URL } from "../service/Authentication/AuthenticationService";
+import { API_BASE_URL1 } from "../service/Authentication/AuthenticationService";
 
 
 export default function EmployeeRegister({ navigation }) {

@@ -3,8 +3,8 @@ import { View, Text, TouchableOpacity, FlatList, ActivityIndicator, StyleSheet }
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import axios from "axios";
 
-import { API_BASE_URL } from "../service/Authentication/AuthService";
-import { API_BASE_URL1 } from "../service/Authentication/AuthService";
+import { API_BASE_URL } from "../service/Authentication/AuthenticationService";
+import { API_BASE_URL1 } from "../service/Authentication/AuthenticationService";
 
     //API Endpoints
     const COMPANY_URL = `${API_BASE_URL}/api/Company`;

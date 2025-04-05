@@ -1,11 +1,11 @@
 import React from "react";
 import { View, Text, StyleSheet, SafeAreaView, Pressable, Alert } from "react-native";
 import { useState } from "react";
-import ViewModal from "../components/LeavePopUp";
-
 
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import { Logout } from "../service/Authentication/AuthService";
+
+import ViewModal from "../components/LeavePopUp";
+import { Logout } from "../service/Authentication/AuthenticationService";
 
 export default function LeavePage({navigation}){
     const [modalVisible, setModalVisible] = useState(false);

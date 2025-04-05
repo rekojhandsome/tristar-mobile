@@ -5,8 +5,9 @@ import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 //API ENDPOINTS
-import { API_BASE_URL } from "../service/Authentication/AuthService";
-import { API_BASE_URL1 } from "../service/Authentication/AuthService";
+import { API_BASE_URL } from "../service/Authentication/AuthenticationService";
+import { API_BASE_URL1 } from "../service/Authentication/AuthenticationService";
+import { GetEmployeeProfile, GetLeaveCredits } from "../service/Employee/EmployeeService";
 
 
 export default function AccountPage({ navigation }) {
@@ -14,48 +15,49 @@ export default function AccountPage({ navigation }) {
   const [lastName, setLastName] = useState("");
   const [phoneNo, setPhoneNo] = useState("");
   const [email, setEmail] = useState("");
-  
-  //Leave
-  const [vacationLeave, setVacationLeave] = useState("");
-  const [sickLeave, setSickLeave] = useState("");
-  
+
+  const [vacationLeaveCredits, setVacationLeaveCredits] = useState(0);
+  const [sickLeaveCredits, setSickLeaveCredits] = useState(0);
+
   const [isEditing, setIsEditing] = useState(false);
-  // Fetch employee profile
+  
   useEffect(() => {
-    const fetchEmployeeProfile = async () => {
+  const loadEmployeeProfile = async () => {
+    try {
+      const employeeData = await GetEmployeeProfile();
+
+      setFirstName(employeeData.firstName);
+      setLastName(employeeData.lastName);
+      setPhoneNo(employeeData.phoneNo);
+      setEmail(employeeData.email);
+
+      console.log("Employee Data:", employeeData);
+    }
+    catch (error) {
+      console.error("Error loading employee profile:", error);
+      Alert.alert("Error", "Failed to load employee data. Please try again.");
+    }
+  }
+loadEmployeeProfile();
+  }, []);
+
+  useEffect(() => {
+
+    const loadLeaveCredits = async () => {
       try {
-        const token = await AsyncStorage.getItem("userToken");
+        const { vacationLeaveCredits, sickLeaveCredits } = await GetLeaveCredits();
 
-        if (!token) {
-          Alert.alert("Error", "No token found. Please login again.");
-          return;
-        }
-
-        const response = await axios.get(`${API_BASE_URL}/api/employee/profile`, {
-          headers: { Authorization: `Bearer ${token}` }
-        });
-
-        const employee = response.data;
-
-        const vacationLeaveCredits = employee.leaveCredits.find((leave) => leave.leaveTypeID === 1)?.remainingCredits || "0";;
-        const sickLeaveCredits = employee.leaveCredits.find((leave) => leave.leaveTypeID === 2)?.remainingCredits || "0";;
-        
-        setFirstName(employee.firstName);
-        setLastName(employee.lastName);
-        setPhoneNo(employee.phoneNo || "");
-        setEmail(employee.email);
-        setVacationLeave(vacationLeaveCredits.toString());
-        setSickLeave(sickLeaveCredits.toString());
-
-        console.log(employee);
-      } catch (error) {
-        console.error("Error fetching employee profile:", error);
-        Alert.alert("Error", "Failed to load employee data. Please try again.");
+        setVacationLeaveCredits(vacationLeaveCredits);
+        setSickLeaveCredits(sickLeaveCredits);
+        console.log("Leave Credits:", "Vacation Leave: ",vacationLeaveCredits, "Sick Leave: ",sickLeaveCredits);
+      }
+      catch (error) {
+        console.error("Error loading leave credits: ", error)
       }
     };
+    loadLeaveCredits();
+  },[]);
 
-    fetchEmployeeProfile();
-  }, []);
 
   return (
     <SafeAreaView>
@@ -67,50 +69,50 @@ export default function AccountPage({ navigation }) {
       </View>
 
         <View style={styles.form}>
-            <Text style={styles.bodyText}>First Name:</Text>
-            <TextInput
-              style={styles.input}
-              editable ={isEditing}
-              value={firstName}
-              onChangeText={setFirstName}
-            />
-            <Text style={styles.bodyText}>Last Name:</Text>
-            <TextInput
-              style={styles.input}
-              editable ={isEditing}
-              value={lastName}
-              onChangeText={setLastName}
-            />
-            <Text style={styles.bodyText}>Contact Number:</Text>
-            <TextInput
-              style={styles.input}
-              editable ={isEditing}
-              keyboardType="number-pad"
-              value={phoneNo}
-              onChangeText={setPhoneNo}
-            />
-            <Text style={styles.bodyText}>Email Address:</Text>
-            <TextInput
-              style={styles.input}
-              editable={isEditing}
-              keyboardType="email-address"
-              value={email}
-              onChangeText={setEmail}
-            />
-            <Text style={styles.bodyText}>Vacation Leave Credits:</Text>
-            <TextInput
-              style={styles.input}
-              editable={false}
-              keyboardType="default"
-              value={vacationLeave}
-            />
-            <Text style={styles.bodyText}>Sick Leave Credits:</Text>
-            <TextInput
-              style={styles.input}
-              editable={false}
-              keyboardType="default"
-              value={sickLeave}
-            />
+          <Text style={styles.bodyText}>Vacation Leave Credits:</Text>
+          <TextInput
+            style={styles.input}
+            editable={false}
+            keyboardType="default"
+            value={vacationLeaveCredits}
+          />  
+          <Text style={styles.bodyText}>Sick Leave Credits:</Text>
+          <TextInput
+            style={styles.input}
+            editable={false}
+            keyboardType="default"
+            value={sickLeaveCredits}
+          />
+          <Text style={styles.bodyText}>First Name:</Text>
+          <TextInput
+            style={styles.input}
+            editable ={isEditing}
+            value={firstName}
+            onChangeText={setFirstName}
+          />
+          <Text style={styles.bodyText}>Last Name:</Text>
+          <TextInput
+            style={styles.input}
+            editable ={isEditing}
+            value={lastName}
+            onChangeText={setLastName}
+          />
+          <Text style={styles.bodyText}>Contact Number:</Text>
+          <TextInput
+            style={styles.input}
+            editable ={isEditing}
+            keyboardType="number-pad"
+            value={phoneNo}
+            onChangeText={setPhoneNo}
+          />
+          <Text style={styles.bodyText}>Email Address:</Text>
+          <TextInput
+            style={styles.input}
+            editable={isEditing}
+            keyboardType="email-address"
+            value={email}
+            onChangeText={setEmail}
+          />
         
         </View>
         <View style={styles.buttonContainer}>
