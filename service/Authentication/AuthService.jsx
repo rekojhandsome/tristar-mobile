@@ -7,7 +7,7 @@ export const API_BASE_URL1 = "http://192.168.29.207:5269";
 
 export const Login = async (username, password) => {
     try{
-        const response = await axios.post(`${API_BASE_URL1}/api/Account/login`,{
+        const response = await axios.post(`${API_BASE_URL}/api/Account/login`,{
             username,
             password
         });
@@ -28,7 +28,14 @@ export const Login = async (username, password) => {
 };
 
 export const Logout = async () => {
+    try {
     await AsyncStorage.removeItem("userToken");
+    console.log("Token Removed");
+    }
+    catch (error) {
+        console.error("Error removing token:", error);
+        return { success: false, message: "Logout Failed" };
+    }
 }
 
 export const getToken = async () => {

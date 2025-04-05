@@ -34,7 +34,7 @@ export default function SignUp({navigation}){
     }, []);
 
   const handleSaveSignUp = async () => {
-    const registerAPI = `${API_BASE_URL1}/api/Account/register`;
+    const registerAPI = `${API_BASE_URL}/api/Account/register`;
 
     try{
 

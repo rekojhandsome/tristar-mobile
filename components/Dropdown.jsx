@@ -7,9 +7,9 @@ import { API_BASE_URL } from "../service/Authentication/AuthService";
 import { API_BASE_URL1 } from "../service/Authentication/AuthService";
 
     //API Endpoints
-    const COMPANY_URL = `${API_BASE_URL1}/api/Company`;
-    const DEPARTMENT_URL = `${API_BASE_URL1}/api/Department`;
-    const LEAVE_TYPE_URL = `${API_BASE_URL1}/api/LeaveType`;
+    const COMPANY_URL = `${API_BASE_URL}/api/Company`;
+    const DEPARTMENT_URL = `${API_BASE_URL}/api/Department`;
+    const LEAVE_TYPE_URL = `${API_BASE_URL}/api/LeaveType`;
 
     export const  CompaniesDropdown = ({ value, setValue, placeholder }) => {
     const [isOpen, setIsOpen] = useState(false);

@@ -31,7 +31,7 @@ export default function AccountPage({ navigation }) {
           return;
         }
 
-        const response = await axios.get(`${API_BASE_URL1}/api/employee/profile`, {
+        const response = await axios.get(`${API_BASE_URL}/api/employee/profile`, {
           headers: { Authorization: `Bearer ${token}` }
         });
 

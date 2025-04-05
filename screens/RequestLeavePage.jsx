@@ -41,7 +41,7 @@ export default function RequestLeavePage({ navigation }) {
                 return;
             }
   
-          const response = await axios.get(`${API_BASE_URL1}/api/employee/profile`, {
+          const response = await axios.get(`${API_BASE_URL}/api/employee/profile`, {
             headers: { Authorization: `Bearer ${token}` }
           });
   
@@ -129,16 +129,6 @@ export default function RequestLeavePage({ navigation }) {
           />
         ),
       },
-      {
-        key: "numberOfDays",
-        label: "Number of Days",
-        component:(
-            <TextInput 
-            style={[styles.input, styles.disabledInput]}
-            editable={false}
-            />
-        )
-      }
     ];
   
     return (

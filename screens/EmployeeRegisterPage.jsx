@@ -27,7 +27,7 @@ export default function EmployeeRegister({ navigation }) {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSaveEmployeeDetail = async () => {
-    const employeeURL = `${API_BASE_URL1}/api/Employee`;
+    const employeeURL = `${API_BASE_URL}/api/Employee`;
 
     if (isSubmitting) return;
     setIsSubmitting(true);
@@ -78,11 +78,11 @@ export default function EmployeeRegister({ navigation }) {
   const formFields = [
     { key: "company", label: "Company:", component: <CompaniesDropdown placeholder={"Select Company"} value={companyID} setValue={setCompanyID} /> },
     { key: "department", label: "Department:", component: <DepartmentsDropdown placeholder={"Select Department"} value={departmentID} setValue={setDepartmentID} /> },
+    { key: "dateHired", label: "Date Hired:", component: <DatePickerComponent value={dateHired} onConfirm={(date) => setDateHired(date)} placeholder="Select Date"/> },
     { key: "firstName", label: "First Name:", component: <TextInput style={styles.input} placeholder="Enter your name" value={firstName} onChangeText={setFirstName} /> },
     { key: "lastName", label: "Last Name:", component: <TextInput style={styles.input} placeholder="Enter your last name" value={lastName} onChangeText={setLastName} /> },
-    { key: "phoneNo", label: "Contact Number:", component: <TextInput style={styles.input} placeholder="Enter your contact number" keyboardType="number-pad" value={phoneNo} onChangeText={setPhoneNo} /> },
     { key: "email", label: "Email Address:", component: <TextInput style={styles.input} placeholder="Enter your email address" keyboardType="email-address" autoCapitalize="none" value={email} onChangeText={setEmail} /> },
-    { key: "dateHired", label: "Date Hired:", component: <DatePickerComponent value={dateHired} onConfirm={(date) => setDateHired(date)} placeholder="Select Date"/> },
+    { key: "phoneNo", label: "Contact Number:", component: <TextInput style={styles.input} placeholder="Enter your contact number" keyboardType="number-pad" value={phoneNo} onChangeText={setPhoneNo} /> },
   ];
 
   return (
