@@ -75,6 +75,7 @@ export default function RequestLeavePage({ navigation }) {
       //Execute API Call
       try{
         const request = await AddLeaveRequest(leaveStart, leaveEnd, leaveTypeID, reason);
+
         if (request.status === 400){
           if(request.code === "OVERLAPPING_LEAVE"){
             Alert.alert("Overlapping Leave", "Leave request overlaps with an existing leave.", request.message);

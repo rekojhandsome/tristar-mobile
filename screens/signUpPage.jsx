@@ -5,8 +5,7 @@ import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 //URL ENDPOINTS
-import { API_BASE_URL } from "../service/Authentication/AuthenticationService";
-import { API_BASE_URL1 } from "../service/Authentication/AuthenticationService";
+import { API_BASE_URL, Register, API_BASE_URL1 } from "../service/Authentication/AuthenticationService";
 
 export default function SignUp({navigation}){
   const [username, setUsername] = useState("");
@@ -16,73 +15,52 @@ export default function SignUp({navigation}){
   const [employeeID, setEmployeeID] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  useEffect(() => {
-      const fetchEmployeeID = async () => {
-        try {
-          const storedEmployeeID = await AsyncStorage.getItem("employeeID");
-          
-          if (storedEmployeeID){
-            setEmployeeID(storedEmployeeID);
-          }
-        }catch(error){
-          console.log("Error retrieving Employee ID", error);
-          Alert.alert("Error", "Error retrieving Employee ID", error);
-        }
-      };
 
-      fetchEmployeeID();
-    }, []);
+  // Validate Password
+ 
+  
+  // Register Employee Account
+    const handleRegister = async () => {
 
-  const handleSaveSignUp = async () => {
-    const registerAPI = `${API_BASE_URL1}/api/Account/register`;
+      if (isSubmitting) return; // Prevent multiple submissions
+      setIsSubmitting(true);
 
-    try{
-
-    if (isSubmitting) return;
-    setIsSubmitting(true);
-
-    if (!employeeID){
-      Alert.alert("Error", "Employee ID is missing. Please register first")
-    }
-
-     if (password !== confirmPassword) {
-          Alert.alert("Error", "Passwords do not match!");
+      if(password !== confirmPassword) {
+          Alert.alert("Password Mismatch", "Please make sure both password fields match.");
           setIsSubmitting(false);
           return;
         }
 
-    const signUpData = {
-        username,
-        password,
-        employeeID
-    };  
-
-    console.log("SignUp Data: ", signUpData);
-    await axios.post(registerAPI, signUpData);
-    
-    Alert.alert("Success", "Account Created Successfully!", [
-            {
-              text: "Okay",
-              onPress: () => {
-                console.log("Account created Successfully!");
-                navigation.navigate("SignIn");
+        try {
+          const request = await Register(username, password, employeeID);
+      
+          // Handle success for both 200 and 201 status codes
+          if (request.status === 200 || request.status === 201) {
+            Alert.alert("Success", "Registered Successfully!", [
+              {
+                text: "Okay",
+                onPress: () => navigation.navigate("SignIn"),
               },
-            },
-          ]);
-    }catch (error){
-        if (axios.isAxiosError(error) && error.response?.status === 409) {
-            console.error("Username already exists", error.response.data.message);
-            Alert.alert("Error", "Username already exists");
-            setIsSubmitting(false);
+            ]);
+            console.log("Account registered successfully!", request.status);
+          } else if (request.status === 409) {
+            if (request.code === "USERNAME_EXIST") {
+              Alert.alert("Error", "Username already exists.", request.message);
+            } else {
+              Alert.alert("Error", "Failed to register account. Please try again.", request.message);
+              console.log("Error:", request.message);
+            }
+          } else {
+            Alert.alert("Error", "Failed to register account. Please try again.");
+            console.log("Failed to register account. Please try again.", request.status);
+          }
+        } catch (error) {
+          console.error("Error submitting leave request:", error);
+        } finally {
+          setIsSubmitting(false);
         }
-        else {
-          Alert.alert("Error", "Error creating account");
-          console.log("Error creating account", error);
-        }
-    }finally{
-      setIsSubmitting(false);
-    }
-}
+      };
+
  return (
        <SafeAreaView style={styles.background}>
          <View style={styles.background} >
@@ -114,15 +92,10 @@ export default function SignUp({navigation}){
                value={confirmPassword}
                onChangeText={setConfirmPassword}
              />
-             {/* Sign-In Button */}
-             <Pressable style={styles.signUpButton} onPress={handleSaveSignUp}>
+             {/* Sign Up button */}
+             <Pressable style={styles.signUpButton} onPress={handleRegister}>
                <Text style={styles.signUpButtonText}>Sign Up</Text>
              </Pressable>
-             {/* Navigation to Sign Up */}
-             <TouchableOpacity onPress={() => navigation.navigate("SignIn")}>
-             <Text style={styles.signInText}> Already have an account? <Text style={styles.signInLink}>Sign In</Text>
-             </Text>
-             </TouchableOpacity>
            </View>
        </View>
        </SafeAreaView>
@@ -149,7 +122,7 @@ const styles = StyleSheet.create({
   },
   formContainer: {
     alignItems: 'center',
-    height:320,
+    height:290,
     width: 282,
     backgroundColor: "#FFFFFF",
     padding: 10,

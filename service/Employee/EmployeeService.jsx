@@ -133,9 +133,7 @@ export const AddLeaveRequest = async (leaveStart, leaveEnd, leaveTypeID, reason)
         success: false,
       }
     }
-    
     return { status: 500, message: "Internal Server Error" };
-
   }
 
 }
