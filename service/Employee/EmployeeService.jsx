@@ -116,12 +116,22 @@ export const AddLeaveRequest = async (leaveStart, leaveEnd, leaveTypeID, reason)
         "Content-Type": "application/json",
       },
     });
-    return response;
+    return {
+      status: response.status,
+      data: response.data,
+      success: true,
+    }
   }catch(error){
     console.error("Error submitting leave request:", error);
   
     if (error.response){
-      return error.response;
+      const { status, data } =  error.response;
+      return {
+        status,
+        code: data.code,
+        message: data.message,
+        success: false,
+      }
     }
     
     return { status: 500, message: "Internal Server Error" };
