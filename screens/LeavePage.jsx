@@ -146,7 +146,7 @@ const styles = StyleSheet.create({
     },
     logoutButton:{
         position: 'absolute',
-        left: 30
+        left: 15
     },
     logoutButtonText:{
         color: 'white',

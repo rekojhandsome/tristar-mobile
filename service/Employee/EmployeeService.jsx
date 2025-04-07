@@ -19,7 +19,7 @@ export const RegisterEmployee = async (firstName,lastName,phoneNo, email, depart
         dateHired
       }
 
-    const response  = await axios.post(`${API_BASE_URL}/api/Employee`, employeeData);
+    const response  = await axios.post(`${API_BASE_URL1}/api/Employee`, employeeData);
 
     const employeeID = response.data.employeeID;
     console.log("Employee ID: ", employeeID);
@@ -49,7 +49,7 @@ export const GetEmployeeProfile = async () => {
       return;
     }
 
-    const response = await axios.get(`${API_BASE_URL}/api/employee/profile`, {
+    const response = await axios.get(`${API_BASE_URL1}/api/employee/profile`, {
       headers: { Authorization: `Bearer ${token}` }
     });
 
@@ -79,7 +79,7 @@ export const GetLeaveCredits = async () => {
     };
   }catch(error){
     console.error("Error fetching leave credits:", error);
-    Alert.alert("Error", "Failed to load leave credits. Please try again.");
+    Alert.alert("Error", "Failed to load leave credits. Please try again.", error);
   }
   return {
     vacationLeaveCredits: "0",
@@ -110,22 +110,22 @@ export const AddLeaveRequest = async (leaveStart, leaveEnd, leaveTypeID, reason)
       reason,
     }
 
-    const response = await axios.post(`${API_BASE_URL}/api/RequestLeave`, employeeRequestLeaveData, {
+    const response = await axios.post(`${API_BASE_URL1}/api/RequestLeave`, employeeRequestLeaveData, {
       headers: {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
       },
     });
-    if (response.status === 200) {
-      return { success: true };
-    }else {
-      return { success: false };
-    }
+    return response;
   }catch(error){
     console.error("Error submitting leave request:", error);
-    Alert.alert("Error", "Failed to submit leave request. Please try again.");
-    return { success: false };
+  
+    if (error.response){
+      return error.response;
+    }
     
+    return { status: 500, message: "Internal Server Error" };
+
   }
 
 }

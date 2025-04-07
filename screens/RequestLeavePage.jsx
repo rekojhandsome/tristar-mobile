@@ -74,9 +74,14 @@ export default function RequestLeavePage({ navigation }) {
       }
       //Execute API Call
       try{
-        const result = await AddLeaveRequest(leaveStart, leaveEnd, leaveTypeID, reason);
+        const request = await AddLeaveRequest(leaveStart, leaveEnd, leaveTypeID, reason);
 
-        if (result.success){
+        if (request.status === 400){
+          Alert.alert("Conflict of Dates", "Leave request already exists for the selected dates.");
+          setIsSubmitting(false);
+          return;
+        }
+        if (request.status === 200){
           Alert.alert("Success", "Leave request submitted successfully!",
           [
             {
@@ -92,7 +97,6 @@ export default function RequestLeavePage({ navigation }) {
         }
       }catch (error) {
         console.error("Error submitting leave request:", error);
-        Alert.alert("Error", "Failed to submit leave request. Please try again.");
       } finally {
           setIsSubmitting(false);
       }

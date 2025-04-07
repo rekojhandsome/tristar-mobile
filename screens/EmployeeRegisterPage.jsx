@@ -45,7 +45,7 @@ export default function EmployeeRegister({ navigation }) {
             }
           }
         ]),
-        console.log("Employee registered successfuly", result);
+        console.log("Employee registered successfuly!", result);
         setIsSubmitting(false);
       } else {
         Alert.alert("Error", "Failed to register employee. Please try again.");
