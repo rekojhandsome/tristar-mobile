@@ -6,6 +6,20 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { API_BASE_URL } from '../Authentication/AuthenticationService';
 import { API_BASE_URL1 } from '../Authentication/AuthenticationService';
 
+const GetToken = async () => {
+  try {
+    const token = await AsyncStorage.getItem('userToken');
+    if (!token){
+      Alert.alert("Error", "No token found. Please sign in again.");
+      return null;
+    }
+    return token;
+  } catch (error){
+    console.error("Error retrieving token:", error);
+    Alert.alert("Error", "Failed to retrieve token. Please try again.");
+    return null;
+  }
+}
 
 // Register Employee
 export const RegisterEmployee = async (firstName,lastName,phoneNo, email, departmentID, dateHired) => {
@@ -42,12 +56,8 @@ export const RegisterEmployee = async (firstName,lastName,phoneNo, email, depart
 // Fetch Employee Profile
 export const GetEmployeeProfile = async () => {
   try {
-    const token = await AsyncStorage.getItem("userToken");
-
-    if (!token) {
-      Alert.alert("Error", "No token found. Please sign in again.");
-      return;
-    }
+    const token = await GetToken();
+    if (!token) return;
 
     const response = await axios.get(`${API_BASE_URL1}/api/employee/profile`, {
       headers: { Authorization: `Bearer ${token}` }
@@ -90,14 +100,8 @@ export const GetLeaveCredits = async () => {
 //Employee Add Leave Request
 export const AddLeaveRequest = async (leaveStart, leaveEnd, leaveTypeID, reason) => {
   try {
-    const token = await AsyncStorage.getItem("userToken");
-
-    if (!token){
-      console.log("Token not found, Please login"),
-      Alert.alert("Token not found", "Token not found, please login");
-      return { success: false };
-
-    }
+    const token = await GetToken();
+    if (!token) return { success: false };  
 
     const employeeData = await GetEmployeeProfile();
     const employeeID = employeeData.employeeID;
@@ -137,3 +141,24 @@ export const AddLeaveRequest = async (leaveStart, leaveEnd, leaveTypeID, reason)
   }
 
 }
+
+export const GetEmployeeLeaveRequest = async () => {
+  try {
+    // Retrieve the token from AsyncStorage
+    const token = await GetToken();
+    if (!token) {
+      
+      return [];
+    }
+
+    // Fetch leave requests from the backend
+    const response = await axios.get(`${API_BASE_URL1}/api/LeaveRequest/leave-request`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    return response.data; // Return the array of leave requests
+  } catch (error) {
+    console.error("Error fetching leave requests:", error);
+    Alert.alert("Error", "Failed to load leave requests. Please try again.");
+    return [];
+  }
+};

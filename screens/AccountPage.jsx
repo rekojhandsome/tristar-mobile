@@ -31,7 +31,6 @@ export default function AccountPage({ navigation }) {
       setPhoneNo(employeeData.phoneNo);
       setEmail(employeeData.email);
 
-      console.log("Employee Data:", employeeData);
     }
     catch (error) {
       console.error("Error loading employee profile:", error);
@@ -42,7 +41,6 @@ loadEmployeeProfile();
   }, []);
 
   useEffect(() => {
-
     const loadLeaveCredits = async () => {
       try {
         const { vacationLeaveCredits, sickLeaveCredits } = await GetLeaveCredits();

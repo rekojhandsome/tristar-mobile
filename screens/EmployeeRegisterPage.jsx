@@ -6,12 +6,6 @@ import axios from "axios";
 import { CompaniesDropdown, DepartmentsDropdown } from "../components/Dropdown";
 import { DatePickerComponent } from "../components/DatePicker";
 
-// JWT Token
-import AsyncStorage from "@react-native-async-storage/async-storage";
-
-// API ENDPOINTS
-import { API_BASE_URL } from "../service/Authentication/AuthenticationService";
-import { API_BASE_URL1 } from "../service/Authentication/AuthenticationService";
 import { RegisterEmployee } from "../service/Employee/EmployeeService";
 
 

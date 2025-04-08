@@ -44,7 +44,8 @@ export default function SignUp({navigation}){
             ]);
             console.log("Account registered successfully!", request.status);
           } else if (request.status === 409) {
-            if (request.code === "USERNAME_EXIST") {
+            console.log("409 Conflict Error:", request); 
+            if (request.code === "EXISTING_USERNAME") {
               Alert.alert("Error", "Username already exists.", request.message);
             } else {
               Alert.alert("Error", "Failed to register account. Please try again.", request.message);
@@ -52,7 +53,7 @@ export default function SignUp({navigation}){
             }
           } else {
             Alert.alert("Error", "Failed to register account. Please try again.");
-            console.log("Failed to register account. Please try again.", request.status);
+            console.log(request.status);
           }
         } catch (error) {
           console.error("Error submitting leave request:", error);

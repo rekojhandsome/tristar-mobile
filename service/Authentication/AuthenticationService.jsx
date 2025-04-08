@@ -44,7 +44,7 @@ export const Register = async (username, password, employeeID) => {
         employeeID
     };
 
-    const request = await axios.post(`${API_BASE_URL}/api/Account/register`, signUpData, {
+    const request = await axios.post(`${API_BASE_URL1}/api/Account/register`, signUpData, {
         headers: {Authorization: `Bearer ${employeeID}`,
             "Content-Type": "application/json",
     },
@@ -59,6 +59,9 @@ export const Register = async (username, password, employeeID) => {
 
         if (error.response){
             const { status, data } = error.response;
+
+            console.log("Register response data: ", data);
+            
             return {
                 status,
                 message: data.message,
