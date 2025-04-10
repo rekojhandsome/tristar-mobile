@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import { View, Text,Modal, TouchableOpacity, StyleSheet, Platform } from "react-native";
+import { View, Text, Modal, TouchableOpacity, StyleSheet, Platform } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { Ionicons } from "@expo/vector-icons";
 
-export const DatePickerComponent = ({ placeholder = "Select Date", value, onConfirm }) => {
+export const DatePickerComponent = ({ placeholder = "Select Date", value, onConfirm, editable = true }) => {
   const [isModalVisible, setModalVisible] = useState(false);
   const [tempDate, setTempDate] = useState(value || new Date()); // Use value as the initial date
 
@@ -27,8 +27,9 @@ export const DatePickerComponent = ({ placeholder = "Select Date", value, onConf
     <View style={styles.container}>
       {/* Button to Open Modal */}
       <TouchableOpacity
-        style={styles.dropdownButton}
-        onPress={() => setModalVisible(true)}
+        style={[styles.dropdownButton, !editable && styles.disabledButton]} // Apply disabled style if not editable
+        onPress={() => editable && setModalVisible(true)} // Only open modal if editable
+        disabled={!editable} // Disable the button if not editable
       >
         <Text style={styles.dropdownText}>
           {value ? value.toDateString() : placeholder}
@@ -101,8 +102,12 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     width: "100%",
   },
+  disabledButton: {
+    backgroundColor: "#f0f0f0", // Optional: Change background color when disabled
+    borderColor: "#ddd", // Optional: Change border color when disabled
+  },
   dropdownText: {
-    fontSize: 16,
+    fontSize: 20,
     color: "#000",
   },
   modalContainer: {

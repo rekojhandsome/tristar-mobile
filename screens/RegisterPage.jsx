@@ -3,20 +3,29 @@ import { View, Text, TextInput, StyleSheet, Alert, SafeAreaView, Pressable, Flat
 import axios from "axios";
 
 // Components
-import { CompaniesDropdown, DepartmentsDropdown } from "../components/Dropdown";
+import { CompaniesDropdown, DepartmentsDropdown, StaticDropdown } from "../components/Dropdown";
 import { DatePickerComponent } from "../components/DatePicker";
 
+
+//API SERVICE
 import { RegisterEmployee } from "../service/Employee/EmployeeService";
+import { civilStatusData, genderData, suffixData } from "../Data/StaticDropdownData";
 
 
 export default function EmployeeRegister({ navigation }) {
   const [firstName, setFirstName] = useState("");
+  const [middleName, setMiddleName] = useState("");
   const [lastName, setLastName] = useState("");
-  const [phoneNo, setPhoneNo] = useState("");
+  const [suffix, setSuffix] = useState("");
+  const [birthDate, setBirthDate] = useState(null);
+  const [gender, setGender] = useState(null);
+  const [civilStatus, setCivilStatus] = useState(null);
   const [email, setEmail] = useState("");
+  const [contactNo, setContactNo] = useState("");
+  const [dateHired, setDateHired] = useState(null);
   const [companyID, setCompanyID] = useState(null);
   const [departmentID, setDepartmentID] = useState(null);
-  const [dateHired, setDateHired] = useState(null);
+  
 
 
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -27,7 +36,7 @@ export default function EmployeeRegister({ navigation }) {
     setIsSubmitting(true);
 
     try{
-      const result = await RegisterEmployee(firstName, lastName, phoneNo, email, departmentID, dateHired);
+      const result = await RegisterEmployee( departmentID, dateHired,firstName, middleName, lastName, suffix, birthDate, gender, civilStatus, contactNo, email);
 
       if (result.success){
         Alert.alert("Success", "Employee registered successfully",
@@ -52,10 +61,8 @@ export default function EmployeeRegister({ navigation }) {
         Alert.alert("Error", "An employee with the same credentials already exists");
         setIsSubmitting(false);
       } else {
-        console.error(error);
         Alert.alert("Error", "Error registering employee");
         console.log("Error registering employee", error);
-        console.log("Sending employee data:", employeeData);
         setIsSubmitting(false);
       }
     }
@@ -66,10 +73,15 @@ export default function EmployeeRegister({ navigation }) {
     { key: "company", label: "Company:", component: <CompaniesDropdown placeholder={"Select Company"} value={companyID} setValue={setCompanyID} /> },
     { key: "department", label: "Department:", component: <DepartmentsDropdown placeholder={"Select Department"} value={departmentID} setValue={setDepartmentID} /> },
     { key: "dateHired", label: "Date Hired:", component: <DatePickerComponent value={dateHired} onConfirm={(date) => setDateHired(date)} placeholder="Select Date"/> },
-    { key: "firstName", label: "First Name:", component: <TextInput style={styles.input} placeholder="Enter your name" value={firstName} onChangeText={setFirstName} /> },
+    { key: "firstName", label: "First Name:", component: <TextInput style={styles.input} placeholder="Enter your name" value={firstName} onChangeText={setFirstName}/> },
+    { key: "middleName", label: "Middle Name:", component: <TextInput style={styles.input} placeholder="Enter your middle name" value={middleName} onChangeText={setMiddleName}/>},
     { key: "lastName", label: "Last Name:", component: <TextInput style={styles.input} placeholder="Enter your last name" value={lastName} onChangeText={setLastName} /> },
-    { key: "email", label: "Email Address:", component: <TextInput style={styles.input} placeholder="Enter your email address" keyboardType="email-address" autoCapitalize="none" value={email} onChangeText={setEmail} /> },
-    { key: "phoneNo", label: "Contact Number:", component: <TextInput style={styles.input} placeholder="Enter your contact number" keyboardType="number-pad" value={phoneNo} onChangeText={setPhoneNo} /> },
+    { key: "suffix", label: "Suffix:", component: <StaticDropdown  data={suffixData} placeholder={"Select suffix"} value={suffix} setValue={setSuffix} /> },
+    { key: "birthDate", label: "Birth Date:", component: <DatePickerComponent value={birthDate} onConfirm={(date) => setBirthDate(date)} placeholder="Select Date"/>},
+    { key: "gender", label: "Gender:", component: <StaticDropdown data={genderData} placeholder={"Select Gender"} value={gender} setValue={setGender} /> },
+    { key: "civilStatus", label: "Civil Status:", component: <StaticDropdown  data={civilStatusData} placeholder={"Select your status"} value={civilStatus} setValue={setCivilStatus} /> },
+    { key: "contactNo", label: "Contact Number:", component: <TextInput style={styles.input} placeholder="Enter your contact number" keyboardType="number-pad" value={contactNo} onChangeText={setContactNo}/> },
+    { key: "email", label: "Email Address:", component: <TextInput style={styles.input} placeholder="Enter your email address" keyboardType="email-address" autoCapitalize="none" value={email} onChangeText={setEmail}/> },
   ];
 
   return (
@@ -99,7 +111,7 @@ export default function EmployeeRegister({ navigation }) {
         ListFooterComponent={
           <View style={styles.buttonContainer}>
             <Pressable style={styles.registerButton} onPress={handleRegisterEmployee}>
-              <Text style={styles.registerButtonText}>Create Account</Text>
+              <Text style={styles.registerButtonText}>Register</Text>
             </Pressable>
           </View>
         }
@@ -155,7 +167,7 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     paddingHorizontal: 10,
-    marginTop: 20,
+    marginTop: 10,
   },
   registerButton: {
     width: "100%",

@@ -134,22 +134,22 @@ import { API_BASE_URL1 } from "../service/Authentication/AuthenticationService";
       );
     };
 
-      export const  LeaveTypeDropdown = ({ value, setValue, placeholder }) => {
-        const [isOpen, setIsOpen] = useState(false);
-        const [data, setData] = useState([]);
-        const [loading, setLoading] = useState(true);
+export const  LeaveTypeDropdown = ({ value, setValue, placeholder }) => {
+const [isOpen, setIsOpen] = useState(false);
+const [data, setData] = useState([]);
+const [loading, setLoading] = useState(true);
       
-        useEffect(() => {
-          axios.get(LEAVE_TYPE_URL)
-            .then(response => {
-              console.log("Fetched Data:", response.data); // Debugging
-              setData(response.data);
-              setLoading(false);
-            })
-            .catch(error => {
-              console.error("Error fetching data:", error);
-              setLoading(false);
-            });
+    useEffect(() => {
+      axios.get(LEAVE_TYPE_URL)
+      .then(response => {
+        console.log("Fetched Data:", response.data); // Debugging
+          setData(response.data);
+          setLoading(false);
+      })
+        .catch(error => {
+          console.error("Error fetching data:", error);
+          setLoading(false);
+          });
         }, []);
       
         return (
@@ -191,6 +191,41 @@ import { API_BASE_URL1 } from "../service/Authentication/AuthenticationService";
         );
       };
 
+export const StaticDropdown = ({ data, value, setValue, placeholder, editable = true}) => {
+const [isOpen, setIsOpen] = useState(false);
+  return (
+    <View style={styles.dropdownContainer}>
+      {/* Dropdown Button */}
+      <TouchableOpacity style={[styles.dropdownButton, !editable && styles.disabledButton]} onPress={() => editable && setIsOpen(!isOpen)}disabled={!editable}>
+        <Text style={styles.dropdownText}>
+          {value || placeholder} {/* Display selected value or placeholder */}
+        </Text>
+        <Ionicons name="chevron-down-outline" size={25} style={styles.dropdownIcon} />
+      </TouchableOpacity>
+
+      {/* Dropdown List */}
+      {isOpen && (
+        <View style={styles.dropdownList}>
+          <FlatList
+            data={data}
+            keyExtractor={(item, index) => index.toString()}
+            renderItem={({ item }) => (
+              <TouchableOpacity
+                style={styles.dropdownItem}
+                onPress={() => {
+                  setValue(item); // Set the selected value
+                  setIsOpen(false); // Close the dropdown
+                }}
+              >
+                <Text style={styles.itemText}>{item}</Text>
+              </TouchableOpacity>
+            )}
+          />
+        </View>
+      )}
+    </View>
+  );
+};
 
 
 const styles = StyleSheet.create({
@@ -206,6 +241,10 @@ const styles = StyleSheet.create({
     alignItems: "flex-start",
     justifyContent: "center"
   },
+  disabledButton:{
+    backgroundColor: "#f0f0f0",
+    borderColor: "#ddd",
+  },
   dropdownIcon: {
     marginTop: 10,
     position: 'absolute',
@@ -220,7 +259,7 @@ const styles = StyleSheet.create({
     borderColor: "#ccc",
     borderRadius: 5,
     backgroundColor: "#fff",
-    maxHeight: 150,
+    maxHeight: 300,
   },
   dropdownItem: {
     padding: 10,

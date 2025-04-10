@@ -1,20 +1,31 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, TextInput, StyleSheet, Alert, SafeAreaView, Pressable } from "react-native";
+import { View, Text, TextInput, StyleSheet, Alert, SafeAreaView, Pressable,FlatList, KeyboardAvoidingView, Platform } from "react-native";
 import axios from "axios";
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-//API ENDPOINTS
-import { API_BASE_URL } from "../service/Authentication/AuthenticationService";
-import { API_BASE_URL1 } from "../service/Authentication/AuthenticationService";
+// Components
+import { CompaniesDropdown, DepartmentsDropdown, StaticDropdown } from "../components/Dropdown";
+import { DatePickerComponent } from "../components/DatePicker";
+
+//API Service
 import { GetEmployeeProfile, GetLeaveCredits } from "../service/Employee/EmployeeService";
+
+// Static data
+import { civilStatusData, genderData, suffixData } from "../Data/StaticDropdownData";
 
 
 export default function AccountPage({ navigation }) {
   const [firstName, setFirstName] = useState("");
+  const [middleName, setMiddleName] = useState("");
   const [lastName, setLastName] = useState("");
-  const [phoneNo, setPhoneNo] = useState("");
+  const [suffix, setSuffix] = useState("");
+  const [birthDate, setBirthDate] = useState(null);
+  const [gender, setGender] = useState(null);
+  const [civilStatus, setCivilStatus] = useState(null);
   const [email, setEmail] = useState("");
+  const [contactNo, setContactNo] = useState("");
+  const [dateHired, setDateHired] = useState(null);
 
   const [vacationLeaveCredits, setVacationLeaveCredits] = useState(0);
   const [sickLeaveCredits, setSickLeaveCredits] = useState(0);
@@ -26,11 +37,16 @@ export default function AccountPage({ navigation }) {
     try {
       const employeeData = await GetEmployeeProfile();
 
+      setBirthDate(employeeData.birthDate ? new Date(employeeData.birthDate) : null);
       setFirstName(employeeData.firstName);
+      setMiddleName(employeeData.middleName);
       setLastName(employeeData.lastName);
-      setPhoneNo(employeeData.phoneNo);
+      setSuffix(employeeData.suffix);
+      setDateHired(employeeData.dateHired ? new Date(employeeData.dateHired) : null);
+      setGender(employeeData.gender);
+      setCivilStatus(employeeData.civilStatus);
+      setContactNo(employeeData.contactNo);
       setEmail(employeeData.email);
-
     }
     catch (error) {
       console.error("Error loading employee profile:", error);
@@ -39,6 +55,107 @@ export default function AccountPage({ navigation }) {
   }
 loadEmployeeProfile();
   }, []);
+
+  const formFields = [
+    {
+      key: "vacationLeaveCredits",
+      label: "Vacation Leave Credits",
+      component: (
+        <TextInput
+          style={[styles.input, { backgroundColor: isEditing ? "#fff" : "#f0f0f0" }]} // Dynamic background color
+          editable={false}
+          value={vacationLeaveCredits}
+        />
+      ),
+    },
+    {
+      key: "sickLeaveCredits",
+      label: "Sick Leave Credits",
+      component: (
+        <TextInput
+          style={[styles.input, { backgroundColor: isEditing ? "#fff" : "#f0f0f0" }]} // Dynamic background color
+          editable={false}
+          value={sickLeaveCredits}
+        />
+      ),
+    },
+    {
+      key: "dateHired",
+      label: "Date Hired:",
+      component: (
+        <DatePickerComponent
+          editable={isEditing} // Date picker is only editable when isEditing is true
+          value={dateHired}
+          onConfirm={(date) => setDateHired(date)}
+        />
+      ),
+    },
+    {
+      key: "firstName",
+      label: "First Name",
+      component: (
+        <TextInput
+          style={[styles.input, { backgroundColor: isEditing ? "#fff" : "#f0f0f0" }]} // Dynamic background color
+          editable={isEditing}
+          value={firstName}
+          onChangeText={setFirstName}
+        />
+      ),
+    },
+    {
+      key: "middleName",
+      label: "Middle Name",
+      component: (
+        <TextInput
+          style={[styles.input, { backgroundColor: isEditing ? "#fff" : "#f0f0f0" }]} // Dynamic background color
+          editable={isEditing}
+          value={middleName}
+          onChangeText={setMiddleName}
+        />
+      ),
+    },
+    {
+      key: "lastName",
+      label: "Last Name",
+      component: (
+        <TextInput
+          style={[styles.input, { backgroundColor: isEditing ? "#fff" : "#f0f0f0" }]} // Dynamic background color
+          editable={isEditing}
+          value={lastName}
+          onChangeText={setLastName}
+        />
+      ),
+    },
+    {
+      key: "contactNo",
+      label: "Contact Number:",
+      component: (
+        <TextInput
+          style={[styles.input, { backgroundColor: isEditing ? "#fff" : "#f0f0f0" }]} // Dynamic background color
+          editable={isEditing}
+          keyboardType="number-pad"
+          value={contactNo}
+          onChangeText={setContactNo}
+        />
+      ),
+    },
+    {
+      key: "email",
+      label: "Email Address:",
+      component: (
+        <TextInput
+          style={[styles.input, { backgroundColor: isEditing ? "#fff" : "#f0f0f0" }]} // Dynamic background color
+          editable={isEditing}
+          keyboardType="email-address"
+          autoCapitalize="none"
+          value={email}
+          onChangeText={setEmail}
+        />
+      ),
+    },
+  ];
+   
+    
 
   useEffect(() => {
     const loadLeaveCredits = async () => {
@@ -58,7 +175,7 @@ loadEmployeeProfile();
 
 
   return (
-    <SafeAreaView>
+    <SafeAreaView style={{ flex: 1 }}>
       <View style={styles.header}>
         <Text style={styles.headerText}>Employee Details</Text>
         <Pressable style={styles.headerButton} onPress={() => setIsEditing(!isEditing)}>
@@ -66,58 +183,28 @@ loadEmployeeProfile();
         </Pressable>
       </View>
 
-        <View style={styles.form}>
-          <Text style={styles.bodyText}>Vacation Leave Credits:</Text>
-          <TextInput
-            style={styles.input}
-            editable={false}
-            keyboardType="default"
-            value={vacationLeaveCredits}
-          />  
-          <Text style={styles.bodyText}>Sick Leave Credits:</Text>
-          <TextInput
-            style={styles.input}
-            editable={false}
-            keyboardType="default"
-            value={sickLeaveCredits}
-          />
-          <Text style={styles.bodyText}>First Name:</Text>
-          <TextInput
-            style={styles.input}
-            editable ={isEditing}
-            value={firstName}
-            onChangeText={setFirstName}
-          />
-          <Text style={styles.bodyText}>Last Name:</Text>
-          <TextInput
-            style={styles.input}
-            editable ={isEditing}
-            value={lastName}
-            onChangeText={setLastName}
-          />
-          <Text style={styles.bodyText}>Contact Number:</Text>
-          <TextInput
-            style={styles.input}
-            editable ={isEditing}
-            keyboardType="number-pad"
-            value={phoneNo}
-            onChangeText={setPhoneNo}
-          />
-          <Text style={styles.bodyText}>Email Address:</Text>
-          <TextInput
-            style={styles.input}
-            editable={isEditing}
-            keyboardType="email-address"
-            value={email}
-            onChangeText={setEmail}
-          />
-        
-        </View>
-        <View style={styles.buttonContainer}>
-          <Pressable style={styles.registerButton} disabled={!isEditing} onPress={() => console.log("Button Pressed")}>
-            <Text style={styles.saveChangesButtonText}>Save Changes</Text>
-          </Pressable>
-        </View>
+        <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={{ flex: 1 }}>
+              <FlatList
+                data={formFields}
+                keyExtractor={(item) => item.key}
+                renderItem={({ item }) => (
+                  <View style={styles.form}>
+                    <Text style={styles.bodyText}>{item.label}</Text>
+                    {item.component}
+                  </View>
+                )}
+                ListFooterComponent={
+                  <View style={styles.buttonContainer}>
+                    <Pressable style={styles.registerButton} disabled={!isEditing} onPress={() => console.log("Button Pressed")}>
+                      <Text style={styles.saveChangesButtonText}>Save Changes</Text>
+                    </Pressable>
+                  </View> 
+                }
+                nestedScrollEnabled={true}
+                contentContainerStyle={{ paddingBottom: 20 }} // Enable nested scrolling
+                showsVerticalScrollIndicator={false} // Hide vertical scroll indicator
+              />
+            </KeyboardAvoidingView>
         <View>
         </View>
         
@@ -172,6 +259,8 @@ const styles = StyleSheet.create({
     borderColor: "#ccc",
     padding: 10,
     borderRadius: 5,
+    fontSize: 20,
+    
   },
  
   buttonContainer: {

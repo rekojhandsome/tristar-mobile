@@ -4,7 +4,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 //Authentication Screens
 import SignIn from "../screens/SignInPage";
 import SignUp from "../screens/SignUpPage";
-import EmployeeRegister from "../screens/EmployeeRegisterPage";
+import EmployeeRegister from "../screens/RegisterPage";
 
 //BottomNavigation
 import BottomNavbarNavigation from "./BottomTabNavigation";

@@ -5,6 +5,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 // API ENDPOINTS
 import { API_BASE_URL } from '../Authentication/AuthenticationService';
 import { API_BASE_URL1 } from '../Authentication/AuthenticationService';
+import { civilStatusData } from '../../Data/StaticDropdownData';
 
 const GetToken = async () => {
   try {
@@ -22,12 +23,17 @@ const GetToken = async () => {
 }
 
 // Register Employee
-export const RegisterEmployee = async (firstName,lastName,phoneNo, email, departmentID, dateHired) => {
+export const RegisterEmployee = async ( departmentID, dateHired, firstName, middleName, lastName, suffix, birthDate, gender, civilStatus, contactNo, email) => {
     try {
       const employeeData ={
         firstName,
+        middleName,
         lastName,
-        phoneNo,
+        suffix,
+        birthDate,
+        gender,
+        civilStatus,
+        contactNo,
         email,
         departmentID,
         dateHired
@@ -49,7 +55,6 @@ export const RegisterEmployee = async (firstName,lastName,phoneNo, email, depart
 
   }catch (error) {
     console.error("Error registering employee:", error);
-    Alert.alert("Error", "Failed to register employee. Please try again.");
     return { success: false };
   }
 }
