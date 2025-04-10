@@ -9,7 +9,7 @@ import { CompaniesDropdown, DepartmentsDropdown, StaticDropdown } from "../compo
 import { DatePickerComponent } from "../components/DatePicker";
 
 //API Service
-import { GetEmployeeProfile, GetLeaveCredits } from "../service/Employee/EmployeeService";
+import { GetEmployeeProfile, GetLeaveCredits, PatchEmployeeDetails } from "../service/Employee/EmployeeService";
 
 // Static data
 import { civilStatusData, genderData, suffixData } from "../Data/StaticDropdownData";
@@ -31,6 +31,7 @@ export default function AccountPage({ navigation }) {
   const [sickLeaveCredits, setSickLeaveCredits] = useState(0);
 
   const [isEditing, setIsEditing] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   
   useEffect(() => {
   const loadEmployeeProfile = async () => {
@@ -53,8 +54,61 @@ export default function AccountPage({ navigation }) {
       Alert.alert("Error", "Failed to load employee data. Please try again.");
     }
   }
-loadEmployeeProfile();
+  loadEmployeeProfile();
   }, []);
+
+  useEffect(() => {
+      const loadLeaveCredits = async () => {
+        try {
+          const { vacationLeaveCredits, sickLeaveCredits } = await GetLeaveCredits();
+
+          setVacationLeaveCredits(vacationLeaveCredits);
+          setSickLeaveCredits(sickLeaveCredits);
+          console.log("Leave Credits:", "Vacation Leave: ",vacationLeaveCredits, "Sick Leave: ",sickLeaveCredits);
+        }
+        catch (error) {
+          console.error("Error loading leave credits: ", error)
+        }
+      };
+      loadLeaveCredits();
+    },[]);
+
+  const handlePatchEmployeeDetails = async () => {
+    if (isSubmitting) return;
+    setIsSubmitting(true);
+    
+    const updatedData = {
+      firstName,
+      middleName,
+      lastName,
+      suffix,
+      birthDate,
+      gender,
+      civilStatus,
+      contactNo,
+      email,
+      dateHired,
+    };
+
+    console.log("Updated Data:", updatedData);
+
+    try {
+      const request = await PatchEmployeeDetails(updatedData);
+
+      if (request.success){
+        Alert.alert("Success", "Employee details update successfully!");
+        setIsEditing(false);
+      }
+      else{
+        Alert.alert("Error", request.message || "Failed to update employee details.");
+        setIsSubmitting(false);
+      }
+    } catch(error){
+      console.error("Error updating employee details:", error);
+      Alert.alert("Error", "An unexpected error occured. Please try again.");
+      setIsSubmitting(false);
+    }
+  }
 
   const formFields = [
     {
@@ -62,7 +116,7 @@ loadEmployeeProfile();
       label: "Vacation Leave Credits",
       component: (
         <TextInput
-          style={[styles.input, { backgroundColor: isEditing ? "#fff" : "#f0f0f0" }]} // Dynamic background color
+          style={styles.input} // Dynamic background color
           editable={false}
           value={vacationLeaveCredits}
         />
@@ -73,7 +127,7 @@ loadEmployeeProfile();
       label: "Sick Leave Credits",
       component: (
         <TextInput
-          style={[styles.input, { backgroundColor: isEditing ? "#fff" : "#f0f0f0" }]} // Dynamic background color
+          style={styles.input} // Dynamic background color
           editable={false}
           value={sickLeaveCredits}
         />
@@ -127,6 +181,45 @@ loadEmployeeProfile();
       ),
     },
     {
+      key: "suffix",
+      label: "Suffix:",
+      component: (
+        <StaticDropdown
+          editable={isEditing} // Dropdown is only editable when isEditing is true
+          data={suffixData} // Static data for suffixes
+          value={suffix}
+          setValue={setSuffix}
+          placeholder="Select Suffix"
+        />
+      ),
+    },
+    {
+      key: "gender",
+      label: "Gender:",
+      component: (
+        <StaticDropdown
+          editable={isEditing} // Dropdown is only editable when isEditing is true
+          data={genderData} // Static data for gender
+          value={gender}
+          setValue={setGender}
+          placeholder="Select Gender"
+        />
+      ),
+    },
+    {
+      key: "civilStatus",
+      label: "Civil Status:",
+      component: (
+        <StaticDropdown
+          editable={isEditing} // Dropdown is only editable when isEditing is true
+          data={civilStatusData} // Static data for civil status
+          value={civilStatus}
+          setValue={setCivilStatus}
+          placeholder="Select Civil Status"
+        />
+      ),
+    },
+    {
       key: "contactNo",
       label: "Contact Number:",
       component: (
@@ -154,25 +247,6 @@ loadEmployeeProfile();
       ),
     },
   ];
-   
-    
-
-  useEffect(() => {
-    const loadLeaveCredits = async () => {
-      try {
-        const { vacationLeaveCredits, sickLeaveCredits } = await GetLeaveCredits();
-
-        setVacationLeaveCredits(vacationLeaveCredits);
-        setSickLeaveCredits(sickLeaveCredits);
-        console.log("Leave Credits:", "Vacation Leave: ",vacationLeaveCredits, "Sick Leave: ",sickLeaveCredits);
-      }
-      catch (error) {
-        console.error("Error loading leave credits: ", error)
-      }
-    };
-    loadLeaveCredits();
-  },[]);
-
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
@@ -195,7 +269,7 @@ loadEmployeeProfile();
                 )}
                 ListFooterComponent={
                   <View style={styles.buttonContainer}>
-                    <Pressable style={styles.registerButton} disabled={!isEditing} onPress={() => console.log("Button Pressed")}>
+                    <Pressable style={styles.registerButton} disabled={!isEditing} onPress={handlePatchEmployeeDetails}>
                       <Text style={styles.saveChangesButtonText}>Save Changes</Text>
                     </Pressable>
                   </View> 
@@ -262,10 +336,9 @@ const styles = StyleSheet.create({
     fontSize: 20,
     
   },
- 
   buttonContainer: {
     paddingHorizontal: 10,
-    marginTop: 25,
+    marginTop: 10,
   },
   registerButton: {
     width: '100%',

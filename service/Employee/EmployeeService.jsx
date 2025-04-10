@@ -147,6 +147,41 @@ export const AddLeaveRequest = async (leaveStart, leaveEnd, leaveTypeID, reason)
 
 }
 
+// Patch Employee Details
+export const PatchEmployeeDetails = async (updatedData) => {
+  try {
+    const token = await GetToken();
+    if (!token) return { success: false };
+
+    const request = await axios.patch(`${API_BASE_URL1}api/Employee`, updatedData,{
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      });
+
+    return {
+      status: request.status,
+      data: request.data,
+      success: true,
+    };
+  } catch (error){
+    console.error("Error updating employee details:", error);
+
+    if (error.response){
+      const { status, data} = error.response;
+      return {
+        status,
+        code: data.code,
+        message: data.message,
+        success: false,
+      }
+    }
+
+    return { status: 500, message: "Internal Server Error" };
+  }
+}
+
 export const GetEmployeeLeaveRequest = async () => {
   try {
     // Retrieve the token from AsyncStorage
