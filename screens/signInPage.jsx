@@ -10,7 +10,12 @@ export default function SignIn({ navigation }) {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
 
+    const [isSubmitting, setIsSubmitting] = useState(false); // State to track submission status
+
     const handleLogin= async () => {
+
+      if (isSubmitting) return;
+
       const result = await Login(username,password)
 
         if (result.success) {
@@ -21,10 +26,12 @@ export default function SignIn({ navigation }) {
             }
           ]);
           console.log("Signed In!");
+          isSubmitting(false);
         }
         else{
           Alert.alert("Error", "Username or Password is incorrect!");
           console.log("Error Signing In");
+          isSubmitting(false);
         }
     };
    

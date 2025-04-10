@@ -103,6 +103,7 @@ export default function RequestLeavePage({ navigation }) {
         } else {
           Alert.alert("Error", "Failed to submit leave request. Please try again.");
           console.log("Failed to submit leave request.");
+          isSubmitting(false);
         }
       }catch (error) {
         console.error("Error submitting leave request:", error);

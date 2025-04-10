@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet, SafeAreaView, Pressable, Alert } from "react-native";
+import { View, Text, StyleSheet, SafeAreaView, Pressable, Alert, FlatList } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { GetEmployeeLeaveRequest } from "../service/Employee/EmployeeService";
 import { Logout } from "../service/Authentication/AuthenticationService";
@@ -15,6 +15,7 @@ export default function LeavePage({ navigation }) {
       try {
         const request = await GetEmployeeLeaveRequest(); // Fetch leave requests from backend
         const leaveRequests = request.map((request) => ({
+          leaveRequestID: request.leaveRequestID,
           leaveType: request.leaveType.leaveTypeName || "Unknown",
           leaveStart: request.leaveStart,
           leaveEnd: request.leaveEnd,
@@ -22,7 +23,6 @@ export default function LeavePage({ navigation }) {
           reason: request.reason,
         }));
         setLeaveRequests(leaveRequests);
-        console.log("Fetched leave requests:", leaveRequests);
       } catch (error) {
         console.error("Error fetching leave requests:", error);
         Alert.alert("Error", "Failed to load leave requests. Please try again.");
@@ -55,7 +55,7 @@ export default function LeavePage({ navigation }) {
   };
 
   return (
-    <SafeAreaView>
+    <SafeAreaView style={{flex: 1}}>
       <View style={styles.header}>
         <Text style={styles.headerText}>Leave</Text>
         <Pressable style={styles.addButton}>
@@ -70,25 +70,26 @@ export default function LeavePage({ navigation }) {
           <Text style={styles.logoutButtonText}>Logout</Text>
         </Pressable>
       </View>
-      <View style={styles.body}>
-        <Text style={styles.bodyText}>Leave History</Text>
-      </View>
-      <View style={styles.bodyContainer}>
-        {leaveRequests.length === 0 ? (
-          <Text>No leave requests available</Text>
-        ) : (
-          leaveRequests.map((request, index) => (
-            <LeaveRequestCard
-              key={index}
-              leaveType={request.leaveType}
-              leaveStart={request.leaveStart}
-              leaveEnd={request.leaveEnd}
-              leaveStatus={request.leaveStatus}
-              onViewPress={() => navigation.navigate("LeaveRequestDetails", { requestID: request.leaveRequestID })}
-            />
-          ))
+      <FlatList
+        data={leaveRequests}
+        keyExtractor={(item) => item.leaveRequestID.toString()}
+        renderItem={({item}) => (
+          <LeaveRequestCard
+            leaveType={item.leaveType}
+            leaveStart={item.leaveStart}
+            leaveEnd={item.leaveEnd}
+            leaveStatus={item.leaveStatus}
+          />
         )}
-      </View>
+        ListHeaderComponent={
+        <View style={styles.body}>
+          <Text style={styles.bodyText}>Leave History</Text>
+        </View>}
+        ListEmptyComponent ={<Text style={styles.emptyText}> No leave Request available</Text>}
+        contentContainerStyle={styles.flatlistContent}
+        nestedScrollEnabled={true}
+        showsVerticalScrollIndicator={false} // Hide vertical scroll indicator
+     />
     </SafeAreaView>
   );
 }
@@ -121,14 +122,20 @@ const styles = StyleSheet.create({
     fontWeight: "600",
   },
   body: {
-    paddingHorizontal: 10,
-    paddingVertical: 10,
+    paddingVertical: 10
   },
   bodyText: {
     fontSize: 30,
   },
-  bodyContainer: {
+  flatlistContent: {
     width: "100%",
     paddingHorizontal: 10,
+    paddingBottom: 10
   },
+  emptyText:{
+    textAlign: 'center',
+    marginTop: 20,
+    fotnSize: 20,
+    color: 'black'
+  }
 });
