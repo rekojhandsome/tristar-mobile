@@ -12,6 +12,7 @@ import BottomNavbarNavigation from "./BottomTabNavigation";
 import RequestLeavePage from "../screens/RequestLeavePage";
 import ViewModal from "../components/LeavePopUp";
 import AccountPage from "../screens/AccountPage";
+import Homepage from "../screens/Homepage";
 
 
 const Stack = createNativeStackNavigator();
@@ -21,6 +22,7 @@ export default function Navigation(){
         <NavigationContainer>
             <Stack.Navigator screenOptions={{headerShown: false} }>
                 {/* Authentication Screens */}
+                <Stack.Screen name = "Homepage" component={Homepage}/>
                 <Stack.Screen name="SignIn" component={SignIn}/>
                 <Stack.Screen name="SignUp" component={SignUp}/>
 

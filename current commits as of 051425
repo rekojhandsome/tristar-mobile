@@ -1,0 +1,155 @@
+[33mcommit 5f2df04f20c3ab96a68dc5079d01c427cc6820b2[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m
+Author: John Paul Pendo <rekojhandsome@gmail.com>
+Date:   Thu Apr 10 16:46:13 2025 +0800
+
+    added PatchEmployeeDetails, not working
+
+[33mcommit f6cfe9c299116c470f9d15bf76f4f7293dbd89a2[m
+Author: John Paul Pendo <rekojhandsome@gmail.com>
+Date:   Thu Apr 10 15:18:59 2025 +0800
+
+    revised accountpage.jsx
+
+[33mcommit d71d2b3dde19a02b24dc18c35d659ca28ec28570[m
+Author: John Paul Pendo <rekojhandsome@gmail.com>
+Date:   Thu Apr 10 09:58:23 2025 +0800
+
+    added scroll effect on leavepage.jsx
+
+[33mcommit 6e96c4b48bb00302d186a991c599003a901db320[m
+Author: John Paul Pendo <rekojhandsome@gmail.com>
+Date:   Tue Apr 8 16:41:50 2025 +0800
+
+    added LeaveRequestCard, can now fetch lr on frontend
+
+[33mcommit d0c7fff4193fea089f01d1c008a02cdaf8a08e6b[m
+Author: John Paul Pendo <rekojhandsome@gmail.com>
+Date:   Mon Apr 7 21:10:21 2025 +0800
+
+    added register on authservice
+
+[33mcommit c2fc8e2b539562d3db5f55764efd8b38710f6e6c[m
+Author: John Paul Pendo <rekojhandsome@gmail.com>
+Date:   Mon Apr 7 15:41:50 2025 +0800
+
+    can now fetch errors from backend
+
+[33mcommit 7a733475bffa37ba88741207164d07460782e33f[m
+Author: John Paul Pendo <rekojhandsome@gmail.com>
+Date:   Mon Apr 7 11:22:28 2025 +0800
+
+    can now check if dates inputed exists on db
+
+[33mcommit 97b89cff48ee73af1aab1e50c72c141b1f0216eb[m
+Author: John Paul Pendo <rekojhandsome@gmail.com>
+Date:   Sat Apr 5 23:06:20 2025 +0800
+
+    placed RegisterEmployee on EmployeeService.jsx
+
+[33mcommit 495680cd26f50f7e27d8a677aee9fb42ba060f97[m
+Author: John Paul Pendo <rekojhandsome@gmail.com>
+Date:   Sat Apr 5 22:31:25 2025 +0800
+
+    added validation on LeaveRequestPage
+
+[33mcommit 4c6fc84e1b0b94f23c1f6a5c6ff3aa002360b8ac[m
+Author: John Paul Pendo <rekojhandsome@gmail.com>
+Date:   Sat Apr 5 19:52:46 2025 +0800
+
+    added AddLeaveRequest, can now send leaverequest from frontend
+
+[33mcommit 4904b7913326e900356712d690c681307bae1254[m
+Author: John Paul Pendo <rekojhandsome@gmail.com>
+Date:   Sat Apr 5 16:00:03 2025 +0800
+
+    Added logout button on LeavePage
+
+[33mcommit c9c33e6246ea148a623465c8ab54394f8953694f[m
+Author: John Paul Pendo <rekojhandsome@gmail.com>
+Date:   Fri Apr 4 16:04:05 2025 +0800
+
+    refactored the api calls unfinished
+
+[33mcommit 8e157f6885c70ee7e8512fbd11cbd07bcefaf960[m
+Author: John Paul Pendo <rekojhandsome@gmail.com>
+Date:   Fri Apr 4 12:43:03 2025 +0800
+
+    added  flatlist on LeaveRequestPage.jsx
+
+[33mcommit 25f36fe3cae7229c5138d02bf901a4aba518244b[m
+Author: John Paul Pendo <rekojhandsome@gmail.com>
+Date:   Thu Apr 3 20:59:45 2025 +0800
+
+    moved AuthService to Authentication folder
+
+[33mcommit ce3edceb6f3e30e7fda5d256bcb0ded3840ee17f[m
+Author: John Paul Pendo <rekojhandsome@gmail.com>
+Date:   Thu Apr 3 16:37:16 2025 +0800
+
+    added flatlist on EmployeeRegister
+
+[33mcommit 5876c04c055e24b50c0271fadeebfb9d1534e164[m
+Author: John Paul Pendo <rekojhandsome@gmail.com>
+Date:   Wed Apr 2 21:20:18 2025 +0800
+
+    Converted DatePickerComponent to Modal
+
+[33mcommit 748697f05bca032958bd3806f8a91b653329ee78[m
+Author: rekoj <rekojhandsome@gmail.com>
+Date:   Wed Apr 2 16:37:31 2025 +0800
+
+    can now fetch leaveDetails on RequestLeavePage
+
+[33mcommit 0355ecc533e42f0ec299347d1c62eaf3954182af[m
+Author: rekoj <rekojhandsome@gmail.com>
+Date:   Wed Apr 2 16:06:30 2025 +0800
+
+    revised RequestLeavePage.jsx
+
+[33mcommit 9aa9f97d00e43797e16b98da38af980d4fb1b777[m
+Author: John Paul Pendo <rekojhandsome@gmail.com>
+Date:   Mon Mar 31 21:11:00 2025 +0800
+
+    changed salary to email on frontend
+
+[33mcommit 67255c5be2aa69569f34d43607fe4654552dc4f7[m
+Author: John Paul Pendo <rekojhandsome@gmail.com>
+Date:   Sun Mar 30 21:07:18 2025 +0800
+
+    added fetchEmployeeData on AccountPage
+
+[33mcommit 57a054a538fc85c6a9c1f97e34b82feae43d97e9[m
+Author: John Paul Pendo <rekojhandsome@gmail.com>
+Date:   Fri Mar 28 20:10:22 2025 +0800
+
+    Done Employee and SignUp, added Edit Button AccountPage
+
+[33mcommit a4cc75e8dd2b31baceec82862df38a592f87a6fa[m
+Author: rekoj <rekojhandsome@gmail.com>
+Date:   Fri Mar 28 15:29:09 2025 +0800
+
+    Separated Employee and Signin Entry
+
+[33mcommit c85f948f0a375afb2623d9f40c7e8d7907556960[m
+Author: rekoj <rekojhandsome@gmail.com>
+Date:   Fri Mar 28 09:47:14 2025 +0800
+
+    added employee entry duplicate checker
+
+[33mcommit 777e6c543a4d60be8f420c4a0ca31f0ab6da0b82[m
+Author: John Paul Pendo <rekojhandsome@gmail.com>
+Date:   Thu Mar 27 21:21:00 2025 +0800
+
+    added AsyncStorage
+
+[33mcommit 8b60cbf8afe40753c3216b49d54b54900799ef96[m
+Author: John Paul Pendo <rekojhandsome@gmail.com>
+Date:   Thu Mar 27 18:21:18 2025 +0800
+
+    Initial Commit 032725
+
+[33mcommit f388b901efb2ae4af8a596faebde99a07c8c38c6[m
+Author: John Paul Pendo <rekojhandsome@gmail.com>
+Date:   Thu Mar 27 18:20:06 2025 +0800
+
+    Initial commit

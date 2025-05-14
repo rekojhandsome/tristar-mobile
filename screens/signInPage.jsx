@@ -39,7 +39,7 @@ export default function SignIn({ navigation }) {
       <SafeAreaView style={styles.background}>
         <View style={styles.background} >
             <Image style={styles.image} source={require("../assets/images/tristar-logo.png")} />
-            <Text style={styles.title}>E-Leave App</Text>
+            <Text style={styles.title}>Enterprie App</Text>
           <View style={styles.formContainer}>
             <Text style={styles.formTitle}>Sign In</Text>
             <TextInput
