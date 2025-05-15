@@ -12,12 +12,18 @@ import EmployeeRegister from "../screens/RegisterPage";
 import BottomNavbarNavigation from "./BottomTabNavigation";
 
 //Main Screens
-import LeavePage from "../screens/LeavePage";
 import AccountPage from "../screens/AccountPage";
 import Homepage from "../screens/Homepage";
 
+
+//Application Screens
+import ApprovalPage from "../screens/ApprovalPage";
+import LeavePage from "../screens/LeavePage";
+
+
 import RequestLeavePage from "../screens/RequestLeavePage";
 import ViewModal from "../components/LeavePopUp";
+
 
 
 
@@ -28,14 +34,12 @@ export default function Navigation(){
         <NavigationContainer>
             <Stack.Navigator screenOptions={{headerShown: false} }>
                 {/* Authentication Screens
-                <Stack.Screen name = "Homepage" component={Homepage}/>
                 <Stack.Screen name="SignIn" component={SignIn}/>
                 <Stack.Screen name="SignUp" component={SignUp}/> */}
 
 
                 {/* Screens with BottomTabNavigation */}
                 <Stack.Screen name="Homepage" component={BottomNavbarNavigation}/>
-                <Stack.Screen name="AccountPage" component={BottomNavbarNavigation}/>
 
 
 
@@ -44,14 +48,13 @@ export default function Navigation(){
 
                 {/* Application Screens */}
                 <Stack.Screen name="LeavePage" component={LeavePage}/>
+                <Stack.Screen name="ApprovalPage" component={ApprovalPage}/>
                 
 
                 {/* Sub Screens */}
                 <Stack.Screen name="ViewModal" component={ViewModal}/>
                 <Stack.Screen name="RequestLeavePage" component={RequestLeavePage}/>
-
-
-               
+                
             </Stack.Navigator>
         </NavigationContainer>
     );

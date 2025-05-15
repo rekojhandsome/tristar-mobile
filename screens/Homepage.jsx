@@ -1,13 +1,10 @@
-import  React from "react";
 import { View, Text, StyleSheet, TouchableOpacity, Pressable, Image  } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
-import RequestLeavePage from "./RequestLeavePage";
-
 export default function Homepage({navigation}){
 return(
-    <SafeAreaView>
+<SafeAreaView>
         <View style={styles.header}>
             <Image style={styles.image} source={require("../assets/images/tristar-logo.png")} />
             <Text style={styles.headerText}>Homepage</Text>
@@ -17,7 +14,6 @@ return(
         <View style={styles.dashboard}>
             <Text style={styles.dashboardText}>Hello, Admin!</Text>
         </View>
-
         <View style={styles.applicationContainer}>
             <View style={styles.application}>
                 <Pressable onPress={() => navigation.navigate("LeavePage")}>
@@ -26,17 +22,14 @@ return(
                 </Pressable>
             </View>
             <View style={styles.application}>
-                <Pressable onPress={() => navigation.navigate("RequestLeavePage")}>
+                <Pressable onPress={() => navigation.navigate("ApprovalPage")}>
                 <Ionicons name="document-attach-outline" size={60} color="#70907C" />
                 <Text style={styles.applicationText}>Approval</Text>
                 </Pressable>
             </View>
-            
-            
         </View>
 </View>
-        
-    </SafeAreaView>
+</SafeAreaView>
 )
 }
 
