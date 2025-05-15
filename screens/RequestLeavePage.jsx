@@ -15,7 +15,8 @@ import { AddLeaveRequest } from '../service/Employee/EmployeeService';
 //Components
 import ConfirmLeaveModal from '../components/ConfirmLeavePopup';
 import { DatePickerComponent } from '../components/DatePicker'; 
-import { LeaveTypeDropdown } from '../components/Dropdown';
+import { LeaveTypeDropdown, StaticDropdown } from '../components/Dropdown';
+import { dayTypeData } from '../Data/StaticDropdownData';
 
 
 export default function RequestLeavePage({ navigation }) { 
@@ -143,6 +144,19 @@ export default function RequestLeavePage({ navigation }) {
             placeholder={"Select Leave Type"}
             value={leaveTypeID}
             setValue={setLeaveTypeID}
+          />
+        ),
+      },
+      {
+        key: "dayType",
+        label: "Day Type:",
+        component: (
+          <StaticDropdown
+            placeholder={"Select Day Type"}
+            value={leaveTypeID}
+            setValue={setLeaveTypeID}
+            editable={true}
+            data={dayTypeData}
           />
         ),
       },

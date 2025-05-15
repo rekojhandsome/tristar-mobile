@@ -10,49 +10,49 @@ export default function LeavePage({ navigation }) {
     const [modalVisible, setModalVisible] = useState(false);
     const [leaveRequests, setLeaveRequests] = useState([]);
 
-  useEffect(() => {
-    const loadEmployeeLeaveRequest = async () => {
-      try {
-        const request = await GetEmployeeLeaveRequest(); // Fetch leave requests from backend
-        const leaveRequests = request.map((request) => ({
-          leaveRequestID: request.leaveRequestID,
-          leaveType: request.leaveType.leaveTypeName || "Unknown",
-          leaveStart: request.leaveStart,
-          leaveEnd: request.leaveEnd,
-          leaveStatus: request.leaveStatus,
-          reason: request.reason,
-        }));
-        setLeaveRequests(leaveRequests);
-      } catch (error) {
-        console.error("Error fetching leave requests:", error);
-        Alert.alert("Error", "Failed to load leave requests. Please try again.");
-      }
-    };
+  // useEffect(() => {
+  //   const loadEmployeeLeaveRequest = async () => {
+  //     try {
+  //       const request = await GetEmployeeLeaveRequest(); // Fetch leave requests from backend
+  //       const leaveRequests = request.map((request) => ({
+  //         leaveRequestID: request.leaveRequestID,
+  //         leaveType: request.leaveType.leaveTypeName || "Unknown",
+  //         leaveStart: request.leaveStart,
+  //         leaveEnd: request.leaveEnd,
+  //         leaveStatus: request.leaveStatus,
+  //         reason: request.reason,
+  //       }));
+  //       setLeaveRequests(leaveRequests);
+  //     } catch (error) {
+  //       console.error("Error fetching leave requests:", error);
+  //       Alert.alert("Error", "Failed to load leave requests. Please try again.");
+  //     }
+  //   };
 
-    loadEmployeeLeaveRequest();
-  }, []); // Runs once when the component is mounted
+  //   loadEmployeeLeaveRequest();
+  // }, []); // Runs once when the component is mounted
 
-  const handleLogout = async () => {
-    Alert.alert("Confirm", "Confirm Logout?", [
-      {
-        text: "No",
-        style: "cancel",
-      },
-      {
-        text: "Yes",
-        onPress: async () => {
-          const result = await Logout();
-          if (result?.success || result === undefined) {
-            console.log("Logged Out Successfully!");
-            navigation.navigate("SignIn"); // Navigate to SignIn page
-          } else {
-            Alert.alert("Error", "Failed to log out. Please try again.");
-            console.log("Error Logging Out");
-          }
-        },
-      },
-    ]);
-  };
+  // const handleLogout = async () => {
+  //   Alert.alert("Confirm", "Confirm Logout?", [
+  //     {
+  //       text: "No",
+  //       style: "cancel",
+  //     },
+  //     {
+  //       text: "Yes",
+  //       onPress: async () => {
+  //         const result = await Logout();
+  //         if (result?.success || result === undefined) {
+  //           console.log("Logged Out Successfully!");
+  //           navigation.navigate("SignIn"); // Navigate to SignIn page
+  //         } else {
+  //           Alert.alert("Error", "Failed to log out. Please try again.");
+  //           console.log("Error Logging Out");
+  //         }
+  //       },
+  //     },
+  //   ]);
+  // };
 
   return (
     <SafeAreaView style={{flex: 1}}>
@@ -66,8 +66,8 @@ export default function LeavePage({ navigation }) {
             onPress={() => navigation.navigate("RequestLeavePage")}
           />
         </Pressable>
-        <Pressable style={styles.logoutButton} onPress={handleLogout}>
-          <Text style={styles.logoutButtonText}>Logout</Text>
+        <Pressable style={styles.logoutButton} onPress={() => navigation.navigate("Homepage")}>
+          <Text style={styles.logoutButtonText}>Homepage</Text>
         </Pressable>
       </View>
       <FlatList

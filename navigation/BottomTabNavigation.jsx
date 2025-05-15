@@ -11,28 +11,26 @@ import RequestLeavePage from "../screens/RequestLeavePage";
 import NotificationPage from "../screens/NotificationPage";
 
 //Screen names
-const leaveName = 'Leave'
+const homepageName = 'Homepage'
+// const leaveName = 'Leave'
 const accountName = 'Account'
-const notificationName = 'Notification'
+// const notificationName = 'Notification'
 
 const Tab = createBottomTabNavigator();
 
 
 export default function BottomNavbarNavigation(){
     return(
-        <Tab.Navigator initialRouteName ={leaveName}screenOptions={({route}) => ({
+        <Tab.Navigator initialRouteName ={homepageName}screenOptions={({route}) => ({
             tabBarIcon: ({focused, color, size}) => {
                 let iconName;
                 let rn = route.name;
                 
-                 if (rn === leaveName){
-                    iconName = focused ? 'list-outline' : 'list'
+                 if (rn === homepageName){
+                    iconName = focused ? 'home-outline' : 'home'
                 }
                 else if (rn === accountName){
                     iconName = focused ? 'person-circle-outline' : 'person-circle'
-                }
-                else if (rn === notificationName){
-                    iconName = focused ? 'notifications-outline' : 'notifications'
                 }
                 return <Ionicons name={iconName} size={size} color={color}/>
             },
@@ -43,9 +41,8 @@ export default function BottomNavbarNavigation(){
             tabBarLabelStyle: {  fontSize: 10}, 
 
         })}>
-            <Tab.Screen name={leaveName} component={LeavePage}/>
+            <Tab.Screen name={homepageName} component={Homepage}/>
             <Tab.Screen name={accountName} component={AccountPage}/>
-            <Tab.Screen name={notificationName} component={NotificationPage}/>
         </Tab.Navigator>
     )
 }

@@ -4,15 +4,21 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 //Authentication Screens
 import SignIn from "../screens/SignInPage";
 import SignUp from "../screens/SignUpPage";
+
+//Register Screen
 import EmployeeRegister from "../screens/RegisterPage";
 
 //BottomNavigation
 import BottomNavbarNavigation from "./BottomTabNavigation";
 
-import RequestLeavePage from "../screens/RequestLeavePage";
-import ViewModal from "../components/LeavePopUp";
+//Main Screens
+import LeavePage from "../screens/LeavePage";
 import AccountPage from "../screens/AccountPage";
 import Homepage from "../screens/Homepage";
+
+import RequestLeavePage from "../screens/RequestLeavePage";
+import ViewModal from "../components/LeavePopUp";
+
 
 
 const Stack = createNativeStackNavigator();
@@ -21,24 +27,31 @@ export default function Navigation(){
     return(
         <NavigationContainer>
             <Stack.Navigator screenOptions={{headerShown: false} }>
-                {/* Authentication Screens */}
+                {/* Authentication Screens
                 <Stack.Screen name = "Homepage" component={Homepage}/>
                 <Stack.Screen name="SignIn" component={SignIn}/>
-                <Stack.Screen name="SignUp" component={SignUp}/>
+                <Stack.Screen name="SignUp" component={SignUp}/> */}
+
+
+                {/* Screens with BottomTabNavigation */}
+                <Stack.Screen name="Homepage" component={BottomNavbarNavigation}/>
+                <Stack.Screen name="AccountPage" component={BottomNavbarNavigation}/>
+
+
 
                 {/* Register Screens */}
                 <Stack.Screen name="Register" component={EmployeeRegister}/>
 
-                {/* Main Screens */}
-                <Stack.Screen name="RequestLeavePage" component={RequestLeavePage} />
+                {/* Application Screens */}
+                <Stack.Screen name="LeavePage" component={LeavePage}/>
                 
 
                 {/* Sub Screens */}
-                <Stack.Screen name="ViewModal" component={ViewModal} />
+                <Stack.Screen name="ViewModal" component={ViewModal}/>
+                <Stack.Screen name="RequestLeavePage" component={RequestLeavePage}/>
 
 
-                {/* Screens with BottomTabNavigation */}
-                <Stack.Screen name="LeavePage" component={BottomNavbarNavigation} />
+               
             </Stack.Navigator>
         </NavigationContainer>
     );
