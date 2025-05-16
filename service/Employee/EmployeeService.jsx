@@ -3,7 +3,7 @@ import { Alert } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // API ENDPOINTS
-import { API_BASE_URL } from '../Authentication/AuthenticationService';
+import { API_BASE_URL, API_BASE_URL2 } from '../Authentication/AuthenticationService';
 import { API_BASE_URL1 } from '../Authentication/AuthenticationService';
 import { civilStatusData } from '../../Data/StaticDropdownData';
 
@@ -64,7 +64,7 @@ export const GetEmployeeProfile = async () => {
     const token = await GetToken();
     if (!token) return;
 
-    const response = await axios.get(`${API_BASE_URL1}/api/employee/profile`, {
+    const response = await axios.get(`${API_BASE_URL2}/api/Account/profile`, {
       headers: { Authorization: `Bearer ${token}` }
     });
 
@@ -192,7 +192,7 @@ export const GetEmployeeLeaveRequest = async () => {
     }
 
     // Fetch leave requests from the backend
-    const response = await axios.get(`${API_BASE_URL1}/api/LeaveRequest/leave-request`, {
+    const response = await axios.get(`${API_BASE_URL2}/api/LeaveRequest/`, {
       headers: { Authorization: `Bearer ${token}` },
     });
     return response.data; // Return the array of leave requests

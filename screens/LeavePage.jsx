@@ -10,27 +10,27 @@ export default function LeavePage({ navigation }) {
     const [modalVisible, setModalVisible] = useState(false);
     const [leaveRequests, setLeaveRequests] = useState([]);
 
-  // useEffect(() => {
-  //   const loadEmployeeLeaveRequest = async () => {
-  //     try {
-  //       const request = await GetEmployeeLeaveRequest(); // Fetch leave requests from backend
-  //       const leaveRequests = request.map((request) => ({
-  //         leaveRequestID: request.leaveRequestID,
-  //         leaveType: request.leaveType.leaveTypeName || "Unknown",
-  //         leaveStart: request.leaveStart,
-  //         leaveEnd: request.leaveEnd,
-  //         leaveStatus: request.leaveStatus,
-  //         reason: request.reason,
-  //       }));
-  //       setLeaveRequests(leaveRequests);
-  //     } catch (error) {
-  //       console.error("Error fetching leave requests:", error);
-  //       Alert.alert("Error", "Failed to load leave requests. Please try again.");
-  //     }
-  //   };
+  useEffect(() => {
+    const loadEmployeeLeaveRequest = async () => {
+      try {
+        const request = await GetEmployeeLeaveRequest(); // Fetch leave requests from backend
+        const leaveRequests = request.map((request) => ({
+          leaveRequestID: request.leaveRequestID,
+          leaveType: request.leaveType.leaveTypeName || "Unknown",
+          leaveStart: request.leaveStart,
+          leaveEnd: request.leaveEnd,
+          leaveStatus: request.leaveStatus,
+          reason: request.reason,
+        }));
+        setLeaveRequests(leaveRequests);
+      } catch (error) {
+        console.error("Error fetching leave requests:", error);
+        Alert.alert("Error", "Failed to load leave requests. Please try again.");
+      }
+    };
 
-  //   loadEmployeeLeaveRequest();
-  // }, []); // Runs once when the component is mounted
+    loadEmployeeLeaveRequest();
+  }, []); // Runs once when the component is mounted
 
   // const handleLogout = async () => {
   //   Alert.alert("Confirm", "Confirm Logout?", [

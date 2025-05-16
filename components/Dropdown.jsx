@@ -5,11 +5,12 @@ import axios from "axios";
 
 import { API_BASE_URL } from "../service/Authentication/AuthenticationService";
 import { API_BASE_URL1 } from "../service/Authentication/AuthenticationService";
+import { API_BASE_URL2 } from "../service/Authentication/AuthenticationService";
 
     //API Endpoints
-    const COMPANY_URL = `${API_BASE_URL1}/api/Company`;
-    const DEPARTMENT_URL = `${API_BASE_URL1}/api/Department`;
-    const LEAVE_TYPE_URL = `${API_BASE_URL1}/api/LeaveType`;
+    const COMPANY_URL = `${API_BASE_URL2}/api/Company/get-companies`;
+    const DEPARTMENT_URL = `${API_BASE_URL2}/api/Department`;
+    const LEAVE_TYPE_URL = `${API_BASE_URL2}/api/LeaveType`;
 
     export const  CompaniesDropdown = ({ value, setValue, placeholder }) => {
     const [isOpen, setIsOpen] = useState(false);
@@ -35,7 +36,7 @@ import { API_BASE_URL1 } from "../service/Authentication/AuthenticationService";
         <TouchableOpacity style={styles.dropdownButton} onPress={() => setIsOpen(!isOpen)}>
             <Text style={styles.dropdownText}>
             {/* Display selected Company Name */}
-            {value ? data.find((item) => item.companyID === value)?.name : placeholder}
+            {value ? data.find((item) => item.companyID === value)?.companyName : placeholder}
             </Text>
             <Ionicons name="chevron-down-outline" size={25} style={styles.dropdownIcon} />
         </TouchableOpacity>
@@ -57,7 +58,7 @@ import { API_BASE_URL1 } from "../service/Authentication/AuthenticationService";
                         setIsOpen(false);
                     }}
                     >
-                    <Text style={styles.itemText}>{item.name}</Text>
+                    <Text style={styles.itemText}>{item.companyName}</Text>
                     </TouchableOpacity>
                 )}
                 />

@@ -33,9 +33,9 @@ export default function Navigation(){
     return(
         <NavigationContainer>
             <Stack.Navigator screenOptions={{headerShown: false} }>
-                {/* Authentication Screens
+                {/* Authentication Screens */}
                 <Stack.Screen name="SignIn" component={SignIn}/>
-                <Stack.Screen name="SignUp" component={SignUp}/> */}
+                <Stack.Screen name="SignUp" component={SignUp}/>
 
 
                 {/* Screens with BottomTabNavigation */}
@@ -54,7 +54,7 @@ export default function Navigation(){
                 {/* Sub Screens */}
                 <Stack.Screen name="ViewModal" component={ViewModal}/>
                 <Stack.Screen name="RequestLeavePage" component={RequestLeavePage}/>
-                
+
             </Stack.Navigator>
         </NavigationContainer>
     );

@@ -22,7 +22,7 @@ export default function SignIn({ navigation }) {
           Alert.alert("Success", "Login successful!", [
             {
               text: "Okay",
-              onPress: () => navigation.navigate("LeavePage") // Navigate only after pressing OK
+              onPress: () => navigation.navigate("Homepage") // Navigate only after pressing OK
             }
           ]);
           console.log("Signed In!");

@@ -26,6 +26,10 @@ export default function AccountPage({ navigation }) {
   const [email, setEmail] = useState("");
   const [contactNo, setContactNo] = useState("");
   const [dateHired, setDateHired] = useState(null);
+  const [departmentName, setDepartmentName] = useState(null);
+  const [companyName, setCompanyName] = useState(null);
+  const [positionName, setPositionName] = useState(null);
+
 
   const [vacationLeaveCredits, setVacationLeaveCredits] = useState(0);
   const [sickLeaveCredits, setSickLeaveCredits] = useState(0);
@@ -37,6 +41,7 @@ export default function AccountPage({ navigation }) {
   const loadEmployeeProfile = async () => {
     try {
       const employeeData = await GetEmployeeProfile();
+       console.log("Employee Data:", employeeData);
 
       setBirthDate(employeeData.birthDate ? new Date(employeeData.birthDate) : null);
       setFirstName(employeeData.firstName);
@@ -48,6 +53,9 @@ export default function AccountPage({ navigation }) {
       setCivilStatus(employeeData.civilStatus);
       setContactNo(employeeData.contactNo);
       setEmail(employeeData.email);
+      setDepartmentName(employeeData.departmentName);
+      setCompanyName(employeeData.companyName);
+      setPositionName(employeeData.positionName);
     }
     catch (error) {
       console.error("Error loading employee profile:", error);
@@ -88,6 +96,9 @@ export default function AccountPage({ navigation }) {
       contactNo,
       email,
       dateHired,
+      positionID,
+      departmentID,
+      companyID
     };
 
     console.log("Updated Data:", updatedData);
@@ -134,6 +145,42 @@ export default function AccountPage({ navigation }) {
       ),
     },
     {
+      key: "companyName",
+      label: "Company Name:",
+      component: (
+        <TextInput
+          style={[styles.input, { backgroundColor: isEditing ? "#fff" : "#f0f0f0" }]} // Dynamic background color
+          editable={isEditing}
+          value={companyName}
+          onChangeText={setCompanyName}
+        />
+      )
+    },
+    {
+      key: "departmentName",
+      label: "Department Name:",
+      component: (
+        <TextInput
+          style={[styles.input, { backgroundColor: isEditing ? "#fff" : "#f0f0f0" }]} // Dynamic background color
+          editable={isEditing}
+          value={departmentName}
+          onChangeText={setDepartmentName}
+        />
+      ),
+    },
+    {
+      key: "positionName",
+      label: "Position Name:",
+      component: (
+        <TextInput
+          style={[styles.input, { backgroundColor: isEditing ? "#fff" : "#f0f0f0" }]} // Dynamic background color
+          editable={isEditing}
+          value={positionName}
+          onChangeText={setPositionName}
+        />
+      ),
+    },
+    {
       key: "dateHired",
       label: "Date Hired:",
       component: (
@@ -141,6 +188,17 @@ export default function AccountPage({ navigation }) {
           editable={isEditing} // Date picker is only editable when isEditing is true
           value={dateHired}
           onConfirm={(date) => setDateHired(date)}
+        />
+      ),
+    },
+    {
+      key: "birthDate",
+      label: "Birth Date:",
+      component: (
+        <DatePickerComponent
+          editable={isEditing} // Date picker is only editable when isEditing is true
+          value={birthDate}
+          onConfirm={(date) => setBirthDate(date)}
         />
       ),
     },

@@ -5,10 +5,11 @@ import { Alert } from "react-native";
 
 export const API_BASE_URL = "http://192.168.100.3:5269";
 export const API_BASE_URL1 = "http://192.168.29.207:5269";
+export const API_BASE_URL2 = "http://192.168.29.188:5269";
 
 export const Login = async (username, password) => {
     try{
-        const response = await axios.post(`${API_BASE_URL1}/api/Account/login`,{
+        const response = await axios.post(`${API_BASE_URL2}/api/Account/login`,{
             username,
             password
         });
