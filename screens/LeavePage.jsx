@@ -14,13 +14,14 @@ export default function LeavePage({ navigation }) {
     const loadEmployeeLeaveRequest = async () => {
       try {
         const request = await GetEmployeeLeaveRequest(); // Fetch leave requests from backend
+        console.log("Fetched Leave Requests:", JSON.stringify(request, null, 2)); // Debugging
+
         const leaveRequests = request.map((request) => ({
           leaveRequestID: request.leaveRequestID,
-          leaveType: request.leaveType.leaveTypeName || "Unknown",
-          leaveStart: request.leaveStart,
-          leaveEnd: request.leaveEnd,
+          leaveType: request.leaveTypeName || "Unknown",
+          leaveStart: request.leaveRequestItems[0]?.leaveStart,
+          leaveEnd: request.leaveRequestItems[0]?.leaveEnd,
           leaveStatus: request.leaveStatus,
-          reason: request.reason,
         }));
         setLeaveRequests(leaveRequests);
       } catch (error) {

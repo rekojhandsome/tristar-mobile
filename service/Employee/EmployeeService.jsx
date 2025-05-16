@@ -192,7 +192,7 @@ export const GetEmployeeLeaveRequest = async () => {
     }
 
     // Fetch leave requests from the backend
-    const response = await axios.get(`${API_BASE_URL2}/api/LeaveRequest/`, {
+    const response = await axios.get(`${API_BASE_URL2}/api/LeaveRequestHeader/leave-request-by-employee`, {
       headers: { Authorization: `Bearer ${token}` },
     });
     return response.data; // Return the array of leave requests
