@@ -39,17 +39,17 @@ export const RegisterEmployee = async ( departmentID, dateHired, firstName, midd
         dateHired
       }
 
-    const response  = await axios.post(`${API_BASE_URL1}/api/Employee`, employeeData);
+    const request  = await axios.post(`${API_BASE_URL1}/api/Employee`, employeeData);
 
-    const employeeID = response.data.employeeID;
+    const employeeID = request.data.employeeID;
     console.log("Employee ID: ", employeeID);
     AsyncStorage.setItem("employeeID", employeeID.toString());
       
-    if (response.status === 201){
+    if (request.status === 201){
       console.log("Employee registered succefully");
       return { success: true };
     } else {
-      console.log("Employee registration failed", response.status);
+      console.log("Employee registration failed", request.status);
       return { success: false };
     }
 
@@ -64,11 +64,11 @@ export const GetEmployeeProfile = async () => {
     const token = await GetToken();
     if (!token) return;
 
-    const response = await axios.get(`${API_BASE_URL2}/api/Account/profile`, {
+    const request = await axios.get(`${API_BASE_URL2}/api/Account/profile`, {
       headers: { Authorization: `Bearer ${token}` }
     });
 
-    return response.data;
+    return request.data;
 
   } catch (error) {
     console.error("Error fetching employee profile:", error);
@@ -108,14 +108,14 @@ export const GetEmployeeLeaveCredits = async () => {
   const token = await GetToken();
   if (!token) return [];
   
-  const response = await axios.get(`${API_BASE_URL2}/api/LeaveCredits/get-leave-credits`, {
+  const request = await axios.get(`${API_BASE_URL2}/api/LeaveCredits/get-leave-credits`, {
   headers: { Authorization: `Bearer ${token}`,
   "Content-Type": "application/json" },
   });
 
   return {
-    status: response.status,
-    data: response.data,
+    status: request.status,
+    data: request.data,
     success: true,
   }
   } catch (error) {
@@ -141,22 +141,22 @@ export const AddLeaveRequest = async (leaveStart, leaveEnd, leaveTypeID, reason)
       reason,
     }
 
-    const response = await axios.post(`${API_BASE_URL1}/api/RequestLeave`, employeeRequestLeaveData, {
+    const request = await axios.post(`${API_BASE_URL1}/api/RequestLeave`, employeeRequestLeaveData, {
       headers: {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
       },
     });
     return {
-      status: response.status,
-      data: response.data,
+      status: request.status,
+      data: request.data,
       success: true,
     }
   }catch(error){
     console.error("Error submitting leave request:", error);
   
-    if (error.response){
-      const { status, data } =  error.response;
+    if (error.request){
+      const { status, data } =  error.request;
       return {
         status,
         code: data.code,
@@ -189,8 +189,8 @@ export const PatchEmployeeDetails = async (updatedData) => {
   } catch (error){
     console.error("Error updating employee details:", error);
 
-    if (error.response){
-      const { status, data} = error.response;
+    if (error.request){
+      const { status, data} = error.request;
       return {
         status,
         code: data.code,
@@ -211,13 +211,33 @@ export const GetEmployeeLeaveRequest = async () => {
       return [];
     }
     // Fetch leave requests from the backend
-    const response = await axios.get(`${API_BASE_URL2}/api/LeaveRequestHeader/leave-request-by-employee`, {
+    const request = await axios.get(`${API_BASE_URL2}/api/LeaveRequestHeader/leave-request-by-employee`, {
       headers: { Authorization: `Bearer ${token}` },
     });
-    return response.data; // Return the array of leave requests
+    return request.data; // Return the array of leave requests
   } catch (error) {
     console.error("Error fetching leave requests:", error);
     Alert.alert("Error", "Failed to load leave requests. Please try again.");
     return [];
   }
 };
+
+export const GetEmployeeLeaveRequestTemplate = async () => {
+  const template = 0;
+  try{
+  const token = await GetToken();
+  if (!token) return [];
+
+    const request = await axios.get(`${API_BASE_URL2}/api/LeaveRequestHeader/${template}`,{
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      }
+    })
+    return request.data;
+  }catch (error) {
+    console.error("Error fetching employee leave request template:", error);
+    Alert.alert("Error", "Failed to load leave request template. Please try again.");
+    return null;
+  }
+}

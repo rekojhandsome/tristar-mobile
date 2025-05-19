@@ -9,7 +9,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { API_BASE_URL } from "../service/Authentication/AuthenticationService";
 import { API_BASE_URL1 } from "../service/Authentication/AuthenticationService";
 
-import { GetEmployeeLeaveCredits, GetLeaveCredits } from "../service/Employee/EmployeeService";
+import { GetEmployeeLeaveCredits, GetEmployeeLeaveRequestTemplate, GetLeaveCredits } from "../service/Employee/EmployeeService";
 import { AddLeaveRequest } from '../service/Employee/EmployeeService';
 
 //Components
@@ -33,22 +33,6 @@ export default function RequestLeavePage({ navigation }) {
 
     const [isSubmitting, setIsSubmitting] = useState(false);
   
-    // // Fetch Leave Credits
-    // useEffect(() => {
-    // const loadLeaveCredits = async () => {
-    //   try {
-    //     const { vacationLeaveCredits, sickLeaveCredits } = await GetLeaveCredits();
-    //       setVacationLeaveCredits(vacationLeaveCredits);
-    //       setSickLeaveCredits(sickLeaveCredits);
-    //       console.log("Current leave credits:", "Vacation Leave: ",vacationLeaveCredits, "Sick Leave: ",sickLeaveCredits);
-    //       }
-    //   catch (error) {
-    //     console.error("Error loading leave credits: ", error)
-    //     }
-    //     };
-    //   loadLeaveCredits();
-    // },[]);
-
      useEffect(() => {
       const loadLeaveCredits = async () => {
         try {
@@ -57,7 +41,7 @@ export default function RequestLeavePage({ navigation }) {
             console.warn("Leave credit fetch was unsuccessful");
             return;
           }
-     const leaveCreditsArray = request.data;
+        const leaveCreditsArray = request.data;
     
           // Parse each leave type
           const vacationLeave = leaveCreditsArray.find(
@@ -80,6 +64,22 @@ export default function RequestLeavePage({ navigation }) {
       };
       loadLeaveCredits();
     }, []);
+
+    // fetch Leave Request Template
+    useEffect(() => {
+      const loadEmployeeLeaveRequestTemplate = async () => {
+        try {
+          const response = await GetEmployeeLeaveRequestTemplate();
+          console.log("Leave Request Template:", JSON.stringify(response, null, 2));
+        }
+        catch (error) {
+          console.error("Error fetching leave request template:", error);
+          Alert.alert("Error", "Failed to load leave request template. Please try again.");
+        }
+      };
+
+      loadEmployeeLeaveRequestTemplate();
+    },[]);
 
     // Apply Leave Request
     const handleAddLeaveRequest = async () => {
