@@ -10,28 +10,40 @@ export default function LeavePage({ navigation }) {
     const [modalVisible, setModalVisible] = useState(false);
     const [leaveRequests, setLeaveRequests] = useState([]);
 
-  useEffect(() => {
-    const loadEmployeeLeaveRequest = async () => {
-      try {
-        const request = await GetEmployeeLeaveRequest(); // Fetch leave requests from backend
-        // console.log("Fetched Leave Requests:", JSON.stringify(request, null, 2)); // Debugging
+ useEffect(() => {
+  const loadEmployeeLeaveRequest = async () => {
+    try {
+      const request = await GetEmployeeLeaveRequest(); // Probably returns an array directly
 
-        const leaveRequests = request.map((request) => ({
-          leaveRequestID: request.leaveRequestID,
-          leaveType: request.leaveTypeName || "Unknown",
-          leaveStart: request.leaveRequestItems[0]?.leaveStartFormatted,
-          leaveEnd: request.leaveRequestItems[0]?.leaveEndFormatted,
-          leaveStatus: request.leaveStatus,
-        }));
-        setLeaveRequests(leaveRequests);
-      } catch (error) {
-        console.error("Error fetching leave requests:", error);
-        Alert.alert("Error", "Failed to load leave requests. Please try again.");
-      }
-    };
+      const leaveRequests = request.map((leaveRequest) => {
+        const items = leaveRequest.leaveRequestItems;
 
-    loadEmployeeLeaveRequest();
-  }, []); // Runs once when the component is mounted
+        const earliestStartDate = items.reduce((min, item) =>
+          new Date(item.leaveStart) < new Date(min.leaveStart) ? item : min
+        );
+
+        const latestEndDate = items.reduce((max, item) =>
+          new Date(item.leaveEnd) > new Date(max.leaveEnd) ? item : max
+        );
+
+        return {
+          leaveRequestID: leaveRequest.leaveRequestID,
+          leaveType: leaveRequest.leaveTypeName,
+          leaveStart: earliestStartDate.leaveStartFormatted,
+          leaveEnd: latestEndDate.leaveEndFormatted,
+          leaveStatus: leaveRequest.leaveStatus,
+        };
+      });
+
+      setLeaveRequests(leaveRequests);
+    } catch (error) {
+      console.error("Error fetching leave requests:", error);
+      Alert.alert("Error", "Failed to load leave requests. Please try again.");
+    }
+  };
+
+  loadEmployeeLeaveRequest();
+}, []);
 
   // const handleLogout = async () => {
   //   Alert.alert("Confirm", "Confirm Logout?", [

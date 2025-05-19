@@ -7,8 +7,8 @@ export default function LeaveRequestCard({ leaveType, leaveStart, leaveEnd, leav
     <View style={styles.container}>
       <View style={styles.containerText}>
         <Text style={styles.leaveText}>Leave Type: {leaveType}</Text>
-        <Text style={styles.dateText}>Leave Start: {leaveStart}</Text>
-        <Text style={styles.dateText}>Leave End:  {leaveEnd}</Text>
+        <Text style={styles.dateText}>Start of Leave: {leaveStart}</Text>
+        <Text style={styles.dateText}>End of Leave:  {leaveEnd}</Text>
         <Text style={[styles.approveText, leaveStatus === "Approved" ? styles.approved : leaveStatus === "Pending" ? styles.pendingText : styles.rejectedText]}>
           {leaveStatus}
         </Text>

@@ -166,7 +166,6 @@ export const AddLeaveRequest = async (leaveStart, leaveEnd, leaveTypeID, reason)
     }
     return { status: 500, message: "Internal Server Error" };
   }
-
 }
 
 // Patch Employee Details
