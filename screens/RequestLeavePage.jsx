@@ -9,7 +9,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { API_BASE_URL } from "../service/Authentication/AuthenticationService";
 import { API_BASE_URL1 } from "../service/Authentication/AuthenticationService";
 
-import { GetLeaveCredits } from "../service/Employee/EmployeeService";
+import { GetEmployeeLeaveCredits, GetLeaveCredits } from "../service/Employee/EmployeeService";
 import { AddLeaveRequest } from '../service/Employee/EmployeeService';
 
 //Components
@@ -21,32 +21,65 @@ import { dayTypeData } from '../Data/StaticDropdownData';
 
 export default function RequestLeavePage({ navigation }) { 
     // Leave Credits
-    const [vacationLeaveCredits, setVacationLeaveCredits] = useState("");
-    const [sickLeaveCredits, setSickLeaveCredits] = useState("");
+    const [vacationLeaveCredits, setVacationLeaveCredits] = useState(0);
+    const [sickLeaveCredits, setSickLeaveCredits] = useState(0);
 
     // Leave Request
     const [leaveTypeID, setLeaveTypeID] = useState(null);
     const [leaveStart, setLeaveStart] = useState(null);
     const [leaveEnd, setLeavEnd] = useState(null);
-    const [reason, setReason] = useState("");
+    const [memo, setMemo] = useState("");
+    const [dayType, setDayType] = useState(null);
 
     const [isSubmitting, setIsSubmitting] = useState(false);
   
-    // Fetch Leave Credits
-    useEffect(() => {
-    const loadLeaveCredits = async () => {
-      try {
-        const { vacationLeaveCredits, sickLeaveCredits } = await GetLeaveCredits();
-          setVacationLeaveCredits(vacationLeaveCredits);
-          setSickLeaveCredits(sickLeaveCredits);
-          console.log("Current leave credits:", "Vacation Leave: ",vacationLeaveCredits, "Sick Leave: ",sickLeaveCredits);
+    // // Fetch Leave Credits
+    // useEffect(() => {
+    // const loadLeaveCredits = async () => {
+    //   try {
+    //     const { vacationLeaveCredits, sickLeaveCredits } = await GetLeaveCredits();
+    //       setVacationLeaveCredits(vacationLeaveCredits);
+    //       setSickLeaveCredits(sickLeaveCredits);
+    //       console.log("Current leave credits:", "Vacation Leave: ",vacationLeaveCredits, "Sick Leave: ",sickLeaveCredits);
+    //       }
+    //   catch (error) {
+    //     console.error("Error loading leave credits: ", error)
+    //     }
+    //     };
+    //   loadLeaveCredits();
+    // },[]);
+
+     useEffect(() => {
+      const loadLeaveCredits = async () => {
+        try {
+          const request = await GetEmployeeLeaveCredits();
+          if (!request?.success) {
+            console.warn("Leave credit fetch was unsuccessful");
+            return;
           }
-      catch (error) {
-        console.error("Error loading leave credits: ", error)
+     const leaveCreditsArray = request.data;
+    
+          // Parse each leave type
+          const vacationLeave = leaveCreditsArray.find(
+            (credit) => credit.leaveTypeName === "Vacation Leave"
+          );
+    
+          const sickLeave = leaveCreditsArray.find(
+            (credit) => credit.leaveTypeName === "Sick Leave"
+          );
+    
+          // Set remainingCredits
+          setVacationLeaveCredits(vacationLeave?.remainingCredits?.toString() || "0");
+          setSickLeaveCredits(sickLeave?.remainingCredits?.toString() || "0");
+    
+           console.log("Vacation Leave Credits:", vacationLeave?.remainingCredits, "Sick Leave Credits:", sickLeave?.remainingCredits);
+    
+        } catch (error) {
+          console.error("Error fetching leave credits: ", error.response?.data || error.message);
         }
-        };
+      };
       loadLeaveCredits();
-    },[]);
+    }, []);
 
     // Apply Leave Request
     const handleAddLeaveRequest = async () => {
@@ -135,32 +168,7 @@ export default function RequestLeavePage({ navigation }) {
             value={sickLeaveCredits}
           />
         ),
-      },
-      {
-        key: "leaveType",
-        label: "Leave Type:",
-        component: (
-          <LeaveTypeDropdown
-            placeholder={"Select Leave Type"}
-            value={leaveTypeID}
-            setValue={setLeaveTypeID}
-          />
-        ),
-      },
-      {
-        key: "dayType",
-        label: "Day Type:",
-        component: (
-          <StaticDropdown
-            placeholder={"Select Day Type"}
-            value={leaveTypeID}
-            setValue={setLeaveTypeID}
-            editable={true}
-            data={dayTypeData}
-          />
-        ),
-      },
-      {
+      },{
         key: "startDate",
         label: "Start of Leave:",
         component: (
@@ -179,6 +187,30 @@ export default function RequestLeavePage({ navigation }) {
             onConfirm={(date) => setLeavEnd(date)}
           />
         ),
+      },      
+      {
+        key: "dayType",
+        label: "Day Type:",
+        component: (
+          <StaticDropdown
+            placeholder={"Select Day Type"}
+            value={dayType}
+            setValue={setDayType}
+            editable={true}
+            data={dayTypeData}
+          />
+        ),
+      },
+      {
+        key: "leaveType",
+        label: "Leave Type:",
+        component: (
+          <LeaveTypeDropdown
+            placeholder={"Select Leave Type"}
+            value={leaveTypeID}
+            setValue={setLeaveTypeID}
+          />
+        ),
       },
       {
         key: "reason",
@@ -189,8 +221,8 @@ export default function RequestLeavePage({ navigation }) {
             placeholder="Enter Reason"
             keyboardType="default"
             autoCapitalize="none"
-            value={reason}
-            onChangeText={setReason}
+            value={memo}
+            onChangeText={setMemo}
           />
         ),
       },

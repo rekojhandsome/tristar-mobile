@@ -14,7 +14,7 @@ export default function LeavePage({ navigation }) {
     const loadEmployeeLeaveRequest = async () => {
       try {
         const request = await GetEmployeeLeaveRequest(); // Fetch leave requests from backend
-        console.log("Fetched Leave Requests:", JSON.stringify(request, null, 2)); // Debugging
+        // console.log("Fetched Leave Requests:", JSON.stringify(request, null, 2)); // Debugging
 
         const leaveRequests = request.map((request) => ({
           leaveRequestID: request.leaveRequestID,

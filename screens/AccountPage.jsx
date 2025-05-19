@@ -9,7 +9,7 @@ import { CompaniesDropdown, DepartmentsDropdown, StaticDropdown } from "../compo
 import { DatePickerComponent } from "../components/DatePicker";
 
 //API Service
-import { GetEmployeeProfile, GetLeaveCredits, PatchEmployeeDetails } from "../service/Employee/EmployeeService";
+import { GetEmployeeLeaveCredits, GetEmployeeProfile, GetLeaveCredits, PatchEmployeeDetails } from "../service/Employee/EmployeeService";
 
 // Static data
 import { civilStatusData, genderData, suffixData } from "../Data/StaticDropdownData";
@@ -65,21 +65,54 @@ export default function AccountPage({ navigation }) {
   loadEmployeeProfile();
   }, []);
 
-  useEffect(() => {
-      const loadLeaveCredits = async () => {
-        try {
-          const { vacationLeaveCredits, sickLeaveCredits } = await GetLeaveCredits();
+  // useEffect(() => {
+  //     const loadLeaveCredits = async () => {
+  //       try {
+  //         const { vacationLeaveCredits, sickLeaveCredits } = await GetLeaveCredits();
 
-          setVacationLeaveCredits(vacationLeaveCredits);
-          setSickLeaveCredits(sickLeaveCredits);
-          console.log("Leave Credits:", "Vacation Leave: ",vacationLeaveCredits, "Sick Leave: ",sickLeaveCredits);
-        }
-        catch (error) {
-          console.error("Error loading leave credits: ", error)
-        }
-      };
-      loadLeaveCredits();
-    },[]);
+  //         setVacationLeaveCredits(vacationLeaveCredits);
+  //         setSickLeaveCredits(sickLeaveCredits);
+  //         console.log("Leave Credits:", "Vacation Leave: ",vacationLeaveCredits, "Sick Leave: ",sickLeaveCredits);
+  //       }
+  //       catch (error) {
+  //         console.error("Error loading leave credits: ", error)
+  //       }
+  //     };
+  //     loadLeaveCredits();
+  //   },[]);
+
+  useEffect(() => {
+  const loadLeaveCredits = async () => {
+    try {
+      const request = await GetEmployeeLeaveCredits();
+      if (!request?.success) {
+        console.warn("Leave credit fetch was unsuccessful");
+        return;
+      }
+ const leaveCreditsArray = request.data;
+
+      // Parse each leave type
+      const vacationLeave = leaveCreditsArray.find(
+        (credit) => credit.leaveTypeName === "Vacation Leave"
+      );
+
+      const sickLeave = leaveCreditsArray.find(
+        (credit) => credit.leaveTypeName === "Sick Leave"
+      );
+
+      // Set remainingCredits
+      setVacationLeaveCredits(vacationLeave?.remainingCredits?.toString() || "0");
+      setSickLeaveCredits(sickLeave?.remainingCredits?.toString() || "0");
+
+       console.log("Vacation Leave Credits:", vacationLeave?.remainingCredits, "Sick Leave Credits:", sickLeave?.remainingCredits);
+
+    } catch (error) {
+      console.error("Error fetching leave credits: ", error.response?.data || error.message);
+    }
+  };
+  loadLeaveCredits();
+}, []);
+
 
   const handlePatchEmployeeDetails = async () => {
     if (isSubmitting) return;
@@ -149,8 +182,8 @@ export default function AccountPage({ navigation }) {
       label: "Company Name:",
       component: (
         <TextInput
-          style={[styles.input, { backgroundColor: isEditing ? "#fff" : "#f0f0f0" }]} // Dynamic background color
-          editable={isEditing}
+          style={styles.input}
+          editable={false}
           value={companyName}
           onChangeText={setCompanyName}
         />
@@ -161,8 +194,8 @@ export default function AccountPage({ navigation }) {
       label: "Department Name:",
       component: (
         <TextInput
-          style={[styles.input, { backgroundColor: isEditing ? "#fff" : "#f0f0f0" }]} // Dynamic background color
-          editable={isEditing}
+          style={styles.input}
+          editable={false}
           value={departmentName}
           onChangeText={setDepartmentName}
         />
@@ -173,8 +206,8 @@ export default function AccountPage({ navigation }) {
       label: "Position Name:",
       component: (
         <TextInput
-          style={[styles.input, { backgroundColor: isEditing ? "#fff" : "#f0f0f0" }]} // Dynamic background color
-          editable={isEditing}
+          style={styles.input}
+          editable={false}
           value={positionName}
           onChangeText={setPositionName}
         />
@@ -185,7 +218,7 @@ export default function AccountPage({ navigation }) {
       label: "Date Hired:",
       component: (
         <DatePickerComponent
-          editable={isEditing} // Date picker is only editable when isEditing is true
+          editable={false} // Date picker is only editable when isEditing is true
           value={dateHired}
           onConfirm={(date) => setDateHired(date)}
         />

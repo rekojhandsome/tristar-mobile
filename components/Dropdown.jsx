@@ -143,7 +143,6 @@ const [loading, setLoading] = useState(true);
     useEffect(() => {
       axios.get(LEAVE_TYPE_URL)
       .then(response => {
-        console.log("Fetched Data:", response.data); // Debugging
           setData(response.data);
           setLoading(false);
       })

@@ -76,30 +76,52 @@ export const GetEmployeeProfile = async () => {
   }
 };
 
-// Fetch Employee Leave Credits
-export const GetLeaveCredits = async () => {
+// // Fetch Employee Leave Credits
+// export const GetLeaveCredits = async () => {
+//   try{
+//     const employeeData = await GetEmployeeProfile();
+
+//     if (!employeeData || !employeeData.leaveCredits){
+//       throw new Error("Invalid employee data or leave credits not found.");
+//     }
+
+//     const vacationLeaveCredits = employeeData.leaveCredits.find((leave) => leave.leaveTypeID === 1)?.remainingCredits || 0;
+//     const sickLeaveCredits = employeeData.leaveCredits.find((leave) => leave.leaveTypeID === 2)?.remainingCredits || 0;
+
+//     return {
+//       vacationLeaveCredits: vacationLeaveCredits.toString(),
+//       sickLeaveCredits: sickLeaveCredits.toString(),
+//     };
+//   }catch(error){
+//     console.error("Error fetching leave credits:", error);
+//     Alert.alert("Error", "Failed to load leave credits. Please try again.", error);
+//   }
+//   return {
+//     vacationLeaveCredits: "0",
+//     sickLeaveCredits: "0",
+//   };
+// }
+
+      
+export const GetEmployeeLeaveCredits = async () => {
   try{
-    const employeeData = await GetEmployeeProfile();
+  const token = await GetToken();
+  if (!token) return [];
+  
+  const response = await axios.get(`${API_BASE_URL2}/api/LeaveCredits/get-leave-credits`, {
+  headers: { Authorization: `Bearer ${token}`,
+  "Content-Type": "application/json" },
+  });
 
-    if (!employeeData || !employeeData.leaveCredits){
-      throw new Error("Invalid employee data or leave credits not found.");
-    }
-
-    const vacationLeaveCredits = employeeData.leaveCredits.find((leave) => leave.leaveTypeID === 1)?.remainingCredits || 0;
-    const sickLeaveCredits = employeeData.leaveCredits.find((leave) => leave.leaveTypeID === 2)?.remainingCredits || 0;
-
-    return {
-      vacationLeaveCredits: vacationLeaveCredits.toString(),
-      sickLeaveCredits: sickLeaveCredits.toString(),
-    };
-  }catch(error){
-    console.error("Error fetching leave credits:", error);
-    Alert.alert("Error", "Failed to load leave credits. Please try again.", error);
-  }
   return {
-    vacationLeaveCredits: "0",
-    sickLeaveCredits: "0",
-  };
+    status: response.status,
+    data: response.data,
+    success: true,
+  }
+  } catch (error) {
+    console.error("Error fetching leave credits:", error);
+    Alert.alert("Error", "Failed to load leave credits. Please try again.");
+  }
 }
 
 //Employee Add Leave Request
@@ -187,10 +209,8 @@ export const GetEmployeeLeaveRequest = async () => {
     // Retrieve the token from AsyncStorage
     const token = await GetToken();
     if (!token) {
-      
       return [];
     }
-
     // Fetch leave requests from the backend
     const response = await axios.get(`${API_BASE_URL2}/api/LeaveRequestHeader/leave-request-by-employee`, {
       headers: { Authorization: `Bearer ${token}` },
