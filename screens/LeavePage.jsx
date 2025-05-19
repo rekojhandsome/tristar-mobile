@@ -19,8 +19,8 @@ export default function LeavePage({ navigation }) {
         const leaveRequests = request.map((request) => ({
           leaveRequestID: request.leaveRequestID,
           leaveType: request.leaveTypeName || "Unknown",
-          leaveStart: request.leaveRequestItems[0]?.leaveStart,
-          leaveEnd: request.leaveRequestItems[0]?.leaveEnd,
+          leaveStart: request.leaveRequestItems[0]?.leaveStartFormatted,
+          leaveEnd: request.leaveRequestItems[0]?.leaveEndFormatted,
           leaveStatus: request.leaveStatus,
         }));
         setLeaveRequests(leaveRequests);

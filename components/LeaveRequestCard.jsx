@@ -7,8 +7,8 @@ export default function LeaveRequestCard({ leaveType, leaveStart, leaveEnd, leav
     <View style={styles.container}>
       <View style={styles.containerText}>
         <Text style={styles.leaveText}>Leave Type: {leaveType}</Text>
-        <Text style={styles.dateText}>Leave Start: {new Date(leaveStart).toLocaleDateString()}</Text>
-        <Text style={styles.dateText}>Leave End:  {new Date(leaveEnd).toLocaleDateString()}</Text>
+        <Text style={styles.dateText}>Leave Start: {leaveStart}</Text>
+        <Text style={styles.dateText}>Leave End:  {leaveEnd}</Text>
         <Text style={[styles.approveText, leaveStatus === "Approved" ? styles.approved : leaveStatus === "Pending" ? styles.pendingText : styles.rejectedText]}>
           {leaveStatus}
         </Text>
