@@ -70,7 +70,7 @@ export default function RequestLeavePage({ navigation }) {
       const loadEmployeeLeaveRequestTemplate = async () => {
         try {
           const response = await GetEmployeeLeaveRequestTemplate();
-          console.log("Leave Request Template:", JSON.stringify(response, null, 2));
+          //console.log("Leave Request Template:", JSON.stringify(response, null, 2));
         }
         catch (error) {
           console.error("Error fetching leave request template:", error);

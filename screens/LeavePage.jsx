@@ -41,31 +41,8 @@ export default function LeavePage({ navigation }) {
       Alert.alert("Error", "Failed to load leave requests. Please try again.");
     }
   };
-
   loadEmployeeLeaveRequest();
 }, []);
-
-  // const handleLogout = async () => {
-  //   Alert.alert("Confirm", "Confirm Logout?", [
-  //     {
-  //       text: "No",
-  //       style: "cancel",
-  //     },
-  //     {
-  //       text: "Yes",
-  //       onPress: async () => {
-  //         const result = await Logout();
-  //         if (result?.success || result === undefined) {
-  //           console.log("Logged Out Successfully!");
-  //           navigation.navigate("SignIn"); // Navigate to SignIn page
-  //         } else {
-  //           Alert.alert("Error", "Failed to log out. Please try again.");
-  //           console.log("Error Logging Out");
-  //         }
-  //       },
-  //     },
-  //   ]);
-  // };
 
   return (
     <SafeAreaView style={{flex: 1}}>
@@ -98,7 +75,7 @@ export default function LeavePage({ navigation }) {
         <View style={styles.body}>
           <Text style={styles.bodyText}>Leave History</Text>
         </View>}
-        ListEmptyComponent ={<Text style={styles.emptyText}> No leave Request available</Text>}
+        ListEmptyComponent ={<Text style={styles.emptyText}>No leave Request available.</Text>}
         contentContainerStyle={styles.flatlistContent}
         nestedScrollEnabled={true}
         showsVerticalScrollIndicator={false} // Hide vertical scroll indicator
@@ -149,6 +126,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginTop: 20,
     fotnSize: 20,
-    color: 'black'
+    color: 'gray'
   }
 });
