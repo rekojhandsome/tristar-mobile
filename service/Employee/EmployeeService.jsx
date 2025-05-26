@@ -6,6 +6,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { API_BASE_URL, API_BASE_URL2 } from '../Authentication/AuthenticationService';
 import { API_BASE_URL1 } from '../Authentication/AuthenticationService';
 import { civilStatusData } from '../../Data/StaticDropdownData';
+import { Header } from 'react-native/Libraries/NewAppScreen';
 
 const GetToken = async () => {
   try {
@@ -241,3 +242,49 @@ export const GetEmployeeLeaveRequestTemplate = async () => {
     return null;
   }
 }
+
+export const GetLeaveRequestForApproval = async () =>{
+  try {
+    const token = await GetToken();
+    if (!token) return [];
+
+    const request = await axios.get(`${API_BASE_URL2}/api/LeaveRequestHeader/get-leave-requests-by-signatory`, {
+      headers:  
+      { Authorization: `Bearer ${token}`, 
+      "Content-Type": "application/json" 
+      }
+    })
+    return request.data;
+  } catch (error){
+    return []
+  }
+}
+export const PatchLeaveRequest = async (leaveRequestID, isSigned) => {
+  try {
+    const token = await GetToken();
+    if (!token) return { success: false, message: "No token found" };
+
+    const response = await axios.patch(
+      `${API_BASE_URL2}/api/LeaveRequestSignatory/patch-leave-request`,
+      {
+        leaveRequestID,
+        isSigned,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    return { success: true, message: response.data?.message || "Success" };
+  } catch (error) {
+    console.error("PatchLeaveRequest error:", error);
+    return {
+      success: false,
+      message:
+        error.response?.data?.message || error.message || "Unexpected error",
+    };
+  }
+};

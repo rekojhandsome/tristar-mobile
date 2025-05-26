@@ -2,9 +2,10 @@
 import React from "react";
 import { View, Text, StyleSheet, Pressable } from "react-native";
 
-export default function ApprovalCard({ leaveType, leaveStart, leaveEnd, employeeName, onApprove, onReject }) {
+export default function ApprovalCard({ leaveRequestID, leaveType, leaveStart, leaveEnd, employeeName, onApprove, onReject }) {
   return (
     <View style={styles.card}>
+      <Text style={styles.type}>Leave Request ID: {leaveRequestID}</Text>
       <Text style={styles.type}>Leave Type: {leaveType}</Text>
       <Text style={styles.date}>Start: {leaveStart}</Text>
       <Text style={styles.date}>End: {leaveEnd}</Text>

@@ -71,11 +71,7 @@ export default function LeavePage({ navigation }) {
             leaveStatus={item.leaveStatus}
           />
         )}
-        ListHeaderComponent={
-        <View style={styles.body}>
-          <Text style={styles.bodyText}>Leave History</Text>
-        </View>}
-        ListEmptyComponent ={<Text style={styles.emptyText}>No leave Request available.</Text>}
+        ListEmptyComponent ={<Text style={styles.emptyText}>No leave request available.</Text>}
         contentContainerStyle={styles.flatlistContent}
         nestedScrollEnabled={true}
         showsVerticalScrollIndicator={false} // Hide vertical scroll indicator
@@ -124,8 +120,8 @@ const styles = StyleSheet.create({
   },
   emptyText:{
     textAlign: 'center',
-    marginTop: 20,
-    fotnSize: 20,
+    marginTop: 50,
+    fontSize: 30,
     color: 'gray'
   }
 });

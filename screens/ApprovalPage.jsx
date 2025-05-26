@@ -1,69 +1,86 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { View, Text, SafeAreaView, StyleSheet, Pressable, FlatList, Alert } from "react-native";
 import ApprovalCard from "../components/ApprovalCard";
+import { GetLeaveRequestForApproval, PatchLeaveRequest } from "../service/Employee/EmployeeService";
 
 export default function ApprovalPage({ navigation }) {
-  // Mock data for pending leave requests
-  const [pendingRequests, setPendingRequests] = useState([
-    {
-      leaveRequestID: 1,
-      leaveTypeName: "Vacation Leave",
-      employeeName: "Juan Dela Cruz",
-      leaveRequestItems: [
-        { leaveStartFormatted: "2025-06-01", leaveEndFormatted: "2025-06-03" },
-      ],
-    },
-     {
-      leaveRequestID: 2,
-      leaveTypeName: "Vacation Leave",
-      employeeName: "Juan Dela Cruz",
-      leaveRequestItems: [
-        { leaveStartFormatted: "2025-06-01", leaveEndFormatted: "2025-06-03" },
-      ],
-    },
-     {
-      leaveRequestID: 3,
-      leaveTypeName: "Vacation Leave",
-      employeeName: "Juan Dela Cruz",
-      leaveRequestItems: [
-        { leaveStartFormatted: "2025-06-01", leaveEndFormatted: "2025-06-03" },
-      ],
-    },
-  ]);
+  
+  const [leaveRequestForApproval, setLeaveRequestForApproval] = useState([]);
 
-  const handleApprove = (leaveRequestID) => {
-    Alert.alert(
-      "Approval",
-      "Are you sure you want to approve this leave request?",
-      [
-        { text: "No", style: "cancel" },
-        {
-          text: "Yes",
-          onPress: () => {
-            Alert.alert("Approved", "Leave Request successfully approved.");
-            setPendingRequests(prev => prev.filter(req => req.leaveRequestID !== leaveRequestID));
-          },
-        },
-      ]
-    );
+ // ✅ Moved outside so it can be reused
+  const loadLeaveRequestForApproval = async () => {
+    try {
+      const response = await GetLeaveRequestForApproval();
+      setLeaveRequestForApproval(response);
+    } catch (error) {
+      console.error("Error fetching leave requests for approval:", error);
+      Alert.alert("Error", "Failed to load leave requests. Please try again.");
+    }
   };
 
-const handleReject = (leaveRequestID) => {
+  useEffect(() => {
+    loadLeaveRequestForApproval();
+  }, []);
+
+ const handleApprove = (leaveRequestID) => {
   Alert.alert(
-    "Confirm Rejection",
-    "Are you sure you want to reject this leave request?",
+    "Confirm",
+    "Are you sure you want to approve this leave request?",
     [
-      { text: "No", style: "cancel" },
+      {
+        text: "Cancel",
+        style: "cancel",
+      },
       {
         text: "Yes",
-        onPress: () => {
-          Alert.alert("Rejected", "Leave Request successfully rejected.");
-          setPendingRequests(prev => prev.filter(req => req.leaveRequestID !== leaveRequestID));
+        onPress: async () => {
+          console.log("Approving ID:", leaveRequestID);
+          const isApprove = true;
+          const result = await PatchLeaveRequest(leaveRequestID, isApprove);
+          console.log("Approve Result:", result);
+
+          if (result.success) {
+            Alert.alert("Approved", result.message || "Leave Request successfully approved.");
+            await loadLeaveRequestForApproval();
+          } else {
+            Alert.alert("Error", result.message || "Failed to approve leave request.");
+          }
         },
       },
     ]
   );
 };
+
+
+const handleReject = (leaveRequestID) => {
+  Alert.alert(
+    "Confirm",
+    "Are you sure you want to reject this leave request?",
+    [
+      {
+        text: "Cancel",
+        style: "cancel",
+      },
+      {
+        text: "Yes",
+        onPress: async () => {
+          console.log("Rejecting ID:", leaveRequestID);
+          const isApprove = false;
+          const result = await PatchLeaveRequest(leaveRequestID, isApprove);
+          console.log("Reject Result:", result);
+
+          if (result.success) {
+            Alert.alert("Rejected", result.message || "Leave Request successfully rejected.");
+            await loadLeaveRequestForApproval();
+          } else {
+            Alert.alert("Error", result.message || "Failed to reject leave request.");
+          }
+        },
+      },
+    ]
+  );
+};
+
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
@@ -76,14 +93,15 @@ const handleReject = (leaveRequestID) => {
 
       <FlatList
         contentContainerStyle={styles.listContainer}
-        data={pendingRequests}
+        data={leaveRequestForApproval}
         keyExtractor={(item) => item.leaveRequestID.toString()}
         renderItem={({ item }) => (
           <ApprovalCard
+          leaveRequestID={item.leaveRequestID}
             leaveType={item.leaveTypeName}
             leaveStart={item.leaveRequestItems[0].leaveStartFormatted}
             leaveEnd={item.leaveRequestItems[item.leaveRequestItems.length - 1].leaveEndFormatted}
-            employeeName={item.employeeName}
+            employeeName={item.firstName + " " + item.lastName}
             onApprove={() => handleApprove(item.leaveRequestID)}
             onReject={() => handleReject(item.leaveRequestID)}
           />
@@ -121,8 +139,8 @@ const styles = StyleSheet.create({
   },
   emptyText: {
     textAlign: "center",
-    marginTop: 20,
-    fontSize: 18,
+    marginTop: 50,
+    fontSize: 30,
     color: "gray",
   },
 });
