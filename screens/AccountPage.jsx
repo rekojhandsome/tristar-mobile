@@ -41,7 +41,6 @@ export default function AccountPage({ navigation }) {
   const loadEmployeeProfile = async () => {
     try {
       const employeeData = await GetEmployeeProfile();
-       console.log("Employee Data:", employeeData);
 
       setBirthDate(employeeData.birthDate ? new Date(employeeData.birthDate) : null);
       setFirstName(employeeData.firstName);
@@ -64,22 +63,6 @@ export default function AccountPage({ navigation }) {
   }
   loadEmployeeProfile();
   }, []);
-
-  // useEffect(() => {
-  //     const loadLeaveCredits = async () => {
-  //       try {
-  //         const { vacationLeaveCredits, sickLeaveCredits } = await GetLeaveCredits();
-
-  //         setVacationLeaveCredits(vacationLeaveCredits);
-  //         setSickLeaveCredits(sickLeaveCredits);
-  //         console.log("Leave Credits:", "Vacation Leave: ",vacationLeaveCredits, "Sick Leave: ",sickLeaveCredits);
-  //       }
-  //       catch (error) {
-  //         console.error("Error loading leave credits: ", error)
-  //       }
-  //     };
-  //     loadLeaveCredits();
-  //   },[]);
 
   useEffect(() => {
   const loadLeaveCredits = async () => {

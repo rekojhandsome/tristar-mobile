@@ -13,23 +13,20 @@ export default function ApprovalPage({ navigation }) {
         { leaveStartFormatted: "2025-06-01", leaveEndFormatted: "2025-06-03" },
       ],
     },
-    {
+     {
       leaveRequestID: 2,
       leaveTypeName: "Vacation Leave",
-      employeeName: "Juan Dela pendo",
+      employeeName: "Juan Dela Cruz",
       leaveRequestItems: [
         { leaveStartFormatted: "2025-06-01", leaveEndFormatted: "2025-06-03" },
       ],
     },
-    {
+     {
       leaveRequestID: 3,
-      leaveTypeName: "Sick Leave",
-      employeeName: "Maria Santos",
+      leaveTypeName: "Vacation Leave",
+      employeeName: "Juan Dela Cruz",
       leaveRequestItems: [
-        { 
-          leaveStartFormatted: "2025-06-05", 
-          leaveEndFormatted: "2025-06-06" 
-        },
+        { leaveStartFormatted: "2025-06-01", leaveEndFormatted: "2025-06-03" },
       ],
     },
   ]);

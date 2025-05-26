@@ -1,8 +1,26 @@
 import { View, Text, StyleSheet, TouchableOpacity, Pressable, Image  } from 'react-native';
+import React, { useState, useEffect } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import { GetEmployeeProfile } from '../service/Employee/EmployeeService';
 
 export default function Homepage({navigation}){
+
+    const [employeeName, setEmployeeName] = useState("");
+
+     useEffect(() => {
+    const loadEmployeeProfile = async () => {
+      try {
+        const employeeData = await GetEmployeeProfile();
+        setEmployeeName(employeeData.firstName);
+      } catch (error) {
+        console.error("Error fetching employee data:", error);
+      }
+    };
+    loadEmployeeProfile(); 
+  }, []); 
+    
+
 return(
     <SafeAreaView>
         <View style={styles.header}>
@@ -12,7 +30,7 @@ return(
 
         <View style={styles.body}>
                 <View style={styles.dashboard}>
-                    <Text style={styles.dashboardText}>Hello, Admin!</Text>
+                    <Text style={styles.dashboardText}>Hello, {employeeName}</Text>
                 </View>
                 <View style={styles.applicationContainer}>
                     <View style={styles.application}>
