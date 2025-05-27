@@ -1,13 +1,7 @@
 import { useState, React, useEffect } from 'react';
 import { View, Text, StyleSheet, TextInput, Pressable, SafeAreaView,  Platform, FlatList, KeyboardAvoidingView, Alert } from 'react-native';
-
-
 import axios from 'axios';
 import AsyncStorage from "@react-native-async-storage/async-storage";
-
-//API ENDPOINTS
-import { API_BASE_URL } from "../service/Authentication/AuthenticationService";
-import { API_BASE_URL1 } from "../service/Authentication/AuthenticationService";
 
 import { GetEmployeeLeaveCredits, GetEmployeeLeaveRequestTemplate, GetLeaveCredits } from "../service/Employee/EmployeeService";
 import { AddLeaveRequest } from '../service/Employee/EmployeeService';
@@ -24,6 +18,8 @@ export default function RequestLeavePage({ navigation }) {
     const [vacationLeaveCredits, setVacationLeaveCredits] = useState(0);
     const [sickLeaveCredits, setSickLeaveCredits] = useState(0);
 
+    //Leave Request Template
+    const [leaveRequestTemplate, setLeaveRequestTemplate] = useState(null);
     // Leave Request
     const [leaveTypeID, setLeaveTypeID] = useState(null);
     const [leaveStart, setLeaveStart] = useState(null);
@@ -67,34 +63,38 @@ export default function RequestLeavePage({ navigation }) {
 
     // fetch Leave Request Template
     useEffect(() => {
-      const loadEmployeeLeaveRequestTemplate = async () => {
-        try {
-          const response = await GetEmployeeLeaveRequestTemplate();
-          //console.log("Leave Request Template:", JSON.stringify(response, null, 2));
-        }
-        catch (error) {
-          console.error("Error fetching leave request template:", error);
-          Alert.alert("Error", "Failed to load leave request template. Please try again.");
-        }
-      };
+  const loadEmployeeLeaveRequestTemplate = async () => {
+    try {
+      const response = await GetEmployeeLeaveRequestTemplate();
+      console.log("Raw template response:", JSON.stringify(response, null, 2));
+      setLeaveRequestTemplate(response.data);
+    }
+    catch (error) {
+      console.error("Error fetching leave request template:", error);
+      Alert.alert("Error", "Failed to load leave request template. Please try again.");
+    }
+  };
 
-      loadEmployeeLeaveRequestTemplate();
-    },[]);
+  loadEmployeeLeaveRequestTemplate();
+},[]);
 
     // Apply Leave Request
     const handleAddLeaveRequest = async () => {
       if (isSubmitting) return; // Prevent multiple submissions
       setIsSubmitting(true);
 
-      const currentDate = new Date();
-      currentDate.setHours(0, 0, 0, 0); // Set time to midnight for comparison
-
       //Validtate inputs
-      if (!leaveStart || !leaveEnd || !leaveTypeID || !reason) {
+      if (!leaveStart || !leaveEnd || !leaveTypeID || !memo || !dayType) {
+        console.log("Missing input fields", { leaveStart, leaveEnd, leaveTypeID, memo, dayType });
         Alert.alert("Incomplete Fields", "Please fill in all fields.");
         setIsSubmitting(false);
         return;
       }
+
+      // Validate Dates
+      const currentDate = new Date();
+      currentDate.setHours(0, 0, 0, 0); // Set time to midnight for comparison
+
       if (leaveStart < currentDate) {
         Alert.alert("Error", "Start date must be the current date or later.");
         setIsSubmitting(false);
@@ -106,44 +106,81 @@ export default function RequestLeavePage({ navigation }) {
         setIsSubmitting(false);
         return;
       }
-      //Execute API Call
-      try{
-        const request = await AddLeaveRequest(leaveStart, leaveEnd, leaveTypeID, reason);
 
-        if (request.status === 400){
-          if(request.code === "OVERLAPPING_LEAVE"){
-            Alert.alert("Overlapping Leave", "Leave request overlaps with an existing leave.", request.message);
-            console.log( request.message);
-          } else if (request.code === "INSUFFICIENT_CREDITS"){
-            Alert.alert("Insufficient Credits", "You do not have enough leave credits.", request.message);
-            console.log("Leave request failed due to insufficient credits.", request.message);
-          } else {
-            Alert.alert("Error", "Failed to submit leave request. Please try again.");
-            console.log("Leave request failed with unknown error.", request.message);
-          }
+      console.log("Checking leaveRequestTemplate before submission:", leaveRequestTemplate);
+      if (leaveRequestTemplate === null || leaveRequestTemplate === undefined) {
+          Alert.alert("Error", "Leave request template not loaded. Please try again later.");
           setIsSubmitting(false);
           return;
         }
-        if (request.status === 200){
-          Alert.alert("Success", "Leave request submitted successfully!",
-          [
-            {
-              text: "Okay",
-              onPress: () => navigation.navigate("LeavePage")
-            },
-          ]
-        );
-          console.log("Leave request submitted successfully!");
-        } else {
-          Alert.alert("Error", "Failed to submit leave request. Please try again.");
-          console.log("Failed to submit leave request.");
-          isSubmitting(false);
-        }
-      }catch (error) {
-        console.error("Error submitting leave request:", error);
-      } finally {
-          setIsSubmitting(false);
+        
+      const leaveRequestItem = {
+        leaveStart: leaveStart,
+        leaveEnd: leaveEnd,
+        dayType: dayType,
+        memo: memo,
+      };
+
+      const payload = {
+        ...leaveRequestTemplate,
+        leaveTypeID: parseInt(leaveTypeID),
+        leaveRequestItems: [leaveRequestItem]
       }
+      
+      console.log('Submitting payload:', JSON.stringify(payload, null, 2));
+
+      try {
+        const response = await AddLeaveRequest(payload);
+
+        if (response.success){
+          Alert.alert("Success", response.message);
+        }
+        else {
+          Alert.alert("Error", response.message);
+        }
+      }
+      catch(error){
+         Alert.alert("Error", "Failed to submit leave request. Please try again.");
+      }
+
+      // //Execute API Call
+      // try{
+      //   const request = await AddLeaveRequest(leaveStart, leaveEnd, leaveTypeID, reason);
+
+      //   if (request.status === 400){
+      //     if(request.code === "OVERLAPPING_LEAVE"){
+      //       Alert.alert("Overlapping Leave", "Leave request overlaps with an existing leave.", request.message);
+      //       console.log( request.message);
+      //     } else if (request.code === "INSUFFICIENT_CREDITS"){
+      //       Alert.alert("Insufficient Credits", "You do not have enough leave credits.", request.message);
+      //       console.log("Leave request failed due to insufficient credits.", request.message);
+      //     } else {
+      //       Alert.alert("Error", "Failed to submit leave request. Please try again.");
+      //       console.log("Leave request failed with unknown error.", request.message);
+      //     }
+      //     setIsSubmitting(false);
+      //     return;
+      //   }
+      //   if (request.status === 200){
+      //     Alert.alert("Success", "Leave request submitted successfully!",
+      //     [
+      //       {
+      //         text: "Okay",
+      //         onPress: () => navigation.navigate("LeavePage")
+      //       },
+      //     ]
+      //   );
+      //     console.log("Leave request submitted successfully!");
+      //   } else {
+      //     Alert.alert("Error", "Failed to submit leave request. Please try again.");
+      //     console.log("Failed to submit leave request.");
+      //     isSubmitting(false);
+      //   }
+      // }catch (error) {
+      //   console.error("Error submitting leave request:", error);
+      // } finally {
+      //     setIsSubmitting(false);
+      // }
     };
   
     const formFields = [
@@ -213,7 +250,7 @@ export default function RequestLeavePage({ navigation }) {
         ),
       },
       {
-        key: "reason",
+        key: "memo",
         label: "Reason:",
         component: (
           <TextInput
@@ -253,7 +290,7 @@ export default function RequestLeavePage({ navigation }) {
             ListFooterComponent={
                 <View style={styles.buttonContainer}>
                     <Pressable style={styles.registerButton} onPress={handleAddLeaveRequest}>
-                        <Text style={styles.registerButtonText}>Request Leave</Text>
+                        <Text style={styles.registerButtonText}>Submit Request</Text>
                     </Pressable>
                 </View>
             }

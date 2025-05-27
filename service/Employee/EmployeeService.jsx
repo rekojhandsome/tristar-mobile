@@ -125,47 +125,78 @@ export const GetEmployeeLeaveCredits = async () => {
   }
 }
 
-//Employee Add Leave Request
-export const AddLeaveRequest = async (leaveStart, leaveEnd, leaveTypeID, reason) => {
+// //Employee Add Leave Request
+// export const AddLeaveRequest = async (leaveStart, leaveEnd, leaveTypeID, reason) => {
+//   try {
+//     const token = await GetToken();
+//     if (!token) return { success: false };  
+
+//     const employeeData = await GetEmployeeProfile();
+//     const employeeID = employeeData.employeeID;
+
+//     const employeeRequestLeaveData = {
+//       employeeID,
+//       leaveTypeID,
+//       leaveStart,
+//       leaveEnd,
+//       reason,
+//     }
+
+//     const request = await axios.post(`${API_BASE_URL1}/api/RequestLeave`, employeeRequestLeaveData, {
+//       headers: {
+//         Authorization: `Bearer ${token}`,
+//         "Content-Type": "application/json",
+//       },
+//     });
+//     return {
+//       status: request.status,
+//       data: request.data,
+//       success: true,
+//     }
+//   }catch(error){
+//     console.error("Error submitting leave request:", error);
+  
+//     if (error.request){
+//       const { status, data } =  error.request;
+//       return {
+//         status,
+//         code: data.code,
+//         message: data.message,
+//         success: false,
+//       }
+//     }
+//     return { status: 500, message: "Internal Server Error" };
+//   }
+// }
+
+// Add Leave Request
+export const AddLeaveRequest = async (LeaveRequestHeader) => {
   try {
     const token = await GetToken();
-    if (!token) return { success: false };  
+    if (!token) return {success: false};
 
-    const employeeData = await GetEmployeeProfile();
-    const employeeID = employeeData.employeeID;
-
-    const employeeRequestLeaveData = {
-      employeeID,
-      leaveTypeID,
-      leaveStart,
-      leaveEnd,
-      reason,
-    }
-
-    const request = await axios.post(`${API_BASE_URL1}/api/RequestLeave`, employeeRequestLeaveData, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-    });
-    return {
-      status: request.status,
-      data: request.data,
-      success: true,
-    }
-  }catch(error){
-    console.error("Error submitting leave request:", error);
-  
-    if (error.request){
-      const { status, data } =  error.request;
-      return {
-        status,
-        code: data.code,
-        message: data.message,
-        success: false,
+    const request = await axios.post(`${API_BASE_URL2}/api/LeaveRequestHeader/leave-request`, LeaveRequestHeader, 
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        }
       }
-    }
-    return { status: 500, message: "Internal Server Error" };
+    );
+      return {
+        success: true,
+        message: request.data?.message || "Leave request submitted successfully.",
+        data: request.data,
+      }
+  }catch (error){
+    console.error("Error submitting leave request:", error);
+    return {
+      status: error.response?.status,
+      success: false,
+      message:
+        error.response?.data?.message ||
+        "An unexpected error occurred while submitting the leave request.",
+    };
   }
 }
 

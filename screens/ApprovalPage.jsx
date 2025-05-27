@@ -34,7 +34,6 @@ export default function ApprovalPage({ navigation }) {
       {
         text: "Yes",
         onPress: async () => {
-          console.log("Approving ID:", leaveRequestID);
           const isApprove = true;
           const result = await PatchLeaveRequest(leaveRequestID, isApprove);
           console.log("Approve Result:", result);
@@ -50,7 +49,6 @@ export default function ApprovalPage({ navigation }) {
     ]
   );
 };
-
 
 const handleReject = (leaveRequestID) => {
   Alert.alert(
@@ -80,7 +78,6 @@ const handleReject = (leaveRequestID) => {
     ]
   );
 };
-
 
   return (
     <SafeAreaView style={{ flex: 1 }}>

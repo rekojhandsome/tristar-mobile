@@ -30,7 +30,7 @@ return(
 
         <View style={styles.body}>
                 <View style={styles.dashboard}>
-                    <Text style={styles.dashboardText}>Hello, {employeeName}</Text>
+                    <Text style={styles.dashboardText}>Hello, {employeeName}!</Text>
                 </View>
                 <View style={styles.applicationContainer}>
                     <View style={styles.application}>
