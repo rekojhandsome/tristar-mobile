@@ -13,6 +13,7 @@ import { GetEmployeeLeaveCredits, GetEmployeeProfile, GetLeaveCredits, PatchEmpl
 
 // Static data
 import { civilStatusData, genderData, suffixData } from "../Data/StaticDropdownData";
+import { Logout } from "../service/Authentication/AuthenticationService";
 
 
 export default function AccountPage({ navigation }) {
@@ -87,14 +88,34 @@ export default function AccountPage({ navigation }) {
       setVacationLeaveCredits(vacationLeave?.remainingCredits?.toString() || "0");
       setSickLeaveCredits(sickLeave?.remainingCredits?.toString() || "0");
 
-       console.log("Vacation Leave Credits:", vacationLeave?.remainingCredits, "Sick Leave Credits:", sickLeave?.remainingCredits);
-
     } catch (error) {
       console.error("Error fetching leave credits: ", error.response?.data || error.message);
     }
   };
   loadLeaveCredits();
 }, []);
+
+const handleLogout = async () => {
+  Alert.alert("Logout", "Confirm logout?",[
+    {
+      text: 'Cancel',
+      style: 'cancel',
+    },
+    {
+      text: 'Logout',
+      onPress: async () => {
+        try {
+          await Logout();
+          Alert.alert("Logout", "Logged out successfully.");
+          navigation.navigate("SignIn");
+        }
+        catch (error) {
+          Alert.alert("Error", "Failed to logout. Please try again.");
+        }
+      }
+    }
+  ])
+}
 
 
   const handlePatchEmployeeDetails = async () => {
@@ -346,6 +367,9 @@ export default function AccountPage({ navigation }) {
                     <Pressable style={styles.registerButton} disabled={!isEditing} onPress={handlePatchEmployeeDetails}>
                       <Text style={styles.saveChangesButtonText}>Save Changes</Text>
                     </Pressable>
+                    <Pressable style={styles.logoutButton} onPress={handleLogout}>
+                      <Text style={styles.logoutButtonText}>Logout</Text>
+                    </Pressable>
                   </View> 
                 }
                 nestedScrollEnabled={true}
@@ -421,6 +445,18 @@ const styles = StyleSheet.create({
     borderRadius: 5,
   },
   saveChangesButtonText: {
+    textAlign: 'center',
+    color: "white",
+    fontSize: 16,
+  },
+  logoutButton:{
+    width: '100%',
+    backgroundColor: "#FF6347",
+    padding: 15,
+    borderRadius: 5,
+    marginTop: 10,
+  },
+  logoutButtonText: {
     textAlign: 'center',
     color: "white",
     fontSize: 16,

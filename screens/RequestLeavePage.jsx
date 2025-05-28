@@ -1,17 +1,14 @@
 import { useState, React, useEffect } from 'react';
 import { View, Text, StyleSheet, TextInput, Pressable, SafeAreaView,  Platform, FlatList, KeyboardAvoidingView, Alert } from 'react-native';
-import axios from 'axios';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-import { GetEmployeeLeaveCredits, GetEmployeeLeaveRequestTemplate, GetLeaveCredits } from "../service/Employee/EmployeeService";
+import { GetEmployeeLeaveCredits } from "../service/Employee/EmployeeService";
 import { AddLeaveRequest } from '../service/Employee/EmployeeService';
 
 //Components
-import ConfirmLeaveModal from '../components/ConfirmLeavePopup';
 import { DatePickerComponent } from '../components/DatePicker'; 
 import { LeaveTypeDropdown, StaticDropdown } from '../components/Dropdown';
 import { dayTypeData } from '../Data/StaticDropdownData';
-import { set } from 'date-fns';
 
 
 export default function RequestLeavePage({ navigation }) { 
@@ -59,23 +56,6 @@ export default function RequestLeavePage({ navigation }) {
       };
       loadLeaveCredits();
     }, []);
-    
-      // const loadEmployeeLeaveRequestTemplate = async () => {
-      //   try {
-      //     const response = await GetEmployeeLeaveRequestTemplate();
-      //     console.log("Raw template response:", JSON.stringify(response, null, 2));
-      //     setLeaveRequestTemplate(response.data);
-      //   }
-      //   catch (error) {
-      //     console.error("Error fetching leave request template:", error);
-      //     Alert.alert("Error", "Failed to load leave request template. Please try again.");
-      //   }
-      // };
-
-      // useEffect(() => {
-      //   loadEmployeeLeaveRequestTemplate();
-      // },[]);
-
 
       useEffect(() => {
         const loadLeaveRequestTemplateFromStorage = async () => {
@@ -84,7 +64,6 @@ export default function RequestLeavePage({ navigation }) {
               if (storedTemplate){
                   const parsedTemplate = JSON.parse(storedTemplate);
                   setLeaveRequestTemplate(parsedTemplate);
-                  console.log("Parsed template from storage:", JSON.stringify(parsedTemplate, null, 2));
               }
               else {
                 console.log("No leave request template found in storage.");

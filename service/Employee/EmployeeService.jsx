@@ -77,31 +77,6 @@ export const GetEmployeeProfile = async () => {
   }
 };
 
-// // Fetch Employee Leave Credits
-// export const GetLeaveCredits = async () => {
-//   try{
-//     const employeeData = await GetEmployeeProfile();
-
-//     if (!employeeData || !employeeData.leaveCredits){
-//       throw new Error("Invalid employee data or leave credits not found.");
-//     }
-
-//     const vacationLeaveCredits = employeeData.leaveCredits.find((leave) => leave.leaveTypeID === 1)?.remainingCredits || 0;
-//     const sickLeaveCredits = employeeData.leaveCredits.find((leave) => leave.leaveTypeID === 2)?.remainingCredits || 0;
-
-//     return {
-//       vacationLeaveCredits: vacationLeaveCredits.toString(),
-//       sickLeaveCredits: sickLeaveCredits.toString(),
-//     };
-//   }catch(error){
-//     console.error("Error fetching leave credits:", error);
-//     Alert.alert("Error", "Failed to load leave credits. Please try again.", error);
-//   }
-//   return {
-//     vacationLeaveCredits: "0",
-//     sickLeaveCredits: "0",
-//   };
-// }
       
 export const GetEmployeeLeaveCredits = async () => {
   try{
@@ -123,50 +98,6 @@ export const GetEmployeeLeaveCredits = async () => {
     Alert.alert("Error", "Failed to load leave credits. Please try again.");
   }
 }
-
-// //Employee Add Leave Request
-// export const AddLeaveRequest = async (leaveStart, leaveEnd, leaveTypeID, reason) => {
-//   try {
-//     const token = await GetToken();
-//     if (!token) return { success: false };  
-
-//     const employeeData = await GetEmployeeProfile();
-//     const employeeID = employeeData.employeeID;
-
-//     const employeeRequestLeaveData = {
-//       employeeID,
-//       leaveTypeID,
-//       leaveStart,
-//       leaveEnd,
-//       reason,
-//     }
-
-//     const request = await axios.post(`${API_BASE_URL1}/api/RequestLeave`, employeeRequestLeaveData, {
-//       headers: {
-//         Authorization: `Bearer ${token}`,
-//         "Content-Type": "application/json",
-//       },
-//     });
-//     return {
-//       status: request.status,
-//       data: request.data,
-//       success: true,
-//     }
-//   }catch(error){
-//     console.error("Error submitting leave request:", error);
-  
-//     if (error.request){
-//       const { status, data } =  error.request;
-//       return {
-//         status,
-//         code: data.code,
-//         message: data.message,
-//         success: false,
-//       }
-//     }
-//     return { status: 500, message: "Internal Server Error" };
-//   }
-// }
 
 // Add Leave Request
 export const AddLeaveRequest = async (LeaveRequestHeader) => {
@@ -193,8 +124,7 @@ export const AddLeaveRequest = async (LeaveRequestHeader) => {
       status: error.response?.status,
       success: false,
       message:
-        error.response?.data?.message ||
-        "An unexpected error occurred while submitting the leave request.",
+        error.response?.data?.message ||"An unexpected error occurred while submitting the leave request.",
     };
   }
 }

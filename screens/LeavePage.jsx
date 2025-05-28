@@ -1,12 +1,10 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { View, Text, StyleSheet, SafeAreaView, Pressable, Alert, FlatList } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { GetEmployeeLeaveRequest, GetEmployeeLeaveRequestTemplate } from "../service/Employee/EmployeeService";
-import { Logout } from "../service/Authentication/AuthenticationService";
 import LeaveRequestCard from "../components/LeaveRequestCard"; // Import the LeaveRequestCard component
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-import ViewModal from "../components/LeavePopUp";
 export default function LeavePage({ navigation }) {
     const [modalVisible, setModalVisible] = useState(false);
     const [leaveRequests, setLeaveRequests] = useState([]);
@@ -49,12 +47,8 @@ export default function LeavePage({ navigation }) {
     const loadEmployeeLeaveRequestTemplate = async () => {
         try {
           const response = await GetEmployeeLeaveRequestTemplate();
-          console.log("Raw template response:", JSON.stringify(response, null, 2));
-          
-          const template = response;
-          setLeaveRequestTemplate(template);
-
-          await AsyncStorage.setItem("leaveRequestTemplate", JSON.stringify(template, null, 2));
+          setLeaveRequestTemplate(response);
+          await AsyncStorage.setItem("leaveRequestTemplate", JSON.stringify(response, null, 2));
         }
         catch (error) {
           console.error("Error fetching leave request template:", error);
