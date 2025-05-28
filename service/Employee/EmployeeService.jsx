@@ -102,7 +102,6 @@ export const GetEmployeeProfile = async () => {
 //     sickLeaveCredits: "0",
 //   };
 // }
-
       
 export const GetEmployeeLeaveCredits = async () => {
   try{
@@ -259,7 +258,6 @@ export const GetEmployeeLeaveRequestTemplate = async () => {
   try{
   const token = await GetToken();
   if (!token) return [];
-
     const request = await axios.get(`${API_BASE_URL2}/api/LeaveRequestHeader/${template}`,{
       headers: {
         Authorization: `Bearer ${token}`,

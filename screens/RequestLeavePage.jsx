@@ -11,6 +11,7 @@ import ConfirmLeaveModal from '../components/ConfirmLeavePopup';
 import { DatePickerComponent } from '../components/DatePicker'; 
 import { LeaveTypeDropdown, StaticDropdown } from '../components/Dropdown';
 import { dayTypeData } from '../Data/StaticDropdownData';
+import { set } from 'date-fns';
 
 
 export default function RequestLeavePage({ navigation }) { 
@@ -52,36 +53,55 @@ export default function RequestLeavePage({ navigation }) {
           setVacationLeaveCredits(vacationLeave?.remainingCredits?.toString() || "0");
           setSickLeaveCredits(sickLeave?.remainingCredits?.toString() || "0");
     
-           console.log("Vacation Leave Credits:", vacationLeave?.remainingCredits, "Sick Leave Credits:", sickLeave?.remainingCredits);
-    
         } catch (error) {
           console.error("Error fetching leave credits: ", error.response?.data || error.message);
         }
       };
       loadLeaveCredits();
     }, []);
+    
+      // const loadEmployeeLeaveRequestTemplate = async () => {
+      //   try {
+      //     const response = await GetEmployeeLeaveRequestTemplate();
+      //     console.log("Raw template response:", JSON.stringify(response, null, 2));
+      //     setLeaveRequestTemplate(response.data);
+      //   }
+      //   catch (error) {
+      //     console.error("Error fetching leave request template:", error);
+      //     Alert.alert("Error", "Failed to load leave request template. Please try again.");
+      //   }
+      // };
 
-    // fetch Leave Request Template
-    useEffect(() => {
-  const loadEmployeeLeaveRequestTemplate = async () => {
-    try {
-      const response = await GetEmployeeLeaveRequestTemplate();
-      console.log("Raw template response:", JSON.stringify(response, null, 2));
-      setLeaveRequestTemplate(response.data);
-    }
-    catch (error) {
-      console.error("Error fetching leave request template:", error);
-      Alert.alert("Error", "Failed to load leave request template. Please try again.");
-    }
-  };
+      // useEffect(() => {
+      //   loadEmployeeLeaveRequestTemplate();
+      // },[]);
 
-  loadEmployeeLeaveRequestTemplate();
-},[]);
+
+      useEffect(() => {
+        const loadLeaveRequestTemplateFromStorage = async () => {
+          const storedTemplate = await AsyncStorage.getItem("leaveRequestTemplate");
+            try {
+              if (storedTemplate){
+                  const parsedTemplate = JSON.parse(storedTemplate);
+                  setLeaveRequestTemplate(parsedTemplate);
+                  console.log("Parsed template from storage:", JSON.stringify(parsedTemplate, null, 2));
+              }
+              else {
+                console.log("No leave request template found in storage.");
+              }
+              }
+            catch (error){
+              console.error("Error loading leave request template from storage:", error);
+            }
+        };
+        loadLeaveRequestTemplateFromStorage();
+     },[]);
 
     // Apply Leave Request
     const handleAddLeaveRequest = async () => {
-      if (isSubmitting) return; // Prevent multiple submissions
-      setIsSubmitting(true);
+      // loadEmployeeLeaveRequestTemplate(); // Ensure template is loaded before submission
+      // if (isSubmitting) return; // Prevent multiple submissions
+      // setIsSubmitting(true);
 
       //Validtate inputs
       if (!leaveStart || !leaveEnd || !leaveTypeID || !memo || !dayType) {
@@ -100,20 +120,18 @@ export default function RequestLeavePage({ navigation }) {
         setIsSubmitting(false);
         return;
       }
-
       if (leaveStart > leaveEnd) {
         Alert.alert("Error", "Start date must be before the end date.");
         setIsSubmitting(false);
         return;
       }
-
       console.log("Checking leaveRequestTemplate before submission:", leaveRequestTemplate);
       if (leaveRequestTemplate === null || leaveRequestTemplate === undefined) {
           Alert.alert("Error", "Leave request template not loaded. Please try again later.");
           setIsSubmitting(false);
           return;
         }
-        
+
       const leaveRequestItem = {
         leaveStart: leaveStart,
         leaveEnd: leaveEnd,
