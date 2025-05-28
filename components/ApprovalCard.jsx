@@ -34,7 +34,7 @@ const styles = StyleSheet.create({
   type: {
     fontSize: 18,
     fontWeight: "600",
-    color: "#444",
+    color: "gray",
   },
   date: {
     fontSize: 16,

@@ -5,7 +5,7 @@ import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 // Components
-import { CompaniesDropdown, DepartmentsDropdown, StaticDropdown } from "../components/Dropdown";
+import { StaticDropdown } from "../components/Dropdown";
 import { DatePickerComponent } from "../components/DatePicker";
 
 //API Service
@@ -31,13 +31,10 @@ export default function AccountPage({ navigation }) {
   const [companyName, setCompanyName] = useState(null);
   const [positionName, setPositionName] = useState(null);
 
-
+  //Leave Credits
   const [vacationLeaveCredits, setVacationLeaveCredits] = useState(0);
   const [sickLeaveCredits, setSickLeaveCredits] = useState(0);
 
-  const [isEditing, setIsEditing] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  
   useEffect(() => {
   const loadEmployeeProfile = async () => {
     try {
@@ -96,10 +93,6 @@ export default function AccountPage({ navigation }) {
 }, []);
 
 const handleLogout = async () => {
-  if (isSubmitting) return;
-  isSubmitting(true);
-
-  
   Alert.alert("Logout", "Confirm logout?",[
     {
       text: 'Cancel',
@@ -120,42 +113,7 @@ const handleLogout = async () => {
     }
   ])
 }
-  // const handlePatchEmployeeDetails = async () => {
-  //   if (isSubmitting) return;
-  //   setIsSubmitting(true);
-    
-  //   const updatedData = {
-  //     firstName,
-  //     middleName,
-  //     lastName,
-  //     suffix,
-  //     birthDate,
-  //     gender,
-  //     civilStatus,
-  //     contactNo,
-  //     email,
-  //   };
-
-  //   console.log("Updated Data:", updatedData);
-
-  //   try {
-  //     const request = await PatchEmployeeDetails(updatedData);
-
-  //     if (request.success){
-  //       Alert.alert("Success", "Employee details update successfully!");
-  //       setIsEditing(false);
-  //     }
-  //     else{
-  //       Alert.alert("Error", request.message || "Failed to update employee details.");
-  //       setIsSubmitting(false);
-  //     }
-  //   } catch(error){
-  //     console.error("Error updating employee details:", error);
-  //     Alert.alert("Error", "An unexpected error occured. Please try again.");
-  //     setIsSubmitting(false);
-  //   }
-  // }
-
+ 
   const formFields = [
     {
       key: "vacationLeaveCredits",
@@ -220,7 +178,7 @@ const handleLogout = async () => {
       label: "Date Hired:",
       component: (
         <DatePickerComponent
-          editable={false} // Date picker is only editable when isEditing is true
+          editable={false}
           value={dateHired}
           onConfirm={(date) => setDateHired(date)}
         />
@@ -231,7 +189,7 @@ const handleLogout = async () => {
       label: "Birth Date:",
       component: (
         <DatePickerComponent
-          editable={isEditing} // Date picker is only editable when isEditing is true
+          editable={false}
           value={birthDate}
           onConfirm={(date) => setBirthDate(date)}
         />
@@ -242,8 +200,8 @@ const handleLogout = async () => {
       label: "First Name",
       component: (
         <TextInput
-          style={[styles.input, { backgroundColor: isEditing ? "#fff" : "#f0f0f0" }]} // Dynamic background color
-          editable={isEditing}
+          style={styles.input} // Dynamic background color
+          editable={false}
           value={firstName}
           onChangeText={setFirstName}
         />
@@ -254,8 +212,8 @@ const handleLogout = async () => {
       label: "Middle Name",
       component: (
         <TextInput
-          style={[styles.input, { backgroundColor: isEditing ? "#fff" : "#f0f0f0" }]} // Dynamic background color
-          editable={isEditing}
+          style={styles.input}
+          editable={false}
           value={middleName}
           onChangeText={setMiddleName}
         />
@@ -266,8 +224,8 @@ const handleLogout = async () => {
       label: "Last Name",
       component: (
         <TextInput
-          style={[styles.input, { backgroundColor: isEditing ? "#fff" : "#f0f0f0" }]} // Dynamic background color
-          editable={isEditing}
+          style={styles.input} // Dynamic background color
+          editable={false}
           value={lastName}
           onChangeText={setLastName}
         />
@@ -278,7 +236,7 @@ const handleLogout = async () => {
       label: "Suffix:",
       component: (
         <StaticDropdown
-          editable={isEditing} // Dropdown is only editable when isEditing is true
+          editable={false}
           data={suffixData} // Static data for suffixes
           value={suffix}
           setValue={setSuffix}
@@ -291,7 +249,7 @@ const handleLogout = async () => {
       label: "Gender:",
       component: (
         <StaticDropdown
-          editable={isEditing} // Dropdown is only editable when isEditing is true
+          editable={false}
           data={genderData} // Static data for gender
           value={gender}
           setValue={setGender}
@@ -304,7 +262,7 @@ const handleLogout = async () => {
       label: "Civil Status:",
       component: (
         <StaticDropdown
-          editable={isEditing} // Dropdown is only editable when isEditing is true
+          editable={false}
           data={civilStatusData} // Static data for civil status
           value={civilStatus}
           setValue={setCivilStatus}
@@ -317,8 +275,8 @@ const handleLogout = async () => {
       label: "Contact Number:",
       component: (
         <TextInput
-          style={[styles.input, { backgroundColor: isEditing ? "#fff" : "#f0f0f0" }]} // Dynamic background color
-          editable={isEditing}
+          style={styles.input}
+          editable={false}
           keyboardType="number-pad"
           value={contactNo}
           onChangeText={setContactNo}
@@ -330,8 +288,8 @@ const handleLogout = async () => {
       label: "Email Address:",
       component: (
         <TextInput
-          style={[styles.input, { backgroundColor: isEditing ? "#fff" : "#f0f0f0" }]} // Dynamic background color
-          editable={isEditing}
+          style={styles.input}
+          editable={false}
           keyboardType="email-address"
           autoCapitalize="none"
           value={email}
@@ -345,9 +303,6 @@ const handleLogout = async () => {
     <SafeAreaView style={{ flex: 1 }}>
       <View style={styles.header}>
         <Text style={styles.headerText}>Employee Details</Text>
-        <Pressable style={styles.headerButton} onPress={() => setIsEditing(!isEditing)}>
-          <Text style={styles.headerText}>{isEditing? "Cancel" : "Edit"}</Text>
-        </Pressable>
       </View>
 
         <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={{ flex: 1 }}>
@@ -362,9 +317,6 @@ const handleLogout = async () => {
                 )}
                 ListFooterComponent={
                   <View style={styles.buttonContainer}>
-                    <Pressable style={styles.registerButton} disabled={!isEditing} onPress={handlePatchEmployeeDetails}>
-                      <Text style={styles.saveChangesButtonText}>Save Changes</Text>
-                    </Pressable>
                     <Pressable style={styles.logoutButton} onPress={handleLogout}>
                       <Text style={styles.logoutButtonText}>Logout</Text>
                     </Pressable>

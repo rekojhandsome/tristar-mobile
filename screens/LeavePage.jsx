@@ -6,7 +6,6 @@ import LeaveRequestCard from "../components/LeaveRequestCard"; // Import the Lea
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function LeavePage({ navigation }) {
-    const [modalVisible, setModalVisible] = useState(false);
     const [leaveRequests, setLeaveRequests] = useState([]);
     const [leaveRequestTemplate, setLeaveRequestTemplate] = useState([]);
 
@@ -90,7 +89,7 @@ export default function LeavePage({ navigation }) {
         contentContainerStyle={styles.flatlistContent}
         nestedScrollEnabled={true}
         showsVerticalScrollIndicator={false} // Hide vertical scroll indicator
-     />
+        style ={styles.body}/>
     </SafeAreaView>
   );
 }
