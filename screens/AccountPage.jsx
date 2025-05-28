@@ -96,6 +96,10 @@ export default function AccountPage({ navigation }) {
 }, []);
 
 const handleLogout = async () => {
+  if (isSubmitting) return;
+  isSubmitting(true);
+
+  
   Alert.alert("Logout", "Confirm logout?",[
     {
       text: 'Cancel',
@@ -116,47 +120,41 @@ const handleLogout = async () => {
     }
   ])
 }
-
-
-  const handlePatchEmployeeDetails = async () => {
-    if (isSubmitting) return;
-    setIsSubmitting(true);
+  // const handlePatchEmployeeDetails = async () => {
+  //   if (isSubmitting) return;
+  //   setIsSubmitting(true);
     
-    const updatedData = {
-      firstName,
-      middleName,
-      lastName,
-      suffix,
-      birthDate,
-      gender,
-      civilStatus,
-      contactNo,
-      email,
-      dateHired,
-      positionID,
-      departmentID,
-      companyID
-    };
+  //   const updatedData = {
+  //     firstName,
+  //     middleName,
+  //     lastName,
+  //     suffix,
+  //     birthDate,
+  //     gender,
+  //     civilStatus,
+  //     contactNo,
+  //     email,
+  //   };
 
-    console.log("Updated Data:", updatedData);
+  //   console.log("Updated Data:", updatedData);
 
-    try {
-      const request = await PatchEmployeeDetails(updatedData);
+  //   try {
+  //     const request = await PatchEmployeeDetails(updatedData);
 
-      if (request.success){
-        Alert.alert("Success", "Employee details update successfully!");
-        setIsEditing(false);
-      }
-      else{
-        Alert.alert("Error", request.message || "Failed to update employee details.");
-        setIsSubmitting(false);
-      }
-    } catch(error){
-      console.error("Error updating employee details:", error);
-      Alert.alert("Error", "An unexpected error occured. Please try again.");
-      setIsSubmitting(false);
-    }
-  }
+  //     if (request.success){
+  //       Alert.alert("Success", "Employee details update successfully!");
+  //       setIsEditing(false);
+  //     }
+  //     else{
+  //       Alert.alert("Error", request.message || "Failed to update employee details.");
+  //       setIsSubmitting(false);
+  //     }
+  //   } catch(error){
+  //     console.error("Error updating employee details:", error);
+  //     Alert.alert("Error", "An unexpected error occured. Please try again.");
+  //     setIsSubmitting(false);
+  //   }
+  // }
 
   const formFields = [
     {

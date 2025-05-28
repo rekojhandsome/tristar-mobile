@@ -128,41 +128,40 @@ export const AddLeaveRequest = async (LeaveRequestHeader) => {
     };
   }
 }
+  // // Patch Employee Details
+// export const PatchEmployeeDetails = async (updatedData) => {
+//   try {
+//     const token = await GetToken();
+//     if (!token) return { success: false };
 
-// Patch Employee Details
-export const PatchEmployeeDetails = async (updatedData) => {
-  try {
-    const token = await GetToken();
-    if (!token) return { success: false };
+//     const request = await axios.patch(`${API_BASE_URL1}api/Employee`, updatedData,{
+//       headers: {
+//         Authorization: `Bearer ${token}`,
+//         "Content-Type": "application/json",
+//       },
+//       });
 
-    const request = await axios.patch(`${API_BASE_URL1}api/Employee`, updatedData,{
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-      });
+//     return {
+//       status: request.status,
+//       data: request.data,
+//       success: true,
+//     };
+//   } catch (error){
+//     console.error("Error updating employee details:", error);
 
-    return {
-      status: request.status,
-      data: request.data,
-      success: true,
-    };
-  } catch (error){
-    console.error("Error updating employee details:", error);
+//     if (error.request){
+//       const { status, data} = error.request;
+//       return {
+//         status,
+//         code: data.code,
+//         message: data.message,
+//         success: false,
+//       }
+//     }
 
-    if (error.request){
-      const { status, data} = error.request;
-      return {
-        status,
-        code: data.code,
-        message: data.message,
-        success: false,
-      }
-    }
-
-    return { status: 500, message: "Internal Server Error" };
-  }
-}
+//     return { status: 500, message: "Internal Server Error" };
+//   }
+// }
 
 export const GetEmployeeLeaveRequest = async () => {
   try {
