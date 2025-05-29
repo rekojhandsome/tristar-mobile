@@ -13,23 +13,21 @@ export default function SignIn({ navigation }) {
     const [isSubmitting, setIsSubmitting] = useState(false); // State to track submission status
 
     const handleLogin = async () => {
-  if (isSubmitting) return; // Prevent multiple submissions
+      if (isSubmitting) return; // Prevent multiple submissions
+      setIsSubmitting(true); // Set submitting to true
 
-  setIsSubmitting(true); // Set submitting to true
-
-  const result = await Login(username, password);
-
-  if (result.success) {
-    Alert.alert("Success", "Login successful!", [
-      {
-        text: "Okay",
-        onPress: () => navigation.navigate("Homepage"),
-      },
-    ]);
-  } else {
-    Alert.alert("Error", "Username or Password is incorrect!");
-  }
-  setIsSubmitting(false); // Reset submitting state
+      const result = await Login(username, password);
+      if (result.success) {
+        Alert.alert("Success", "Login successful!", [
+          {
+            text: "Okay",
+            onPress: () => navigation.navigate("Homepage"),
+          },
+        ]);
+      } else {
+        Alert.alert("Error", "Username or Password is incorrect!");
+      }
+      setIsSubmitting(false); // Reset submitting state
 };
    
     return (
@@ -138,7 +136,7 @@ export default function SignIn({ navigation }) {
     signUpText: {
       color: "black",
       textAlign: "center",
-     paddingTop: 15
+     marginTop: 20,
     },
     signUpLink:{
       color: "#3FD68F", 
