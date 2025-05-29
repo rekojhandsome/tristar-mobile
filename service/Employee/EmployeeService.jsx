@@ -24,29 +24,14 @@ const GetToken = async () => {
 }
 
 // Register Employee
-export const RegisterEmployee = async ( departmentID, dateHired, firstName, middleName, lastName, suffix, birthDate, gender, civilStatus, contactNo, email) => {
-    try {
-      const employeeData ={
-        firstName,
-        middleName,
-        lastName,
-        suffix,
-        birthDate,
-        gender,
-        civilStatus,
-        contactNo,
-        email,
-        departmentID,
-        dateHired
-      }
-
-    const request  = await axios.post(`${API_BASE_URL1}/api/Employee`, employeeData);
-
+export const RegisterEmployee = async (employeeData) => {
+  try{
+    const request  = await axios.post(`${API_BASE_URL2}/api/Employee/register-employee`, employeeData);
     const employeeID = request.data.employeeID;
     console.log("Employee ID: ", employeeID);
     AsyncStorage.setItem("employeeID", employeeID.toString());
       
-    if (request.status === 201){
+    if (request.status === 200){
       console.log("Employee registered succefully");
       return { success: true };
     } else {

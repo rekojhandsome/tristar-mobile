@@ -78,9 +78,6 @@ export default function RequestLeavePage({ navigation }) {
 
     // Apply Leave Request
     const handleAddLeaveRequest = async () => {
-      // loadEmployeeLeaveRequestTemplate(); // Ensure template is loaded before submission
-      // if (isSubmitting) return; // Prevent multiple submissions
-      // setIsSubmitting(true);
 
       //Validtate inputs
       if (!leaveStart || !leaveEnd || !leaveTypeID || !memo || !dayType) {
@@ -140,44 +137,6 @@ export default function RequestLeavePage({ navigation }) {
          Alert.alert("Error", "Failed to submit leave request. Please try again.");
       }
 
-      // //Execute API Call
-      // try{
-      //   const request = await AddLeaveRequest(leaveStart, leaveEnd, leaveTypeID, reason);
-
-      //   if (request.status === 400){
-      //     if(request.code === "OVERLAPPING_LEAVE"){
-      //       Alert.alert("Overlapping Leave", "Leave request overlaps with an existing leave.", request.message);
-      //       console.log( request.message);
-      //     } else if (request.code === "INSUFFICIENT_CREDITS"){
-      //       Alert.alert("Insufficient Credits", "You do not have enough leave credits.", request.message);
-      //       console.log("Leave request failed due to insufficient credits.", request.message);
-      //     } else {
-      //       Alert.alert("Error", "Failed to submit leave request. Please try again.");
-      //       console.log("Leave request failed with unknown error.", request.message);
-      //     }
-      //     setIsSubmitting(false);
-      //     return;
-      //   }
-      //   if (request.status === 200){
-      //     Alert.alert("Success", "Leave request submitted successfully!",
-      //     [
-      //       {
-      //         text: "Okay",
-      //         onPress: () => navigation.navigate("LeavePage")
-      //       },
-      //     ]
-      //   );
-      //     console.log("Leave request submitted successfully!");
-      //   } else {
-      //     Alert.alert("Error", "Failed to submit leave request. Please try again.");
-      //     console.log("Failed to submit leave request.");
-      //     isSubmitting(false);
-      //   }
-      // }catch (error) {
-      //   console.error("Error submitting leave request:", error);
-      // } finally {
-      //     setIsSubmitting(false);
-      // }
     };
   
     const formFields = [

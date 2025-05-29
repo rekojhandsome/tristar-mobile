@@ -14,8 +14,6 @@ export const Login = async (username, password) => {
             password
         });
 
-        console.log("API Response:", response.data);
-
     if (response.data?.token){
         await AsyncStorage.setItem("userToken", response.data.token);
         return { success: true, user: response.data.User};
@@ -45,7 +43,7 @@ export const Register = async (username, password, employeeID) => {
         employeeID
     };
 
-    const request = await axios.post(`${API_BASE_URL1}/api/Account/register`, signUpData, {
+    const request = await axios.post(`${API_BASE_URL2}/api/Account/register`, signUpData, {
         headers: {Authorization: `Bearer ${employeeID}`,
             "Content-Type": "application/json",
     },

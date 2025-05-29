@@ -9,8 +9,9 @@ import { API_BASE_URL2 } from "../service/Authentication/AuthenticationService";
 
     //API Endpoints
     const COMPANY_URL = `${API_BASE_URL2}/api/Company/get-companies`;
-    const DEPARTMENT_URL = `${API_BASE_URL2}/api/Department`;
+    const DEPARTMENT_URL = `${API_BASE_URL2}/api/Department/get-departments`
     const LEAVE_TYPE_URL = `${API_BASE_URL2}/api/LeaveType`;
+    const POSITION_URL = `${API_BASE_URL2}/api/Position/get-positions`;
 
     export const  CompaniesDropdown = ({ value, setValue, placeholder }) => {
     const [isOpen, setIsOpen] = useState(false);
@@ -124,6 +125,72 @@ import { API_BASE_URL2 } from "../service/Authentication/AuthenticationService";
                       }}
                     >
                       <Text style={styles.itemText}>{item.departmentName}</Text>
+                    </TouchableOpacity>
+                  )}
+                  nestedScrollEnabled={true} // Enable nested scrolling for FlatList
+                />
+              )}
+            </View>
+          )}
+        </View>
+      );
+    };
+
+      export const PositionsDropdown = ({ value, setValue, placeholder }) => {
+      const [isOpen, setIsOpen] = useState(false);
+      const [data, setData] = useState([]);
+      const [loading, setLoading] = useState(true);
+    
+      useEffect(() => {
+        axios
+          .get(POSITION_URL)
+          .then((response) => {
+            console.log("Fetched Data:", response.data); // Debugging
+            setData(response.data);
+            setLoading(false);
+          })
+          .catch((error) => {
+            console.error("Error fetching data:", error);
+            setLoading(false);
+          });
+      }, []);
+    
+      return (
+        <View style={styles.dropdownContainer}>
+          {/* Dropdown Button */}
+          <TouchableOpacity
+            style={styles.dropdownButton}
+            onPress={() => setIsOpen(!isOpen)}
+          >
+            <Text style={styles.dropdownText}>
+              {/* Display selected Department Name */}
+              {value
+                ? data.find((item) => item.positionID === value)?.positionName
+                : placeholder}
+            </Text>
+            <Ionicons name="chevron-down-outline" size={25} style={styles.dropdownIcon} />
+          </TouchableOpacity>
+    
+          {/* Dropdown List */}
+          {isOpen && (
+            <View style={styles.dropdownList}>
+              {loading ? (
+                <ActivityIndicator size="small" color="#0000ff" />
+              ) : (
+                <FlatList
+                  data={data}
+                  keyExtractor={(item) =>
+                    item?.positionID ? item.positionID.toString() : "unknown"
+                  }
+                  renderItem={({ item }) => (
+                    <TouchableOpacity
+                      style={styles.dropdownItem}
+                      onPress={() => {
+                        setValue(item.positionID); // Save the Department ID, not the name
+                        setIsOpen(false);
+                      }}
+                    >
+                      <Text style={styles.itemText}>{item.positionName}</Text>
                     </TouchableOpacity>
                   )}
                   nestedScrollEnabled={true} // Enable nested scrolling for FlatList

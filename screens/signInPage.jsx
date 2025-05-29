@@ -12,28 +12,25 @@ export default function SignIn({ navigation }) {
 
     const [isSubmitting, setIsSubmitting] = useState(false); // State to track submission status
 
-    const handleLogin= async () => {
+    const handleLogin = async () => {
+  if (isSubmitting) return; // Prevent multiple submissions
 
-      if (isSubmitting) return;
+  setIsSubmitting(true); // Set submitting to true
 
-      const result = await Login(username,password)
+  const result = await Login(username, password);
 
-        if (result.success) {
-          Alert.alert("Success", "Login successful!", [
-            {
-              text: "Okay",
-              onPress: () => navigation.navigate("Homepage") // Navigate only after pressing OK
-            }
-          ]);
-          console.log("Signed In!");
-          isSubmitting(false);
-        }
-        else{
-          Alert.alert("Error", "Username or Password is incorrect!");
-          console.log("Error Signing In");
-          isSubmitting(false);
-        }
-    };
+  if (result.success) {
+    Alert.alert("Success", "Login successful!", [
+      {
+        text: "Okay",
+        onPress: () => navigation.navigate("Homepage"),
+      },
+    ]);
+  } else {
+    Alert.alert("Error", "Username or Password is incorrect!");
+  }
+  setIsSubmitting(false); // Reset submitting state
+};
    
     return (
       <SafeAreaView style={styles.background}>
@@ -60,10 +57,13 @@ export default function SignIn({ navigation }) {
               onChangeText={setPassword}
             />
             {/* Sign-In Button */}
-            <Pressable style={styles.signInButton} onPress={handleLogin}>
+            <Pressable
+              style={[styles.signInButton, isSubmitting && { opacity: 0.5 }]}
+              onPress={handleLogin}
+              disabled={isSubmitting}
+            >
               <Text style={styles.signInButtonText}>Sign In</Text>
             </Pressable>
-    
             {/* Navigation to Sign Up */}
             <TouchableOpacity onPress={() => navigation.navigate("Register")}>
             <Text style={styles.signUpText}> Don't have an account? <Text style={styles.signUpLink}>Register here</Text>

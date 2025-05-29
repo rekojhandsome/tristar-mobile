@@ -3,7 +3,7 @@ import { View, Text, TextInput, StyleSheet, Alert, SafeAreaView, Pressable, Flat
 import axios from "axios";
 
 // Components
-import { CompaniesDropdown, DepartmentsDropdown, StaticDropdown } from "../components/Dropdown";
+import { CompaniesDropdown, DepartmentsDropdown, PositionsDropdown, StaticDropdown } from "../components/Dropdown";
 import { DatePickerComponent } from "../components/DatePicker";
 
 
@@ -25,6 +25,7 @@ export default function EmployeeRegister({ navigation }) {
   const [dateHired, setDateHired] = useState(null);
   const [companyID, setCompanyID] = useState(null);
   const [departmentID, setDepartmentID] = useState(null);
+  const [positionID, setPositionID] = useState(null);
   
 
 
@@ -35,8 +36,23 @@ export default function EmployeeRegister({ navigation }) {
     if (isSubmitting) return;
     setIsSubmitting(true);
 
+     const employeeData ={
+        firstName,
+        middleName,
+        lastName,
+        suffix,
+        birthDate,
+        gender,
+        civilStatus,
+        contactNo,
+        email,
+        departmentID,
+        dateHired,
+        positionID,
+        companyID
+      }
     try{
-      const result = await RegisterEmployee( departmentID, dateHired,firstName, middleName, lastName, suffix, birthDate, gender, civilStatus, contactNo, email);
+      const result = await RegisterEmployee(employeeData);
 
       if (result.success){
         Alert.alert("Success", "Employee registered successfully",
@@ -72,6 +88,7 @@ export default function EmployeeRegister({ navigation }) {
   const formFields = [
     { key: "company", label: "Company:", component: <CompaniesDropdown placeholder={"Select Company"} value={companyID} setValue={setCompanyID} /> },
     { key: "department", label: "Department:", component: <DepartmentsDropdown placeholder={"Select Department"} value={departmentID} setValue={setDepartmentID} /> },
+    { key: "position", label: "Position:", component: <PositionsDropdown placeholder={"Select Position"} value={positionID} setValue={setPositionID} /> },
     { key: "dateHired", label: "Date Hired:", component: <DatePickerComponent value={dateHired} onConfirm={(date) => setDateHired(date)} placeholder="Select Date"/> },
     { key: "firstName", label: "First Name:", component: <TextInput style={styles.input} placeholder="Enter your name" value={firstName} onChangeText={setFirstName}/> },
     { key: "middleName", label: "Middle Name:", component: <TextInput style={styles.input} placeholder="Enter your middle name" value={middleName} onChangeText={setMiddleName}/>},
@@ -105,9 +122,6 @@ export default function EmployeeRegister({ navigation }) {
             {item.component}
           </View>
         )}
-        ListHeaderComponent={
-          <Text style={styles.formText}>Employee Details</Text> // Only the "Employee Details" text remains in the header of the list
-        }
         ListFooterComponent={
           <View style={styles.buttonContainer}>
             <Pressable style={styles.registerButton} onPress={handleRegisterEmployee}>

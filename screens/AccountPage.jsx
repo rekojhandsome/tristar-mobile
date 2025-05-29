@@ -323,7 +323,7 @@ const handleLogout = async () => {
                   </View> 
                 }
                 nestedScrollEnabled={true}
-                contentContainerStyle={{ paddingBottom: 20 }} // Enable nested scrolling
+                contentContainerStyle={{ paddingBottom: 10 }} // Enable nested scrolling
                 showsVerticalScrollIndicator={false} // Hide vertical scroll indicator
               />
             </KeyboardAvoidingView>
@@ -386,25 +386,14 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     paddingHorizontal: 10,
-    marginTop: 10,
   },
-  registerButton: {
-    width: '100%',
-    backgroundColor: "#3FD68F",
-    padding: 15,
-    borderRadius: 5,
-  },
-  saveChangesButtonText: {
-    textAlign: 'center',
-    color: "white",
-    fontSize: 16,
-  },
+  
   logoutButton:{
     width: '100%',
     backgroundColor: "#FF6347",
     padding: 15,
     borderRadius: 5,
-    marginTop: 10,
+    marginTop: 5,
   },
   logoutButtonText: {
     textAlign: 'center',
