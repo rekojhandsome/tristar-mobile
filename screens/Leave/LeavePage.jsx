@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import { View, Text, StyleSheet, SafeAreaView, Pressable, Alert, FlatList } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
-import { GetEmployeeLeaveRequest, GetEmployeeLeaveRequestTemplate } from "../service/Employee/EmployeeService";
-import LeaveRequestCard from "../components/LeaveRequestCard"; // Import the LeaveRequestCard component
+import { GetEmployeeLeaveRequest, GetEmployeeLeaveRequestTemplate } from "../../service/Employee/EmployeeService";
+import LeaveRequestCard from "../../components/LeaveRequestCard"; // Import the LeaveRequestCard component
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function LeavePage({ navigation }) {

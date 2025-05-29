@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, SafeAreaView, StyleSheet, Pressable, FlatList, Alert } from "react-native";
-import ApprovalCard from "../components/ApprovalCard";
-import { GetLeaveRequestForApproval, PatchLeaveRequest } from "../service/Employee/EmployeeService";
+import ApprovalCard from "../../components/ApprovalCard";
+import { GetLeaveRequestForApproval, PatchLeaveRequest } from "../../service/Employee/EmployeeService";
 
 export default function ApprovalPage({ navigation }) {
   

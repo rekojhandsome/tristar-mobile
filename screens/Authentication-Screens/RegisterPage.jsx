@@ -3,13 +3,13 @@ import { View, Text, TextInput, StyleSheet, Alert, SafeAreaView, Pressable, Flat
 import axios from "axios";
 
 // Components
-import { CompaniesDropdown, DepartmentsDropdown, PositionsDropdown, StaticDropdown } from "../components/Dropdown";
-import { DatePickerComponent } from "../components/DatePicker";
+import { CompaniesDropdown, DepartmentsDropdown, PositionsDropdown, StaticDropdown } from "../../components/Dropdown";
+import { DatePickerComponent } from "../../components/DatePicker";
 
 
 //API SERVICE
-import { RegisterEmployee } from "../service/Employee/EmployeeService";
-import { civilStatusData, genderData, suffixData } from "../Data/StaticDropdownData";
+import { RegisterEmployee } from "../../service/Employee/EmployeeService";
+import { civilStatusData, genderData, suffixData } from "../../Data/StaticDropdownData";
 
 
 export default function EmployeeRegister({ navigation }) {

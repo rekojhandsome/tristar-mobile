@@ -2,7 +2,7 @@ import { View, Text, StyleSheet, TouchableOpacity, Pressable, Image  } from 'rea
 import React, { useState, useEffect } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import { GetEmployeeProfile } from '../service/Employee/EmployeeService';
+import { GetEmployeeProfile } from '../../service/Employee/EmployeeService';
 
 export default function Homepage({navigation}){
 
@@ -24,7 +24,7 @@ export default function Homepage({navigation}){
 return(
     <SafeAreaView>
         <View style={styles.header}>
-            <Image style={styles.image} source={require("../assets/images/tristar-logo.png")} />
+            <Image style={styles.image} source={require("../../assets/images/tristar-logo.png")} />
             <Text style={styles.headerText}>Homepage</Text>
         </View>
 

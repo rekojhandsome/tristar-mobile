@@ -5,7 +5,7 @@ import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 //URL ENDPOINTS
-import { API_BASE_URL, Register, API_BASE_URL1 } from "../service/Authentication/AuthenticationService";
+import { API_BASE_URL, Register, API_BASE_URL1 } from "../../service/Authentication/AuthenticationService";
 
 export default function SignUp({navigation}){
   const [username, setUsername] = useState("");
@@ -35,7 +35,7 @@ export default function SignUp({navigation}){
           const request = await Register(username, password, employeeID);
       
           // Handle success for both 200 and 201 status codes
-          if (request.status === 200 || request.status === 201) {
+          if (request.status === 200) {
             Alert.alert("Success", "Registered Successfully!", [
               {
                 text: "Okay",
@@ -65,7 +65,7 @@ export default function SignUp({navigation}){
  return (
        <SafeAreaView style={styles.background}>
          <View style={styles.background} >
-             <Image style={styles.image} source={require("../assets/images/tristar-logo.png")} />
+             <Image style={styles.image} source={require("../../assets/images/tristar-logo.png")} />
              <Text style={styles.title}>E-Leave App</Text>
            <View style={styles.formContainer}>
              <Text style={styles.formTitle}>Create Account</Text>

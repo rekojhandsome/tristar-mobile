@@ -4,11 +4,9 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 
 
 //Screens
-import Homepage from "../screens/Homepage";
-import LeavePage from "../screens/LeavePage";
-import AccountPage from "../screens/AccountPage";
-import RequestLeavePage from "../screens/RequestLeavePage";
-import NotificationPage from "../screens/NotificationPage";
+import Homepage from "../screens/Main-Screens/Homepage";
+import AccountPage from "../screens/Main-Screens/AccountPage";
+
 
 //Screen names
 const homepageName = 'Homepage'

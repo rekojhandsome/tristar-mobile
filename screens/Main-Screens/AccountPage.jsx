@@ -5,15 +5,15 @@ import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 // Components
-import { StaticDropdown } from "../components/Dropdown";
-import { DatePickerComponent } from "../components/DatePicker";
+import { StaticDropdown } from "../../components/Dropdown";
+import { DatePickerComponent } from "../../components/DatePicker";
 
 //API Service
-import { GetEmployeeLeaveCredits, GetEmployeeProfile, GetLeaveCredits, PatchEmployeeDetails } from "../service/Employee/EmployeeService";
+import { GetEmployeeLeaveCredits, GetEmployeeProfile, GetLeaveCredits, PatchEmployeeDetails } from "../../service/Employee/EmployeeService";
 
 // Static data
-import { civilStatusData, genderData, suffixData } from "../Data/StaticDropdownData";
-import { Logout } from "../service/Authentication/AuthenticationService";
+import { civilStatusData, genderData, suffixData } from "../../Data/StaticDropdownData";
+import { Logout } from "../../service/Authentication/AuthenticationService";
 
 
 export default function AccountPage({ navigation }) {

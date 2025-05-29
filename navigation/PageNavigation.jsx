@@ -2,30 +2,23 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 //Authentication Screens
-import SignIn from "../screens/SignInPage";
-import SignUp from "../screens/SignUpPage";
+import SignIn from "../screens/Authentication-Screens/SignInPage";
+import SignUp from "../screens/Authentication-Screens/SignUpPage";
 
 //Register Screen
-import EmployeeRegister from "../screens/RegisterPage";
+import EmployeeRegister from "../screens/Authentication-Screens/RegisterPage";
 
 //BottomNavigation
 import BottomNavbarNavigation from "./BottomTabNavigation";
 
-//Main Screens
-import AccountPage from "../screens/AccountPage";
-import Homepage from "../screens/Homepage";
-
 
 //Application Screens
-import ApprovalPage from "../screens/ApprovalPage";
-import LeavePage from "../screens/LeavePage";
+import ApprovalPage from "../screens/Approval/ApprovalPage";
+import LeavePage from "../screens/Leave/LeavePage";
 
 
-import RequestLeavePage from "../screens/RequestLeavePage";
+import RequestLeavePage from "../screens/Leave/RequestLeavePage";
 import ViewModal from "../components/LeavePopUp";
-
-
-
 
 const Stack = createNativeStackNavigator();
  

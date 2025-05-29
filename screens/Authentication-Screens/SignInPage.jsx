@@ -3,7 +3,7 @@ import { View, Text, TextInput, StyleSheet, Image, TouchableOpacity, Pressable, 
 import { Alert } from "react-native";
 import { useState } from "react";
 
-import { Login } from "../service/Authentication/AuthenticationService";
+import { Login } from "../../service/Authentication/AuthenticationService";
 
 export default function SignIn({ navigation }) {
 
@@ -33,7 +33,7 @@ export default function SignIn({ navigation }) {
     return (
       <SafeAreaView style={styles.background}>
         <View style={styles.background} >
-            <Image style={styles.image} source={require("../assets/images/tristar-logo.png")} />
+            <Image style={styles.image} source={require("../../assets/images/tristar-logo.png")} />
             <Text style={styles.title}>Enterprie App</Text>
           <View style={styles.formContainer}>
             <Text style={styles.formTitle}>Sign In</Text>

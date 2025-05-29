@@ -2,13 +2,13 @@ import { useState, React, useEffect } from 'react';
 import { View, Text, StyleSheet, TextInput, Pressable, SafeAreaView,  Platform, FlatList, KeyboardAvoidingView, Alert } from 'react-native';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-import { GetEmployeeLeaveCredits } from "../service/Employee/EmployeeService";
-import { AddLeaveRequest } from '../service/Employee/EmployeeService';
+import { GetEmployeeLeaveCredits } from "../../service/Employee/EmployeeService";
+import { AddLeaveRequest } from '../../service/Employee/EmployeeService';
 
 //Components
-import { DatePickerComponent } from '../components/DatePicker'; 
-import { LeaveTypeDropdown, StaticDropdown } from '../components/Dropdown';
-import { dayTypeData } from '../Data/StaticDropdownData';
+import { DatePickerComponent } from '../../components/DatePicker'; 
+import { LeaveTypeDropdown, StaticDropdown } from '../../components/Dropdown';
+import { dayTypeData } from '../../Data/StaticDropdownData';
 
 
 export default function RequestLeavePage({ navigation }) { 
