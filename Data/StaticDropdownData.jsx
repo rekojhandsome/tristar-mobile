@@ -6,3 +6,4 @@ export const suffixData = [ "None", "Jr", "Sr", "I","II", "III", "IV"]; // Add s
 
 export const dayTypeData = ["Whole Day", "Half Day"];
 
+export const leaveStatusData = ["Recent", "Pending", "Approved", "Rejected"];

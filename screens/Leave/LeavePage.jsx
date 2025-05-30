@@ -1,18 +1,28 @@
 import { useState, useEffect } from "react";
 import { View, Text, StyleSheet, SafeAreaView, Pressable, Alert, FlatList } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
+
+//Components
+import { LeaveStatusDropdown } from "../../components/Dropdown";
 import { GetEmployeeLeaveRequest, GetEmployeeLeaveRequestTemplate } from "../../service/Employee/EmployeeService";
 import LeaveRequestCard from "../../components/LeaveRequestCard"; // Import the LeaveRequestCard component
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import { leaveStatusData } from "../../Data/StaticDropdownData";
+
 
 export default function LeavePage({ navigation }) {
     const [leaveRequests, setLeaveRequests] = useState([]);
     const [leaveRequestTemplate, setLeaveRequestTemplate] = useState([]);
 
+    // State for the status filter
+    const [statusFilter, setStatusFilter] = useState("Recent");
+
  useEffect(() => {
   const loadEmployeeLeaveRequest = async () => {
     try {
       const request = await GetEmployeeLeaveRequest(); // Probably returns an array directly
+      console.log("Leave Requests:", JSON.stringify(request, null, 2)); // Log the entire response for debugging
 
       const leaveRequests = request.map((leaveRequest) => {
         const items = leaveRequest.leaveRequestItems;
@@ -58,6 +68,14 @@ export default function LeavePage({ navigation }) {
         loadEmployeeLeaveRequestTemplate();
       }, []);
 
+      let filteredLeaveRequests = [...leaveRequests]; // clone to avoid mutating state
+
+if (statusFilter === "Pending" || statusFilter === "Approved" || statusFilter === "Rejected") {
+  filteredLeaveRequests = filteredLeaveRequests.filter((req) => req.leaveStatus === statusFilter);
+} else if (statusFilter === "Recent") {
+  filteredLeaveRequests.sort((a, b) => new Date(b.leaveStart) - new Date(a.leaveStart));
+}
+
   return (
     <SafeAreaView style={{flex: 1}}>
       <View style={styles.header}>
@@ -74,8 +92,16 @@ export default function LeavePage({ navigation }) {
           <Text style={styles.logoutButtonText}>Homepage</Text>
         </Pressable>
       </View>
+      <View style={styles.leaveStatusContainer}>
+        <Text style={styles.leaveStatusText}>Sort By:</Text>
+      <LeaveStatusDropdown
+        data={leaveStatusData}
+        value={statusFilter}
+        setValue={setStatusFilter}
+      />
+      </View>
       <FlatList
-        data={leaveRequests}
+        data={filteredLeaveRequests}
         keyExtractor={(item) => item.leaveRequestID.toString()}
         renderItem={({item}) => (
           <LeaveRequestCard
@@ -111,6 +137,17 @@ const styles = StyleSheet.create({
     position: "absolute",
     right: 30,
     top: 20,
+  },
+  leaveStatusContainer:{
+    marginTop: 10,
+    paddingHorizontal: 10,
+    flexDirection:"row",
+    justifyContent: "flex-end",
+    alignItems: "center"
+  },
+  leaveStatusText:{
+    fontSize: 16,
+    marginRight: 10,
   },
   logoutButton: {
     position: "absolute",

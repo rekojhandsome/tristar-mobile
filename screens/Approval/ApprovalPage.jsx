@@ -36,7 +36,6 @@ export default function ApprovalPage({ navigation }) {
         onPress: async () => {
           const isApprove = true;
           const result = await PatchLeaveRequest(leaveRequestID, isApprove);
-          console.log("Approve Result:", result);
 
           if (result.success) {
             Alert.alert("Approved", result.message || "Leave Request successfully approved.");
@@ -62,10 +61,8 @@ const handleReject = (leaveRequestID) => {
       {
         text: "Yes",
         onPress: async () => {
-          console.log("Rejecting ID:", leaveRequestID);
           const isApprove = false;
           const result = await PatchLeaveRequest(leaveRequestID, isApprove);
-          console.log("Reject Result:", result);
 
           if (result.success) {
             Alert.alert("Rejected", result.message || "Leave Request successfully rejected.");

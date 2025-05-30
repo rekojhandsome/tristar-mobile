@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { View, Text, TouchableOpacity, FlatList, ActivityIndicator, StyleSheet } from "react-native";
+import React, { useState, useEffect, useRef } from "react";
+import { View, Text, TouchableOpacity, FlatList, ActivityIndicator, StyleSheet, Modal } from "react-native";
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import axios from "axios";
 
@@ -294,6 +294,121 @@ const [isOpen, setIsOpen] = useState(false);
   );
 };
 
+export const LeaveStatusDropdown = ({ data, value, setValue, editable = true}) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [buttonLayout, setButtonLayout] = useState({ x: 0, y: 0 });
+  const buttonRef = useRef();
+
+  const openDropdown = () => {
+    buttonRef.current?.measureInWindow((x, y, width, height) => {
+      setButtonLayout({ x, y: y + height }); // dropdown should appear below the button
+      setIsOpen(true);
+    });
+  };
+
+  return (
+    <View ref={buttonRef} collapsable={false} style={leaveStatusStyles.dropdownContainer}>
+      <TouchableOpacity
+        style={[
+          leaveStatusStyles.dropdownButton,
+          !editable && leaveStatusStyles.disabledButton,
+        ]}
+        onPress={() => editable && openDropdown()}
+        disabled={!editable}
+      >
+        <Text style={leaveStatusStyles.dropdownText}>
+          {value || placeholder}
+        </Text>
+        <Ionicons
+          name="chevron-down-outline"
+          size={20}
+          style={leaveStatusStyles.dropdownIcon}
+        />
+      </TouchableOpacity>
+
+      <Modal visible={isOpen} transparent animationType="none">
+        <TouchableOpacity
+          activeOpacity={1}
+          onPressOut={() => setIsOpen(false)}
+          style={StyleSheet.absoluteFill}
+        >
+          <View
+            style={[
+              leaveStatusStyles.floatingDropdown,
+              {
+                top: buttonLayout.y,
+                left: buttonLayout.x,
+              },
+            ]}
+          >
+            <FlatList
+              data={data}
+              keyExtractor={(item, index) => index.toString()}
+              renderItem={({ item }) => (
+                <TouchableOpacity
+                  style={leaveStatusStyles.dropdownItem}
+                  onPress={() => {
+                    setValue(item);
+                    setIsOpen(false);
+                  }}
+                >
+                  <Text style={leaveStatusStyles.itemText}>{item}</Text>
+                </TouchableOpacity>
+              )}
+            />
+          </View>
+        </TouchableOpacity>
+      </Modal>
+    </View>
+  );
+};
+
+const leaveStatusStyles = StyleSheet.create({
+  dropdownContainer: {
+    backgroundColor: "#fff",
+    width: 100,
+  },
+  dropdownButton: {
+    height: 30,
+    borderWidth: 1,
+    borderColor: "#ccc",
+    paddingHorizontal: 10,
+    justifyContent: "center",
+    borderRadius: 5,
+  },
+  disabledButton: {
+    backgroundColor: "#f0f0f0",
+    borderColor: "#ddd",
+  },
+  dropdownIcon: {
+    position: "absolute",
+    right: 10,
+    top: "50%",
+    marginTop: -10,
+  },
+  dropdownText: {
+    fontSize: 14,
+  },
+  floatingDropdown: {
+    position: "absolute",
+    width: 100,
+    backgroundColor: "#fff",
+    borderRadius: 5,
+    borderWidth: 1,
+    borderColor: "#ccc",
+    maxHeight: 200,
+    elevation: 5,
+    zIndex: 999,
+  },
+  dropdownItem: {
+    padding: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: "#ddd",
+  },
+  itemText: {
+    fontSize: 14,
+  },
+});
 
 const styles = StyleSheet.create({
   dropdownContainer: {
