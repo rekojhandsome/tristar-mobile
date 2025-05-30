@@ -70,11 +70,11 @@ export default function LeavePage({ navigation }) {
 
       let filteredLeaveRequests = [...leaveRequests]; // clone to avoid mutating state
 
-if (statusFilter === "Pending" || statusFilter === "Approved" || statusFilter === "Rejected") {
-  filteredLeaveRequests = filteredLeaveRequests.filter((req) => req.leaveStatus === statusFilter);
-} else if (statusFilter === "Recent") {
-  filteredLeaveRequests.sort((a, b) => new Date(b.leaveStart) - new Date(a.leaveStart));
-}
+    if (statusFilter === "Pending" || statusFilter === "Approved" || statusFilter === "Rejected") {
+      filteredLeaveRequests = filteredLeaveRequests.filter((req) => req.leaveStatus === statusFilter);
+    } else if (statusFilter === "Recent") {
+      filteredLeaveRequests.sort((a, b) => new Date(b.leaveStart) - new Date(a.leaveStart));
+    }
 
   return (
     <SafeAreaView style={{flex: 1}}>
@@ -115,7 +115,7 @@ if (statusFilter === "Pending" || statusFilter === "Approved" || statusFilter ==
         contentContainerStyle={styles.flatlistContent}
         nestedScrollEnabled={true}
         showsVerticalScrollIndicator={false} // Hide vertical scroll indicator
-        style ={styles.body}/>
+      />
     </SafeAreaView>
   );
 }
@@ -140,6 +140,7 @@ const styles = StyleSheet.create({
   },
   leaveStatusContainer:{
     marginTop: 10,
+    marginBottom: 10,
     paddingHorizontal: 10,
     flexDirection:"row",
     justifyContent: "flex-end",
@@ -158,9 +159,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "600",
   },
-  body: {
-    paddingVertical: 10
-  },
+  
   bodyText: {
     fontSize: 30,
   },

@@ -76,68 +76,73 @@ export default function RequestLeavePage({ navigation }) {
         loadLeaveRequestTemplateFromStorage();
      },[]);
 
-    // Apply Leave Request
-    const handleAddLeaveRequest = async () => {
 
-      //Validtate inputs
+    const handleSubmitPress = () => {
+      // Validations BEFORE showing confirmation
       if (!leaveStart || !leaveEnd || !leaveTypeID || !memo || !dayType) {
         console.log("Missing input fields", { leaveStart, leaveEnd, leaveTypeID, memo, dayType });
         Alert.alert("Incomplete Fields", "Please fill in all fields.");
-        setIsSubmitting(false);
         return;
       }
 
-      // Validate Dates
       const currentDate = new Date();
-      currentDate.setHours(0, 0, 0, 0); // Set time to midnight for comparison
+      currentDate.setHours(0, 0, 0, 0);
 
       if (leaveStart < currentDate) {
         Alert.alert("Error", "Start date must be the current date or later.");
-        setIsSubmitting(false);
         return;
       }
+
       if (leaveStart > leaveEnd) {
         Alert.alert("Error", "Start date must be before the end date.");
-        setIsSubmitting(false);
         return;
       }
-      console.log("Checking leaveRequestTemplate before submission:", leaveRequestTemplate);
-      if (leaveRequestTemplate === null || leaveRequestTemplate === undefined) {
-          Alert.alert("Error", "Leave request template not loaded. Please try again later.");
-          setIsSubmitting(false);
-          return;
-        }
 
-      const leaveRequestItem = {
-        leaveStart: leaveStart,
-        leaveEnd: leaveEnd,
-        dayType: dayType,
-        memo: memo,
-      };
-
-      const payload = {
-        ...leaveRequestTemplate,
-        leaveTypeID: parseInt(leaveTypeID),
-        leaveRequestItems: [leaveRequestItem]
-      }
-      
-      console.log('Submitting payload:', JSON.stringify(payload, null, 2));
-
-      try {
-        const response = await AddLeaveRequest(payload);
-
-        if (response.success){
-          Alert.alert("Success", response.message);
-        }
-        else {
-          Alert.alert("Error", response.message);
-        }
-      }
-      catch(error){
-         Alert.alert("Error", "Failed to submit leave request. Please try again.");
+      if (!leaveRequestTemplate) {
+        Alert.alert("Error", "Leave request template not loaded. Please try again later.");
+        return;
       }
 
-    };
+    // Show confirmation
+    Alert.alert("Confirm", "Confirm leave request?", [
+      { text: "Cancel", style: "cancel" },
+      { text: "Yes", onPress: () => handleAddLeaveRequest() }
+    ]);
+};
+    // Apply Leave Request
+    const handleAddLeaveRequest = async () => {
+  setIsSubmitting(true);
+
+  const leaveRequestItem = {
+    leaveStart,
+    leaveEnd,
+    dayType,
+    memo,
+  };
+
+  const payload = {
+    ...leaveRequestTemplate,
+    leaveTypeID: parseInt(leaveTypeID),
+    leaveRequestItems: [leaveRequestItem],
+  };
+
+  console.log('Submitting payload:', JSON.stringify(payload, null, 2));
+
+  try {
+    const response = await AddLeaveRequest(payload);
+
+    if (response.success) {
+      Alert.alert("Success", response.message);
+      // Optional: navigate back or reset fields
+    } else {
+      Alert.alert("Error", response.message);
+    }
+  } catch (error) {
+    Alert.alert("Error", "Failed to submit leave request. Please try again.");
+  }
+
+  setIsSubmitting(false);
+};
   
     const formFields = [
       {
@@ -230,7 +235,7 @@ export default function RequestLeavePage({ navigation }) {
           <Text style={styles.headerText}>Request Leave</Text>
         </View>
   
-        <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={{ flex: 1 }}>
+        <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={{ flex: 1, }}>
           <FlatList
             data={formFields}
             keyExtractor={(item) => item.key}
@@ -245,7 +250,7 @@ export default function RequestLeavePage({ navigation }) {
             }
             ListFooterComponent={
                 <View style={styles.buttonContainer}>
-                    <Pressable style={styles.registerButton} onPress={handleAddLeaveRequest}>
+                    <Pressable style={styles.registerButton} onPress={handleSubmitPress}>
                         <Text style={styles.registerButtonText}>Submit Request</Text>
                     </Pressable>
                 </View>
