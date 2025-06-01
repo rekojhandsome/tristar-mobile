@@ -1,8 +1,12 @@
 // LeaveRequestCard.jsx
 import React from "react";
 import { View, Text, StyleSheet, Pressable } from "react-native";
+import { useState } from "react";
 
-export default function LeaveRequestCard({ leaveType, leaveStart, leaveEnd, leaveStatus, onViewPress }){
+import LeaveReqeustSignatoryModal from "./LeaveRequestSignatoryModal"; // Import the modal component
+
+export default function LeaveRequestCard({ leaveType, leaveStart, leaveEnd, leaveStatus, signatories, }){
+  const [isModalVisible, setIsModalVisible] = useState(false);
   return (
     <View style={styles.container}>
       <View style={styles.containerText}>
@@ -13,9 +17,15 @@ export default function LeaveRequestCard({ leaveType, leaveStart, leaveEnd, leav
           {leaveStatus}
         </Text>
       </View>
-      <Pressable style={styles.containerButton} onPress={onViewPress}>
+      <Pressable style={styles.containerButton} onPress={() => setIsModalVisible(true)}>
         <Text style={styles.containerButtonText}>View</Text>
       </Pressable>
+
+      <LeaveReqeustSignatoryModal
+        visible={isModalVisible}
+        onClose={() => setIsModalVisible(false)}
+        signatories={signatories}
+        />
     </View>
   );
 };

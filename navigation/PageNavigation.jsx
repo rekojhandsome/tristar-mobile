@@ -32,7 +32,7 @@ export default function Navigation(){
 
 
                 {/* Screens with BottomTabNavigation */}
-                <Stack.Screen name="Homepage" component={BottomNavbarNavigation}/>
+                <Stack.Screen name="BottomTabNavigation" component={BottomNavbarNavigation}/>
 
 
 

@@ -41,6 +41,7 @@ export default function LeavePage({ navigation }) {
           leaveStart: earliestStartDate.leaveStartFormatted,
           leaveEnd: latestEndDate.leaveEndFormatted,
           leaveStatus: leaveRequest.leaveStatus,
+          leaveRequestSignatories: leaveRequest.leaveRequestSignatories || [] 
         };
       });
 
@@ -88,7 +89,7 @@ export default function LeavePage({ navigation }) {
             onPress={() => navigation.navigate("RequestLeavePage")}
           />
         </Pressable>
-        <Pressable style={styles.logoutButton} onPress={() => navigation.navigate("Homepage")}>
+        <Pressable style={styles.logoutButton} onPress={() => navigation.navigate("BottomTabNavigation")}>
           <Text style={styles.logoutButtonText}>Homepage</Text>
         </Pressable>
       </View>
@@ -109,6 +110,7 @@ export default function LeavePage({ navigation }) {
             leaveStart={item.leaveStart}
             leaveEnd={item.leaveEnd}
             leaveStatus={item.leaveStatus}
+            signatories={item.leaveRequestSignatories || []} // Ensure signatories is an array
           />
         )}
         ListEmptyComponent ={<Text style={styles.emptyText}>No leave request available.</Text>}

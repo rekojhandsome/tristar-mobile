@@ -21,7 +21,7 @@ export default function SignIn({ navigation }) {
         Alert.alert("Success", "Login successful!", [
           {
             text: "Okay",
-            onPress: () => navigation.navigate("Homepage"),
+            onPress: () => navigation.navigate("BottomTabNavigation"),
           },
         ]);
       } else {
