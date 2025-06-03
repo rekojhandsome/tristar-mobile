@@ -7,7 +7,7 @@ export const MAIN_API_URL = "http://intern-dev2-api.tristar.com.ph:4869"
 
 export const Login = async (username, password) => {
     try{
-        const response = await axios.post(`${API_BASE_URL2}/api/Account/login`,{
+        const response = await axios.post(`${MAIN_API_URL}/api/Account/login`,{
             username,
             password
         });
@@ -20,7 +20,6 @@ export const Login = async (username, password) => {
     }
     }
     catch (error){
-        console.error("Login Error:", error.response?.data || error.message);
         return {success: false, message: error.response?.data?.message || "Login Failed"};
     }
 };
@@ -41,7 +40,7 @@ export const Register = async (username, password, employeeID) => {
         employeeID
     };
 
-    const request = await axios.post(`${API_BASE_URL2}/api/Account/register`, signUpData, {
+    const request = await axios.post(`${MAIN_API_URL}/api/Account/register`, signUpData, {
         headers: {Authorization: `Bearer ${employeeID}`,
             "Content-Type": "application/json",
     },
@@ -74,7 +73,6 @@ export const Register = async (username, password, employeeID) => {
 export const Logout = async () => {
     try {
     await AsyncStorage.removeItem("userToken");
-    console.log("Token Removed");
     }
     catch (error) {
         console.error("Error removing token:", error);

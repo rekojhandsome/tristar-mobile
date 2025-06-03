@@ -3,7 +3,15 @@
     "name": "ojtProject",
     "slug": "ojtProject",
     "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/images/tristar_logo.png",
+    "userInterfaceStyle": "light",
     "newArchEnabled": true,
+    "splash": {
+      "image": "./assets/images/tristar_logo.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
     "ios": {
       "supportsTablet": true
     },
@@ -15,7 +23,7 @@
       "package": "com.anonymous.ojtProject"
     },
     "web": {
-      "favicon": "./assets/images/tristar-logo.png"
+      "favicon": "./assets/images/tristar_logo.png"
     },
     "extra": {
       "eas": {

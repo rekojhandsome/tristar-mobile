@@ -16,7 +16,7 @@ export default function Homepage({navigation}){
         const employeeData = await GetEmployeeProfile();
         setEmployeeName(employeeData.firstName);
       } catch (error) {
-        console.error("Error fetching employee data:", error);
+        Alert.alert("Error", "Error fetching employee data:");
       }
     };
     loadEmployeeProfile(); 

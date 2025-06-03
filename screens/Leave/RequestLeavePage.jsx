@@ -32,9 +32,10 @@ export default function RequestLeavePage({ navigation }) {
         try {
           const request = await GetEmployeeLeaveCredits();
           if (!request?.success) {
-            console.warn("Leave credit fetch was unsuccessful");
+            Alert.alert("Error", request?.message || "Failed to fetch leave credits.");
             return;
           }
+
         const leaveCreditsArray = request.data;
     
           // Parse each leave type
@@ -51,7 +52,7 @@ export default function RequestLeavePage({ navigation }) {
           setSickLeaveCredits(sickLeave?.remainingCredits?.toString() || "0");
     
         } catch (error) {
-          console.error("Error fetching leave credits: ", error.response?.data || error.message);
+          Alert.alert("Error", "Failed to load leave credits. Please try again later.");
         }
       };
       loadLeaveCredits();
@@ -66,7 +67,7 @@ export default function RequestLeavePage({ navigation }) {
                   setLeaveRequestTemplate(parsedTemplate);
               }
               else {
-                console.log("No leave request template found in storage.");
+               Alert.alert("Error", "Leave request template not found. Please try again later.");
               }
               }
             catch (error){
@@ -80,7 +81,6 @@ export default function RequestLeavePage({ navigation }) {
     const handleSubmitPress = () => {
       // Validations BEFORE showing confirmation
       if (!leaveStart || !leaveEnd || !leaveTypeID || !memo || !dayType) {
-        console.log("Missing input fields", { leaveStart, leaveEnd, leaveTypeID, memo, dayType });
         Alert.alert("Incomplete Fields", "Please fill in all fields.");
         return;
       }

@@ -5,7 +5,7 @@ import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 //URL ENDPOINTS
-import { API_BASE_URL, Register, API_BASE_URL1 } from "../../service/Authentication/AuthenticationService";
+import { Register } from "../../service/Authentication/AuthenticationService";
 
 export default function SignUp({navigation}){
   const [username, setUsername] = useState("");
@@ -16,8 +16,6 @@ export default function SignUp({navigation}){
   const [isSubmitting, setIsSubmitting] = useState(false);
 
 
-  // Validate Password
- 
   
   // Register Employee Account
     const handleRegister = async () => {
@@ -30,7 +28,6 @@ export default function SignUp({navigation}){
           setIsSubmitting(false);
           return;
         }
-
         try {
           const request = await Register(username, password, employeeID);
       
@@ -42,21 +39,15 @@ export default function SignUp({navigation}){
                 onPress: () => navigation.navigate("SignIn"),
               },
             ]);
-            console.log("Account registered successfully!", request.status);
           } else if (request.status === 409) {
-            console.log("409 Conflict Error:", request); 
+            console.log("Error", request.message); 
             if (request.code === "EXISTING_USERNAME") {
               Alert.alert("Error", "Username already exists.", request.message);
-            } else {
-              Alert.alert("Error", "Failed to register account. Please try again.", request.message);
-              console.log("Error:", request.message);
-            }
+            } 
           } else {
             Alert.alert("Error", "Failed to register account. Please try again.");
-            console.log(request.status);
           }
         } catch (error) {
-          console.error("Error submitting leave request:", error);
         } finally {
           setIsSubmitting(false);
         }

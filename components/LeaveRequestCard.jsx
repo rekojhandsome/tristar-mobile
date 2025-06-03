@@ -33,7 +33,7 @@ export default function LeaveRequestCard({ leaveType, leaveStart, leaveEnd, leav
 const styles = StyleSheet.create({
   container: {
     width: "100%",
-    height: 120,
+    maxHeight: 150,
     borderWidth: 0.1,
     backgroundColor: "white",
     borderRadius: 5,
@@ -51,7 +51,7 @@ const styles = StyleSheet.create({
   },
   dateText: {
     paddingTop: 5,
-    fontSize: 20,
+    fontSize: 16,
   },
   approveText: {
     paddingTop: 5,

@@ -50,6 +50,7 @@ export default function SignIn({ navigation }) {
               style={styles.input}
               placeholder="Password"
               placeholderTextColor="#fff"
+              autoCapitalize="none"
               secureTextEntry
               value={password}
               onChangeText={setPassword}

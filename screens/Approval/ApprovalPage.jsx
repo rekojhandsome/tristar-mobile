@@ -13,7 +13,6 @@ export default function ApprovalPage({ navigation }) {
       const response = await GetLeaveRequestForApproval();
       setLeaveRequestForApproval(response);
     } catch (error) {
-      console.error("Error fetching leave requests for approval:", error);
       Alert.alert("Error", "Failed to load leave requests. Please try again.");
     }
   };
@@ -80,8 +79,8 @@ const handleReject = (leaveRequestID) => {
     <SafeAreaView style={{ flex: 1 }}>
       <View style={styles.header}>
         <Text style={styles.headerText}>Approval Page</Text>
-        <Pressable style={styles.headerButton} onPress={() => navigation.navigate("Homepage")}>
-          <Text style={styles.headerButtonText}>Go back</Text>
+        <Pressable style={styles.headerButton} onPress={() => navigation.navigate("BottomTabNavigation")}>
+          <Text style={styles.headerButtonText}>Homepage</Text>
         </Pressable>
       </View>
 

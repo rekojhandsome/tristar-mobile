@@ -54,7 +54,6 @@ export const GetEmployeeProfile = async () => {
     return request.data;
 
   } catch (error) {
-    console.error("Error fetching employee profile:", error);
     Alert.alert("Error", "Failed to load employee data. Please try again.");
   }
 };
@@ -76,7 +75,6 @@ export const GetEmployeeLeaveCredits = async () => {
     success: true,
   }
   } catch (error) {
-    console.error("Error fetching leave credits:", error);
     Alert.alert("Error", "Failed to load leave credits. Please try again.");
   }
 }
@@ -101,7 +99,6 @@ export const AddLeaveRequest = async (LeaveRequestHeader) => {
         data: request.data,
       }
   }catch (error){
-    console.error("Error submitting leave request:", error);
     return {
       status: error.response?.status,
       success: false,
@@ -158,9 +155,7 @@ export const GetEmployeeLeaveRequest = async () => {
     });
     return request.data; // Return the array of leave requests
   } catch (error) {
-    console.error("Error fetching leave requests:", error);
-    Alert.alert("Error", "Failed to load leave requests. Please try again.");
-    return [];
+    return {success: false, message: request.data?.message};
   }
 };
 

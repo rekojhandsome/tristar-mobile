@@ -55,7 +55,6 @@ export default function AccountPage({ navigation }) {
       setPositionName(employeeData.positionName);
     }
     catch (error) {
-      console.error("Error loading employee profile:", error);
       Alert.alert("Error", "Failed to load employee data. Please try again.");
     }
   }
@@ -67,10 +66,9 @@ export default function AccountPage({ navigation }) {
     try {
       const request = await GetEmployeeLeaveCredits();
       if (!request?.success) {
-        console.warn("Leave credit fetch was unsuccessful");
         return;
       }
- const leaveCreditsArray = request.data;
+      const leaveCreditsArray = request.data;
 
       // Parse each leave type
       const vacationLeave = leaveCreditsArray.find(
@@ -86,7 +84,7 @@ export default function AccountPage({ navigation }) {
       setSickLeaveCredits(sickLeave?.remainingCredits?.toString() || "0");
 
     } catch (error) {
-      console.error("Error fetching leave credits: ", error.response?.data || error.message);
+      Alert.alert("Error fetching leave credits: ", error.response?.data || error.message);
     }
   };
   loadLeaveCredits();

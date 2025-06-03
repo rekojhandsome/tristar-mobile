@@ -3,15 +3,13 @@ import { View, Text, TouchableOpacity, FlatList, ActivityIndicator, StyleSheet, 
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import axios from "axios";
 
-import { API_BASE_URL } from "../service/Authentication/AuthenticationService";
-import { API_BASE_URL1 } from "../service/Authentication/AuthenticationService";
-import { API_BASE_URL2 } from "../service/Authentication/AuthenticationService";
+import { MAIN_API_URL } from "../service/Authentication/AuthenticationService";
 
     //API Endpoints
-    const COMPANY_URL = `${API_BASE_URL2}/api/Company/get-companies`;
-    const DEPARTMENT_URL = `${API_BASE_URL2}/api/Department/get-departments`
-    const LEAVE_TYPE_URL = `${API_BASE_URL2}/api/LeaveType`;
-    const POSITION_URL = `${API_BASE_URL2}/api/Position/get-positions`;
+    const COMPANY_URL = `${MAIN_API_URL}/api/Company/get-companies`;
+    const DEPARTMENT_URL = `${MAIN_API_URL}/api/Department/get-departments`
+    const LEAVE_TYPE_URL = `${MAIN_API_URL}/api/LeaveType`;
+    const POSITION_URL = `${MAIN_API_URL}/api/Position/get-positions`;
 
     export const  CompaniesDropdown = ({ value, setValue, placeholder }) => {
     const [isOpen, setIsOpen] = useState(false);

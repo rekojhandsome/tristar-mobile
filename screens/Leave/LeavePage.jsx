@@ -22,7 +22,6 @@ export default function LeavePage({ navigation }) {
   const loadEmployeeLeaveRequest = async () => {
     try {
       const request = await GetEmployeeLeaveRequest(); // Probably returns an array directly
-      console.log("Leave Requests:", JSON.stringify(request, null, 2)); // Log the entire response for debugging
 
       const leaveRequests = request.map((leaveRequest) => {
         const items = leaveRequest.leaveRequestItems;
@@ -47,7 +46,6 @@ export default function LeavePage({ navigation }) {
 
       setLeaveRequests(leaveRequests);
     } catch (error) {
-      console.error("Error fetching leave requests:", error);
       Alert.alert("Error", "Failed to load leave requests. Please try again.");
     }
   };
@@ -61,7 +59,6 @@ export default function LeavePage({ navigation }) {
           await AsyncStorage.setItem("leaveRequestTemplate", JSON.stringify(response, null, 2));
         }
         catch (error) {
-          console.error("Error fetching leave request template:", error);
           Alert.alert("Error", "Failed to load leave request template. Please try again.");
         }
       };
@@ -162,9 +159,6 @@ const styles = StyleSheet.create({
     fontWeight: "600",
   },
   
-  bodyText: {
-    fontSize: 30,
-  },
   flatlistContent: {
     width: "100%",
     paddingHorizontal: 10,
