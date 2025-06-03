@@ -2,11 +2,11 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 //Authentication Screens
-import SignIn from "../screens/Authentication-Screens/SignInPage";
-import SignUp from "../screens/Authentication-Screens/SignUpPage";
+import SignIn from "../screens/Authentication_Screens/SignInPage";
+import SignUp from "../screens/Authentication_Screens/SignUpPage";
 
 //Register Screen
-import EmployeeRegister from "../screens/Authentication-Screens/RegisterPage";
+import EmployeeRegister from "../screens/Authentication_Screens/RegisterPage";
 
 //BottomNavigation
 import BottomNavbarNavigation from "./BottomTabNavigation";

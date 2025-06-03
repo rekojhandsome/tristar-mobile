@@ -2,8 +2,8 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 // Screens
-import Homepage from "../screens/Main-Screens/Homepage";
-import AccountPage from "../screens/Main-Screens/AccountPage";
+import Homepage from "../screens/Main_Screens/Homepage";
+import AccountPage from "../screens/Main_Screens/AccountPage";
 
 // Screen names
 const homepageName = 'Homepage';

@@ -3,10 +3,7 @@ import { Alert } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // API ENDPOINTS
-import { API_BASE_URL, API_BASE_URL2 } from '../Authentication/AuthenticationService';
-import { API_BASE_URL1 } from '../Authentication/AuthenticationService';
-import { civilStatusData } from '../../Data/StaticDropdownData';
-import { Header } from 'react-native/Libraries/NewAppScreen';
+import { MAIN_API_URL } from '../Authentication/AuthenticationService';
 
 const GetToken = async () => {
   try {
@@ -26,7 +23,7 @@ const GetToken = async () => {
 // Register Employee
 export const RegisterEmployee = async (employeeData) => {
   try{
-    const request  = await axios.post(`${API_BASE_URL2}/api/Employee/register-employee`, employeeData);
+    const request  = await axios.post(`${MAIN_API_URL}/api/Employee/register-employee`, employeeData);
     const employeeID = request.data.employeeID;
     console.log("Employee ID: ", employeeID);
     AsyncStorage.setItem("employeeID", employeeID.toString());
@@ -50,7 +47,7 @@ export const GetEmployeeProfile = async () => {
     const token = await GetToken();
     if (!token) return;
 
-    const request = await axios.get(`${API_BASE_URL2}/api/Account/profile`, {
+    const request = await axios.get(`${MAIN_API_URL}/api/Account/profile`, {
       headers: { Authorization: `Bearer ${token}` }
     });
 
@@ -68,7 +65,7 @@ export const GetEmployeeLeaveCredits = async () => {
   const token = await GetToken();
   if (!token) return [];
   
-  const request = await axios.get(`${API_BASE_URL2}/api/LeaveCredits/get-leave-credits`, {
+  const request = await axios.get(`${MAIN_API_URL}/api/LeaveCredits/get-leave-credits`, {
   headers: { Authorization: `Bearer ${token}`,
   "Content-Type": "application/json" },
   });
@@ -90,7 +87,7 @@ export const AddLeaveRequest = async (LeaveRequestHeader) => {
     const token = await GetToken();
     if (!token) return {success: false};
 
-    const request = await axios.post(`${API_BASE_URL2}/api/LeaveRequestHeader/leave-request`, LeaveRequestHeader, 
+    const request = await axios.post(`${MAIN_API_URL}/api/LeaveRequestHeader/leave-request`, LeaveRequestHeader, 
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -156,7 +153,7 @@ export const GetEmployeeLeaveRequest = async () => {
       return [];
     }
     // Fetch leave requests from the backend
-    const request = await axios.get(`${API_BASE_URL2}/api/LeaveRequestHeader/leave-request-by-employee`, {
+    const request = await axios.get(`${MAIN_API_URL}/api/LeaveRequestHeader/leave-request-by-employee`, {
       headers: { Authorization: `Bearer ${token}` },
     });
     return request.data; // Return the array of leave requests
@@ -172,7 +169,7 @@ export const GetEmployeeLeaveRequestTemplate = async () => {
   try{
   const token = await GetToken();
   if (!token) return [];
-    const request = await axios.get(`${API_BASE_URL2}/api/LeaveRequestHeader/${template}`,{
+    const request = await axios.get(`${MAIN_API_URL}/api/LeaveRequestHeader/${template}`,{
       headers: {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
@@ -191,7 +188,7 @@ export const GetLeaveRequestForApproval = async () =>{
     const token = await GetToken();
     if (!token) return [];
 
-    const request = await axios.get(`${API_BASE_URL2}/api/LeaveRequestHeader/get-leave-requests-by-signatory`, {
+    const request = await axios.get(`${MAIN_API_URL}/api/LeaveRequestHeader/get-leave-requests-by-signatory`, {
       headers:  
       { Authorization: `Bearer ${token}`, 
       "Content-Type": "application/json" 
@@ -208,7 +205,7 @@ export const PatchLeaveRequest = async (leaveRequestID, isSigned) => {
     if (!token) return { success: false, message: "No token found" };
 
     const response = await axios.patch(
-      `${API_BASE_URL2}/api/LeaveRequestSignatory/patch-leave-request`,
+      `${MAIN_API_URL}/api/LeaveRequestSignatory/patch-leave-request`,
       {
         leaveRequestID,
         isSigned,

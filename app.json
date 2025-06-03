@@ -3,27 +3,25 @@
     "name": "ojtProject",
     "slug": "ojtProject",
     "version": "1.0.0",
-    "orientation": "portrait",
-    "icon": "./assets/images/tristar-logo.png",
-    "userInterfaceStyle": "light",
     "newArchEnabled": true,
-    "splash": {
-      "image": "./assets/images/tristar-logo.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
-    },
     "ios": {
       "supportsTablet": true
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/tristar-logo.png",
+        "foregroundImage": "./assets/images/tristar_logo.png",
         "backgroundColor": "#ffffff"
       },
       "package": "com.anonymous.ojtProject"
     },
     "web": {
       "favicon": "./assets/images/tristar-logo.png"
-    }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "a6faf1d0-84e6-45bb-a1a8-e7796118b7b1"
+      }
+    },
+    "owner": "rekojhandsome"
   }
 }

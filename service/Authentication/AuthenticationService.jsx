@@ -3,9 +3,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Alert } from "react-native";
 
 //API URLs
-export const API_BASE_URL = "http://192.168.100.3:5269";
-export const API_BASE_URL1 = "http://192.168.29.207:5269";
-export const API_BASE_URL2 = "http://192.168.29.188:5269";
+export const MAIN_API_URL = "http://intern-dev2-api.tristar.com.ph:4869"
 
 export const Login = async (username, password) => {
     try{

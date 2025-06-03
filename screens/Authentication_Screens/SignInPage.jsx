@@ -33,7 +33,7 @@ export default function SignIn({ navigation }) {
     return (
       <SafeAreaView style={styles.background}>
         <View style={styles.background} >
-            <Image style={styles.image} source={require("../../assets/images/tristar-logo.png")} />
+            <Image style={styles.image} source={require("../../assets/images/tristar_logo.png")} />
             <Text style={styles.title}>Enterprie App</Text>
           <View style={styles.formContainer}>
             <Text style={styles.formTitle}>Sign In</Text>
