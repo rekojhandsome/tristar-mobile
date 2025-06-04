@@ -25,11 +25,11 @@
     "web": {
       "favicon": "./assets/images/tristar_logo.png"
     },
+    "owner": "rekojhandsome",
     "extra": {
       "eas": {
-        "projectId": "a6faf1d0-84e6-45bb-a1a8-e7796118b7b1"
+        "projectId": "0c0b8d55-d855-43a2-8f08-c0a4ef42af2b"
       }
-    },
-    "owner": "rekojhandsome"
+    }
   }
 }
