@@ -1,5 +1,5 @@
 import { useState, React, useEffect } from 'react';
-import { View, Text, StyleSheet, TextInput, Pressable, SafeAreaView,  Platform, FlatList, KeyboardAvoidingView, Alert } from 'react-native';
+import { View, Text, StyleSheet, TextInput, Pressable, SafeAreaView,  Platform, FlatList, KeyboardAvoidingView, Alert, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import { GetEmployeeLeaveCredits } from "../../service/Employee/EmployeeService";
@@ -126,8 +126,6 @@ export default function RequestLeavePage({ navigation }) {
     leaveRequestItems: [leaveRequestItem],
   };
 
-  console.log('Submitting payload:', JSON.stringify(payload, null, 2));
-
   try {
     const response = await AddLeaveRequest(payload);
 
@@ -216,7 +214,7 @@ export default function RequestLeavePage({ navigation }) {
         component: (
           <TextInput
             style={styles.input}
-            placeholder="Enter Reason"
+            placeholder="Enter Reason "
             keyboardType="default"
             autoCapitalize="none"
             value={memo}
@@ -226,42 +224,47 @@ export default function RequestLeavePage({ navigation }) {
       },
     ];
   
-    return (
-      <SafeAreaView style={{ flex: 1 }}>
-        <View style={styles.header}>
-          <Pressable style={styles.leaveButton} onPress={() => navigation.navigate("LeavePage")}>
-            <Text style={styles.headerText}>Leave</Text>
-          </Pressable>
-          <Text style={styles.headerText}>Request Leave</Text>
-        </View>
-  
-        <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={{ flex: 1, }}>
+  return (
+    <SafeAreaView style={{ flex: 1 }}>
+      <View style={styles.header}>
+        <Pressable style={styles.leaveButton} onPress={() => navigation.navigate("LeavePage")}>
+          <Text style={styles.headerText}>Leave</Text>
+        </Pressable>
+        <Text style={styles.headerText}>Request Leave</Text>
+      </View>
+
+      <KeyboardAvoidingView
+        style={{ flex: 1 }}
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+      >
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <FlatList
-            data={formFields}
-            keyExtractor={(item) => item.key}
-            renderItem={({ item }) => (
-              <View style={styles.form}>
-                <Text style={styles.bodyText}>{item.label}</Text>
-                {item.component}
-              </View>
-            )}
             ListHeaderComponent={
-                <Text style={styles.formText}>Leave Application Form</Text> // Only the "Employee Details" text remains in the header of the list
-            }
-            ListFooterComponent={
+              <>
+                <Text style={styles.formText}>Leave Application Form</Text>
+                {formFields.map((item) => (
+                  <View key={item.key} style={styles.form}>
+                    <Text style={styles.bodyText}>{item.label}</Text>
+                    {item.component}
+                  </View>
+                ))}
                 <View style={styles.buttonContainer}>
-                    <Pressable style={styles.registerButton} onPress={handleSubmitPress}>
-                        <Text style={styles.registerButtonText}>Submit Request</Text>
-                    </Pressable>
+                  <Pressable style={styles.registerButton} onPress={handleSubmitPress}>
+                    <Text style={styles.registerButtonText}>Submit Request</Text>
+                  </Pressable>
                 </View>
+              </>
             }
-            nestedScrollEnabled={true}  // Enable nested scrolling
-            showsVerticalScrollIndicator={false} // Hide vertical scroll indicator  
-            contentContainerStyle={{ paddingBottom: 20 }} // Enable nested scrolling
+            data={formFields} 
+            renderItem={null}
+            keyboardShouldPersistTaps="handled"
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={{ paddingBottom: 20 }}
           />
-        </KeyboardAvoidingView>
-      </SafeAreaView>
-    );
+        </TouchableWithoutFeedback>
+      </KeyboardAvoidingView>
+    </SafeAreaView>
+  );
   }
 
 const styles = StyleSheet.create({

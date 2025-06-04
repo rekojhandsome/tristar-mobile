@@ -18,7 +18,6 @@ import LeavePage from "../screens/Leave/LeavePage";
 
 
 import RequestLeavePage from "../screens/Leave/RequestLeavePage";
-import ViewModal from "../components/LeavePopUp";
 
 const Stack = createNativeStackNavigator();
  
@@ -45,7 +44,6 @@ export default function Navigation(){
                 
 
                 {/* Sub Screens */}
-                <Stack.Screen name="ViewModal" component={ViewModal}/>
                 <Stack.Screen name="RequestLeavePage" component={RequestLeavePage}/>
 
             </Stack.Navigator>

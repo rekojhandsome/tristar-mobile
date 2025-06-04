@@ -265,7 +265,7 @@ const [isOpen, setIsOpen] = useState(false);
         <Text style={styles.dropdownText}>
           {value || placeholder} {/* Display selected value or placeholder */}
         </Text>
-        <Ionicons name="chevron-down-outline" size={25} style={styles.dropdownIcon} />
+        <Ionicons name="chevron-down-outline" size={20} style={styles.dropdownIcon} />
       </TouchableOpacity>
 
       {/* Dropdown List */}
@@ -364,7 +364,7 @@ export const LeaveStatusDropdown = ({ data, value, setValue, editable = true}) =
 const leaveStatusStyles = StyleSheet.create({
   dropdownContainer: {
     backgroundColor: "#fff",
-    width: 100,
+    width: 105,
   },
   dropdownButton: {
     height: 30,
