@@ -7,7 +7,7 @@ export const MAIN_API_URL = process.env.MAIN_API_URL;
 
 export const Login = async (username, password) => {
     try{
-        const response = await axios.post(`${MAIN_API_URL}/api/Account/login`,{
+        const response = await axios.post(`http://intern-dev2-api.tristar.com.ph:4869/api/Account/login`,{
             username,
             password
         });
