@@ -4,11 +4,11 @@
     "slug": "Tristar-App",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/tristar_logo.png",
+    "icon": "./assets/images/tristar_logo_3.png",
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
     "splash": {
-      "image": "./assets/images/tristar_logo.png",
+      "image": "./assets/images/tristar_logo_3.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -17,7 +17,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/tristar_logo.png",
+        "foregroundImage": "./assets/images/tristar_logo_3.png",
         "backgroundColor": "#ffffff"
       },
       "package": "com.anonymous.ojtProject"

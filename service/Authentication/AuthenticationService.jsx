@@ -3,7 +3,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Alert } from "react-native";
 
 //API URLs
-export const MAIN_API_URL = "http://intern-dev2-api.tristar.com.ph:4869"
+export const MAIN_API_URL = process.env.MAIN_API_URL;
 
 export const Login = async (username, password) => {
     try{

@@ -7,16 +7,19 @@
   "build": {
     "development": {
       "developmentClient": true,
-      "distribution": "internal"
-    },
-    "preview": {
-      "distribution": "internal"
+      "distribution": "internal",
+      "env": {
+        "MAIN_API_URL": "http://192.168.29.188:5269"
+      }
     },
     "production": {
       "android": {
         "buildType": "apk"
       },
-      "autoIncrement": true
+      "autoIncrement": true,
+      "env": {
+        "MAIN_API_URL": "http://intern-dev2-api.tristar.com.ph:4869"
+      }
     }
   },
   "submit": {
