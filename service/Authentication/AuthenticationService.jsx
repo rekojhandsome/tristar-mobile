@@ -1,13 +1,14 @@
+import Constants from "expo-constants";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Alert } from "react-native";
 
 //API URLs
-export const MAIN_API_URL = process.env.MAIN_API_URL;
+export const URL = Constants.expoConfig.extra.MAIN_API_URL;
 
 export const Login = async (username, password) => {
     try{
-        const response = await axios.post(`http://intern-dev2-api.tristar.com.ph:4869/api/Account/login`,{
+        const response = await axios.post(`${URL}/api/Account/login`,{
             username,
             password
         });
@@ -40,7 +41,7 @@ export const Register = async (username, password, employeeID) => {
         employeeID
     };
 
-    const request = await axios.post(`${MAIN_API_URL}/api/Account/register`, signUpData, {
+    const request = await axios.post(`${URL}/api/Account/register`, signUpData, {
         headers: {Authorization: `Bearer ${employeeID}`,
             "Content-Type": "application/json",
     },

@@ -3,7 +3,7 @@ import { Alert } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // API ENDPOINTS
-import { MAIN_API_URL } from '../Authentication/AuthenticationService';
+import { URL } from '../Authentication/AuthenticationService';
 
 const GetToken = async () => {
   try {
@@ -23,7 +23,7 @@ const GetToken = async () => {
 // Register Employee
 export const RegisterEmployee = async (employeeData) => {
   try{
-    const request  = await axios.post(`${MAIN_API_URL}/api/Employee/register-employee`, employeeData);
+    const request  = await axios.post(`${URL}/api/Employee/register-employee`, employeeData);
     const employeeID = request.data.employeeID;
     console.log("Employee ID: ", employeeID);
     AsyncStorage.setItem("employeeID", employeeID.toString());
@@ -47,7 +47,7 @@ export const GetEmployeeProfile = async () => {
     const token = await GetToken();
     if (!token) return;
 
-    const request = await axios.get(`${MAIN_API_URL}/api/Account/profile`, {
+    const request = await axios.get(`${URL}/api/Account/profile`, {
       headers: { Authorization: `Bearer ${token}` }
     });
 
@@ -64,7 +64,7 @@ export const GetEmployeeLeaveCredits = async () => {
   const token = await GetToken();
   if (!token) return [];
   
-  const request = await axios.get(`${MAIN_API_URL}/api/LeaveCredits/get-leave-credits`, {
+  const request = await axios.get(`${URL}/api/LeaveCredits/get-leave-credits`, {
   headers: { Authorization: `Bearer ${token}`,
   "Content-Type": "application/json" },
   });
@@ -85,7 +85,7 @@ export const AddLeaveRequest = async (LeaveRequestHeader) => {
     const token = await GetToken();
     if (!token) return {success: false};
 
-    const request = await axios.post(`${MAIN_API_URL}/api/LeaveRequestHeader/leave-request`, LeaveRequestHeader, 
+    const request = await axios.post(`${URL}/api/LeaveRequestHeader/leave-request`, LeaveRequestHeader, 
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -107,40 +107,6 @@ export const AddLeaveRequest = async (LeaveRequestHeader) => {
     };
   }
 }
-  // // Patch Employee Details
-// export const PatchEmployeeDetails = async (updatedData) => {
-//   try {
-//     const token = await GetToken();
-//     if (!token) return { success: false };
-
-//     const request = await axios.patch(`${API_BASE_URL1}api/Employee`, updatedData,{
-//       headers: {
-//         Authorization: `Bearer ${token}`,
-//         "Content-Type": "application/json",
-//       },
-//       });
-
-//     return {
-//       status: request.status,
-//       data: request.data,
-//       success: true,
-//     };
-//   } catch (error){
-//     console.error("Error updating employee details:", error);
-
-//     if (error.request){
-//       const { status, data} = error.request;
-//       return {
-//         status,
-//         code: data.code,
-//         message: data.message,
-//         success: false,
-//       }
-//     }
-
-//     return { status: 500, message: "Internal Server Error" };
-//   }
-// }
 
 export const GetEmployeeLeaveRequest = async () => {
   try {
@@ -150,7 +116,7 @@ export const GetEmployeeLeaveRequest = async () => {
       return [];
     }
     // Fetch leave requests from the backend
-    const request = await axios.get(`${MAIN_API_URL}/api/LeaveRequestHeader/leave-request-by-employee`, {
+    const request = await axios.get(`${URL}/api/LeaveRequestHeader/leave-request-by-employee`, {
       headers: { Authorization: `Bearer ${token}` },
     });
     return request.data; // Return the array of leave requests
@@ -164,7 +130,7 @@ export const GetEmployeeLeaveRequestTemplate = async () => {
   try{
   const token = await GetToken();
   if (!token) return [];
-    const request = await axios.get(`${MAIN_API_URL}/api/LeaveRequestHeader/${template}`,{
+    const request = await axios.get(`${URL}/api/LeaveRequestHeader/${template}`,{
       headers: {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
@@ -183,7 +149,7 @@ export const GetLeaveRequestForApproval = async () =>{
     const token = await GetToken();
     if (!token) return [];
 
-    const request = await axios.get(`${MAIN_API_URL}/api/LeaveRequestHeader/get-leave-requests-by-signatory`, {
+    const request = await axios.get(`${URL}/api/LeaveRequestHeader/get-leave-requests-by-signatory`, {
       headers:  
       { Authorization: `Bearer ${token}`, 
       "Content-Type": "application/json" 
@@ -200,7 +166,7 @@ export const PatchLeaveRequest = async (leaveRequestID, isSigned) => {
     if (!token) return { success: false, message: "No token found" };
 
     const response = await axios.patch(
-      `${MAIN_API_URL}/api/LeaveRequestSignatory/patch-leave-request`,
+      `${URL}/api/LeaveRequestSignatory/patch-leave-request`,
       {
         leaveRequestID,
         isSigned,

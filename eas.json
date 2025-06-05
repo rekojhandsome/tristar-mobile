@@ -9,7 +9,7 @@
       "developmentClient": true,
       "distribution": "internal",
       "env": {
-        "MAIN_API_URL": "http://192.168.29.188:5269"
+        "EXPO_PUBLIC_MAIN_API_URL": "http://192.168.29.188:5269"
       }
     },
     "production": {
@@ -18,7 +18,7 @@
       },
       "autoIncrement": true,
       "env": {
-        "MAIN_API_URL": "http://intern-dev2-api.tristar.com.ph:4869"
+        "EXPO_PUBLIC_MAIN_API_URL": "http://intern-dev2-api.tristar.com.ph:4869"
       }
     }
   },
